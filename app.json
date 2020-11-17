@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "flinch",
+    "slug": "flinch-me",
+    "icon": "./assets/images/logo.png",
+    "version": "1.2",
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover"
+    },
+    "android":{
+      "package": "com.shoutouts.flinch",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.shoutouts.flinch",
+      "buildNumber": "1.2.0"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "expo.ts",
+        "expo.tsx",
+        "expo.js",
+        "expo.jsx",
+        "ts",
+        "tsx",
+        "js",
+        "jsx",
+        "json",
+        "wasm",
+        "svg"
+      ]
+    }
+  }
+}
