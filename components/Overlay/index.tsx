@@ -1,30 +1,74 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { ActivityIndicator, Button, ProgressBar } from 'react-native-paper'
+import { ActivityIndicator, Button, ProgressBar, Snackbar } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
 import { AltMiniLabel, maxWidth, Paragraph } from '../../common/styledComponents'
 import { COLORS, theme } from '../../config/theme'
 import { useLoader } from '../../hooks/useLoader'
+import { useToast } from '../../hooks/useToast'
 import UploadHookService from '../../services/UploadHookService'
-
+import { loaderActions } from '../../store/loader'
+import { toastActions } from '../../store/toast'
 interface AppOverlayProps {
   children: any;
 }
 
 const AppOverlay: React.FC<AppOverlayProps> = ({
-  children
+  children,
+  ...p
 }) => {
+  const dispatch = useDispatch()
   const [progress, setProgress] = useState(0)
   const {
     paymentLoader,
     responseLoader,
     authLoader
   } = useLoader()
+  const {
+    onDismiss,
+    onPress,
+    msg,
+    show,
+    label
+  } = useToast()
   useEffect(() => {
     const unsubscribe = UploadHookService.uploadHookRef &&
-      UploadHookService.listen(setProgress)
+      UploadHookService.listen(
+        setProgress,
+        onUploadError,
+        onUploadComplete
+      )
     return () => unsubscribe && unsubscribe()
   }, [UploadHookService.uploadHookRef])
   const loading = paymentLoader || responseLoader
+  const onUploadError = () => {
+    dispatch(toastActions.setToast({
+      label: 'Retry',
+      msg: 'An Error Occured during upload...',
+      show: true,
+      onDismiss: onHideToast,
+      onPress
+    }))
+  }
+  const onHideToast = () => {
+    dispatch(toastActions.resetToast())
+  }
+  const onHideUpload = () => {
+    dispatch(loaderActions.loaded('responseLoader'))
+    // NavigationService.reset('Home')
+  }
+  const onUploadComplete = () => {
+    dispatch(
+      toastActions.setToast({
+        show: true,
+        label: 'Okay',
+        msg: 'Upload completed',
+        onDismiss: onHideToast,
+        onPress: onHideToast
+      })
+    )
+  }
+
   const renderSubmitting = () => {
     return <View style={[styles.submitting]}>
       <View style={[styles.submittingContent]}>
@@ -43,14 +87,20 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
         style={[styles.progressBar]}
         color={theme.colors.primary}
       />
-      <Button
-        icon='close'
-        mode='contained'
-        onPress={() => UploadHookService.cancel()}
-        color={COLORS.red}
-      >
-        Cancel
-      </Button>
+      <View style={[styles.btns]}>
+        <Button
+          color={theme.colors.primary}
+          onPress={onHideUpload}
+        >
+          Hide
+        </Button>
+        <Button
+          onPress={() => UploadHookService.cancel()}
+          color={COLORS.red}
+        >
+          Cancel
+        </Button>
+      </View>
     </View>
   }
   const renderLoader = () => {
@@ -63,11 +113,25 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   return (
     <>
       {children}
+      {/* LOADERS */}
       {loading && <View style={styles.container}>
         {paymentLoader && renderLoader()}
         {responseLoader && renderUploading()}
         {authLoader && renderSubmitting()}
       </View>}
+      {/* TOASTS */}
+      <Snackbar
+        visible={show}
+        onDismiss={onDismiss}
+        action={{
+          label,
+          onPress
+        }}
+      >
+        <AltMiniLabel>
+          {msg}
+        </AltMiniLabel>
+      </Snackbar>
     </>
   )
 }
@@ -107,8 +171,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: COLORS.white,
-    height: '25%',
+    height: '30%',
     width: '80%',
     borderRadius: 5
+  },
+  btns: {
+    flexDirection: 'row'
   }
 })

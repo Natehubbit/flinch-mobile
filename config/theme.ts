@@ -12,7 +12,9 @@ export const theme:Theme = {
 
 export const COLORS = {
   white: '#fff',
-  red: '#cc0e74'
+  red: '#cc0e74',
+  warn: '#ff9966',
+  success: '#3ACC6C'
 }
 
 export const settings = {

@@ -5,7 +5,11 @@ export default class UploadHookService {
     this.uploadHookRef = hook
   }
 
-  static listen (setProgress:(val:number)=>void) {
+  static listen (
+    setProgress:(val:number)=>void,
+    onError?:()=>void,
+    onComplete?:()=>void
+  ) {
     const reset = () => {
       setProgress(0)
       this.setHook(null)
@@ -13,8 +17,8 @@ export default class UploadHookService {
     return this.uploadHookRef.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       snap => this.next(snap, setProgress),
-      e => this.error(e, reset),
-      this.complete
+      e => this.error(e, onError, reset),
+      () => this.complete(onComplete)
     )
   }
 
@@ -31,12 +35,14 @@ export default class UploadHookService {
     setProgress(progress)
   }
 
-  static error (error:Error, reset:()=>void) {
+  static error (error:Error, reset:()=>void, onError?:()=>void) {
     reset()
+    onError && onError()
     console.log(error.message)
   }
 
-  static complete () {
+  static complete (onComplete?:()=>void) {
+    onComplete && onComplete()
     console.log('completed')
   }
 }

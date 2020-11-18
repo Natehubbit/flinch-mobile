@@ -87,6 +87,7 @@ var HelperService = /** @class */ (function () {
                     case 1:
                         res = _a.sent();
                         if (res.cancelled === false) {
+                            console.log(res.exif);
                             getVideo(res.uri);
                         }
                         return [3 /*break*/, 3];

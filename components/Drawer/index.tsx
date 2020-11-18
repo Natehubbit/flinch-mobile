@@ -35,7 +35,7 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
     return routeNames.map((route:Routes, i:number) => {
       const isHome = route === 'Home'
       const icon = isHome
-        ? 'home'
+        ? 'home-outline'
         : route === 'Requests'
           ? 'book-outline'
           : route === 'Notifications'
@@ -46,11 +46,13 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
                 ? 'account-outline'
                 : 'camera'
 
-      return isHome
-        ? null
-        : <DrawerItem
+      return <DrawerItem
                 key={i}
-                icon={props => <MaterialIcon {...props} name={icon} style={styles.drawerIcon} />}
+                icon={props => <MaterialIcon
+                  {...props}
+                  name={icon}
+                  style={styles.drawerIcon}
+                />}
                 label={route}
                 onPress={() => onNavigate(route)}
                 activeBackgroundColor='#fff'

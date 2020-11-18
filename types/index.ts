@@ -28,19 +28,28 @@ export interface PaymentMode {
     icon:string;
 }
 
+export interface Toast {
+    show:boolean;
+    msg:string;
+    label:string;
+    duration?:number;
+    onPress?:()=>void;
+    onDismiss?:()=>void;
+}
+
 export interface Request {
     id?: string;
     instructions: string;
     recipient: string;
     occasion: string;
-    requestor: UserMetaInfo;
-    celebrity: UserMetaInfo;
+    requestor: UserMeta;
+    celebrity: UserMeta;
     response: RequestResponse;
     payment: RequestPayment;
     status: RequestStatus;
     price: number;
     payed: boolean;
-    timestamp:number;
+    timestamp: number;
 }
 
 export interface RequestPayment {
@@ -50,9 +59,10 @@ export interface RequestPayment {
     timestamp:number;
 }
 
-export interface UserMetaInfo {
+export interface UserMeta {
     id:string;
     name:string;
+    imageUrl?:string;
 }
 
 export interface RequestResponse {

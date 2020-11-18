@@ -31,6 +31,7 @@ export default class HelperService {
       const res = await ImagePicker
         .launchImageLibraryAsync(VID_OPTIONS)
       if (res.cancelled === false) {
+        console.log(res.exif)
         getVideo(res.uri)
       }
     } catch (error) {

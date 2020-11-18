@@ -1,13 +1,13 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
-import { useUser } from '../../hooks/useUser'
 import { AltMiniLabel, Paragraph } from '../../common/styledComponents'
 import Tag from '../Tag'
 import { RequestStatus } from '../../types'
 
 interface RequestCardProps {
   name:string;
+  imageUrl:string;
   tag:RequestStatus;
   occasion:string;
   price:string;
@@ -18,10 +18,10 @@ const RequestCard: React.FC<RequestCardProps> = ({
   name,
   tag,
   occasion,
+  imageUrl: uri,
   price,
   onPress
 }) => {
-  const { imageUrl: uri } = useUser()
   return <View style={styles.container}>
         <TouchableRipple onPress={onPress}>
             <>

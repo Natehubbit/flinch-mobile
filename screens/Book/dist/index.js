@@ -86,7 +86,8 @@ var Book = function () {
         return __generator(this, function (_a) {
             data = __assign({ celebrity: {
                     id: id,
-                    name: alias
+                    name: alias,
+                    imageUrl: imageUrl
                 }, requestor: {
                     id: userId,
                     name: displayName
@@ -140,8 +141,7 @@ var styles = react_native_1.StyleSheet.create({
         marginTop: 24,
         marginBottom: 12,
         height: 50,
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'center'
     },
     celeb: {
         flexDirection: 'row',

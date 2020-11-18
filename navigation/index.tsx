@@ -5,6 +5,7 @@ import AuthStack from './AuthStack'
 import AppDrawer from './AppDrawer'
 import { useUser } from '../hooks/useUser'
 import { Celeb } from '../services/CelebService'
+import NavigationService from '../services/NavigationService'
 
 export type RouteParams = {
   Login: undefined;
@@ -47,12 +48,12 @@ export type Routes = keyof RouteParams
 
 const Navigation: React.FC = () => {
   const { profileUpdated } = useUser()
-  return profileUpdated
-    ? <NavigationContainer>
-      <AppDrawer/>
-    </NavigationContainer>
-    : <NavigationContainer>
-      <AuthStack/>
+  return <NavigationContainer
+    ref={ref => NavigationService.setRef(ref)}
+  >
+    {profileUpdated
+      ? <AppDrawer/>
+      : <AuthStack/>}
     </NavigationContainer>
 }
 

@@ -3,12 +3,10 @@ exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
-var useUser_1 = require("../../hooks/useUser");
 var styledComponents_1 = require("../../common/styledComponents");
 var Tag_1 = require("../Tag");
 var RequestCard = function (_a) {
-    var name = _a.name, tag = _a.tag, occasion = _a.occasion, price = _a.price, onPress = _a.onPress;
-    var uri = useUser_1.useUser().imageUrl;
+    var name = _a.name, tag = _a.tag, occasion = _a.occasion, uri = _a.imageUrl, price = _a.price, onPress = _a.onPress;
     return react_1["default"].createElement(react_native_1.View, { style: styles.container },
         react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onPress },
             react_1["default"].createElement(react_1["default"].Fragment, null,

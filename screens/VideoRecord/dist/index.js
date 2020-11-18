@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,23 +58,27 @@ var expo_av_1 = require("expo-av");
 var expo_camera_1 = require("expo-camera");
 var react_redux_1 = require("react-redux");
 var requests_1 = require("../../store/requests");
+var useToast_1 = require("../../hooks/useToast");
+var toast_1 = require("../../store/toast");
 var RECORD_OPTIONS = {
     mute: false,
-    maxDuration: 60
+    maxDuration: 60,
+    quality: expo_camera_1.Camera.Constants.VideoQuality['480p']
 };
 var time = 0;
 var timerId = null;
-// create a component
 var VideoRecord = function () {
     var camera = react_1.useRef(null);
     var dispatch = react_redux_1.useDispatch();
+    var toast = useToast_1.useToast();
     var id = native_1.useRoute().params.id;
     var _a = react_1.useState(false), isRecording = _a[0], setIsRecording = _a[1];
-    var _b = react_1.useState(false), isPreviewing = _b[0], setIsPreviewing = _b[1];
-    var _c = react_1.useState(''), videoUri = _c[0], setVideoUri = _c[1];
-    var _d = react_1.useState(0), timer = _d[0], setTimer = _d[1];
-    var _e = react_1.useState(false), showControls = _e[0], setShowControls = _e[1];
-    var _f = native_1.useNavigation(), goBack = _f.goBack, reset = _f.reset;
+    var _b = react_1.useState('16:9'), ratio = _b[0], setRatio = _b[1];
+    var _c = react_1.useState(false), isPreviewing = _c[0], setIsPreviewing = _c[1];
+    var _d = react_1.useState(''), videoUri = _d[0], setVideoUri = _d[1];
+    var _e = react_1.useState(0), timer = _e[0], setTimer = _e[1];
+    var _f = react_1.useState(false), showControls = _f[0], setShowControls = _f[1];
+    var goBack = native_1.useNavigation().goBack;
     react_1.useEffect(function () {
         var cleanUp = function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -75,6 +90,20 @@ var VideoRecord = function () {
                 return [2 /*return*/];
             });
         }); };
+        var setCameraRatio = function () { return __awaiter(void 0, void 0, void 0, function () {
+            var ratioData, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, camera.current.getSupportedRatiosAsync()];
+                    case 1:
+                        ratioData = _a.sent();
+                        res = ratioData.pop();
+                        setRatio(res);
+                        return [2 /*return*/];
+                }
+            });
+        }); };
+        setCameraRatio();
         return function () {
             cleanUp();
         };
@@ -131,19 +160,25 @@ var VideoRecord = function () {
     var onRecordAgain = function () {
         setIsPreviewing(false);
     };
-    var onSubmitted = function () {
-        reset({
-            index: 0,
-            routes: [{ name: 'Requests', key: null }]
-        });
-    };
+    // const onSubmitted = () => {
+    //   reset({
+    //     index: 0,
+    //     routes: [{ name: 'Requests', key: null }]
+    //   })
+    // }
     var onSend = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            dispatch(requests_1.requestsActions
-                .approveRequest(id, videoUri, timer, onSubmitted));
+            dispatch(toast_1.toastActions.setToast(__assign(__assign({}, toast), { show: false, onPress: send })));
+            send();
             return [2 /*return*/];
         });
     }); };
+    var send = function () {
+        dispatch(requests_1.requestsActions
+            .approveRequest(id, videoUri, timer
+        // onSubmitted
+        ));
+    };
     var startTimer = function () {
         timerId = setInterval(function () {
             time = time + 1;
@@ -165,7 +200,7 @@ var VideoRecord = function () {
                     react_1["default"].createElement(styledComponents_1.Paragraph, null, "Recording"),
                     react_1["default"].createElement(react_native_1.View, { style: styles.recordIndicator })))),
         !isPreviewing &&
-            react_1["default"].createElement(expo_camera_1.Camera, { style: styles.camera, type: expo_camera_1.Camera.Constants.Type.front, ref: camera, ratio: '16:9' }),
+            react_1["default"].createElement(expo_camera_1.Camera, { style: styles.camera, type: expo_camera_1.Camera.Constants.Type.front, ref: camera, ratio: ratio }),
         (isPreviewing) &&
             react_1["default"].createElement(react_native_1.View, { style: styles.videoContainer },
                 react_1["default"].createElement(react_native_1.View, null,

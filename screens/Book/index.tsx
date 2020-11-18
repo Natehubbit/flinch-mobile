@@ -38,7 +38,8 @@ const Book: React.FC = () => {
     const data:Request = {
       celebrity: {
         id,
-        name: alias
+        name: alias,
+        imageUrl
       },
       requestor: {
         id: userId,
@@ -155,8 +156,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     marginBottom: 12,
     height: 50,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: 'center'
   },
   celeb: {
     flexDirection: 'row',

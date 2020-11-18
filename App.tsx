@@ -15,6 +15,7 @@ import {
 import {
   Provider
 } from 'react-redux'
+import * as ScreenOrientation from 'expo-screen-orientation'
 
 import { Provider as PaperProvider } from 'react-native-paper'
 
@@ -44,14 +45,19 @@ function cacheFonts (fonts:Array<string | { [fontFamily: string]: Font.FontSourc
 
 const App: () => React.ReactNode = () => {
   const [appReady, setAppReady] = useState(false)
-
+  // const navRef = useRef<NavigationContainerRef>(null)
   useEffect(() => {
     LogBox.ignoreLogs(['Setting'])
+    const lockScreen = async () => {
+      await ScreenOrientation
+        .lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    }
+    lockScreen()
   }, [])
 
   const loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
-      'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
+      // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
       // require('./assets/images/play.svg'),
     ])
 

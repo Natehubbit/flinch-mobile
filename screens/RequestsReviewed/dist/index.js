@@ -38,7 +38,7 @@ var RequestsReviewed = function () {
                 react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'info' }, "No reviewed requests"))
             : react_1["default"].createElement(react_native_gesture_handler_1.FlatList, { data: requests, contentContainerStyle: [styles.listContainer], renderItem: function (_a) {
                     var item = _a.item;
-                    return react_1["default"].createElement(RequestCard_1["default"], { name: item.recipient, occasion: item.occasion, price: HelperService_1["default"].parseToMoney(item.price), tag: item.status, onPress: function () { return onOpenRequest(item.id); } });
+                    return react_1["default"].createElement(RequestCard_1["default"], { name: item.recipient, imageUrl: item.celebrity.imageUrl, occasion: item.occasion, price: HelperService_1["default"].parseToMoney(item.price), tag: item.status, onPress: function () { return onOpenRequest(item.id); } });
                 }, refreshControl: react_1["default"].createElement(react_native_1.RefreshControl, { refreshing: refresh, onRefresh: onRefresh, colors: [theme_1.theme.colors.primary] }), initialNumToRender: 7, keyExtractor: function (item, i) { return item.id || i.toString(); } });
     };
     return loading

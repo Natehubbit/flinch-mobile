@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -44,24 +55,26 @@ var react_native_1 = require("react-native");
 var react_redux_1 = require("react-redux");
 var videoBack_svg_1 = require("../../assets/images/videoBack.svg");
 var ButtonAction_1 = require("../../components/ButtonAction");
+var useToast_1 = require("../../hooks/useToast");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
+var toast_1 = require("../../store/toast");
 var VideoUpload = function () {
     var dispatch = react_redux_1.useDispatch();
+    var toast = useToast_1.useToast();
     var _a = react_1.useState(''), videoUri = _a[0], setVideoUri = _a[1];
     var id = native_1.useRoute().params.id;
     var _b = native_1.useNavigation(), navigate = _b.navigate, reset = _b.reset;
     react_1.useEffect(function () {
         console.log(videoUri);
-        videoUri && dispatch(requests_1.requestsActions
-            .approveRequest(id, videoUri, 10, onReset));
+        videoUri && onSend();
     }, [videoUri]);
     var onReset = function () {
         reset({
             index: 0,
             routes: [{ name: 'Requests', key: null }]
         });
-        setVideoUri('a');
+        setVideoUri('');
     };
     var onUploadVideo = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -85,6 +98,17 @@ var VideoUpload = function () {
             }
         });
     }); };
+    var onSend = function () { return __awaiter(void 0, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            dispatch(toast_1.toastActions.setToast(__assign(__assign({}, toast), { show: false, onPress: send })));
+            send();
+            return [2 /*return*/];
+        });
+    }); };
+    var send = function () {
+        dispatch(requests_1.requestsActions
+            .approveRequest(id, videoUri, 10, onReset));
+    };
     var requestPermission = function () { return __awaiter(void 0, void 0, void 0, function () {
         var videoPerm, audioPerm;
         return __generator(this, function (_a) {

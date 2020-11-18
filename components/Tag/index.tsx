@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { Badge } from 'react-native-paper'
-import { theme } from '../../config/theme'
+import { COLORS } from '../../config/theme'
 import { RequestStatus } from '../../types'
 
 interface TagProps {
@@ -13,8 +13,8 @@ const Tag: React.FC<TagProps> = (props) => {
   const color = (label === 'failed' || label === 'urgent')
     ? 'red'
     : label === 'pending'
-      ? theme.colors.primary
-      : '#3ACC6C'
+      ? COLORS.warn
+      : COLORS.success
   return <Badge
         visible
         style={[styles.badge, { backgroundColor: color }]}

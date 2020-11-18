@@ -11,18 +11,20 @@ import AsyncStorage from '@react-native-community/async-storage'
 import { userSlice } from './user'
 import { requestSlice } from './request'
 import { requestsSlice } from './requests'
+import { toastSlice } from './toast'
 
 const rootReducer = combineReducers({
   [userSlice.name]: userSlice.reducer,
   [loaderSlice.name]: loaderSlice.reducer,
   [celebsSlice.name]: celebsSlice.reducer,
   [requestSlice.name]: requestSlice.reducer,
-  [requestsSlice.name]: requestsSlice.reducer
+  [requestsSlice.name]: requestsSlice.reducer,
+  [toastSlice.name]: toastSlice.reducer
 })
 
 const persistConfig:PersistConfig<unknown, any, any, any> = {
   key: 'root',
-  blacklist: ['loader'],
+  blacklist: ['loader', 'toast'],
   storage: AsyncStorage,
   timeout: 10000
 }

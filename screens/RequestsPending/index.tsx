@@ -47,6 +47,7 @@ const RequestsPending: React.FC = () => {
             renderItem={({ item }) => <RequestCard
                 name={item.recipient}
                 occasion={item.occasion}
+                imageUrl={item.celebrity.imageUrl}
                 price={HelperService.parseToMoney(item.price)}
                 tag={item.status}
                 onPress={() => onOpenRequest(item.id)}

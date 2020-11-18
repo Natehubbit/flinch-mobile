@@ -10,26 +10,30 @@ import { Camera, CameraRecordingOptions } from 'expo-camera'
 import { RecordVideoScreenRouteProps } from '../../navigation'
 import { useDispatch } from 'react-redux'
 import { requestsActions } from '../../store/requests'
+import { useToast } from '../../hooks/useToast'
+import { toastActions } from '../../store/toast'
 
 const RECORD_OPTIONS:CameraRecordingOptions = {
   mute: false,
-  maxDuration: 60
+  maxDuration: 60,
+  quality: Camera.Constants.VideoQuality['480p']
 }
 
 let time = 0
 let timerId = null
 
-// create a component
 const VideoRecord = () => {
   const camera = useRef<Camera>(null)
   const dispatch = useDispatch()
+  const toast = useToast()
   const { params: { id } } = useRoute<RecordVideoScreenRouteProps>()
   const [isRecording, setIsRecording] = useState(false)
+  const [ratio, setRatio] = useState('16:9')
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [videoUri, setVideoUri] = useState('')
   const [timer, setTimer] = useState(0)
   const [showControls, setShowControls] = useState(false)
-  const { goBack, reset } = useNavigation()
+  const { goBack } = useNavigation()
   useEffect(() => {
     const cleanUp = async () => {
       if (isRecording) {
@@ -38,6 +42,12 @@ const VideoRecord = () => {
         camera.current.stopRecording()
       }
     }
+    const setCameraRatio = async () => {
+      const ratioData = await camera.current.getSupportedRatiosAsync()
+      const res = ratioData.pop()
+      setRatio(res)
+    }
+    setCameraRatio()
     return () => {
       cleanUp()
     }
@@ -79,24 +89,34 @@ const VideoRecord = () => {
     setIsPreviewing(false)
   }
 
-  const onSubmitted = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Requests', key: null }]
-    })
-  }
+  // const onSubmitted = () => {
+  //   reset({
+  //     index: 0,
+  //     routes: [{ name: 'Requests', key: null }]
+  //   })
+  // }
 
   const onSend = async () => {
+    dispatch(toastActions.setToast({
+      ...toast,
+      show: false,
+      onPress: send
+    }))
+    send()
+  }
+
+  const send = () => {
     dispatch(
       requestsActions
         .approveRequest(
           id,
           videoUri,
-          timer,
-          onSubmitted
+          timer
+          // onSubmitted
         )
     )
   }
+
   const startTimer = () => {
     timerId = setInterval(() => {
       time = time + 1
@@ -131,7 +151,7 @@ const VideoRecord = () => {
                 style={styles.camera}
                 type={Camera.Constants.Type.front}
                 ref={camera}
-                ratio='16:9'
+                ratio={ratio}
             />}
             {(isPreviewing) &&
             <View style={styles.videoContainer}>

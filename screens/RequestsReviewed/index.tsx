@@ -46,6 +46,7 @@ const RequestsReviewed: React.FC = () => {
                 contentContainerStyle={[styles.listContainer]}
                 renderItem={({ item }) => <RequestCard
                     name={item.recipient}
+                    imageUrl={item.celebrity.imageUrl}
                     occasion={item.occasion}
                     price={HelperService.parseToMoney(item.price)}
                     tag={item.status}

@@ -9,8 +9,8 @@ var Tag = function (props) {
     var color = (label === 'failed' || label === 'urgent')
         ? 'red'
         : label === 'pending'
-            ? theme_1.theme.colors.primary
-            : '#3ACC6C';
+            ? theme_1.COLORS.warn
+            : theme_1.COLORS.success;
     return react_1["default"].createElement(react_native_paper_1.Badge, { visible: true, style: [styles.badge, { backgroundColor: color }] }, label);
 };
 var styles = react_native_1.StyleSheet.create({
