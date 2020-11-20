@@ -58,7 +58,7 @@ var Request = function () {
     var _c = native_1.useNavigation(), navigate = _c.navigate, goBack = _c.goBack;
     var params = native_1.useRoute().params;
     var id = params.id;
-    var _d = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _d.occasion, status = _d.status, instructions = _d.instructions, recipient = _d.recipient, price = _d.price, name = _d.celebrity.name;
+    var _d = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _d.occasion, status = _d.status, instructions = _d.instructions, recipient = _d.recipient, price = _d.price, name = _d.celebrity.name, _e = _d.response, duration = _e.duration, timestamp = _e.timestamp;
     var summarize = instructions.length > 99;
     var info = summarize
         ? instructions.substring(0, 99)
@@ -71,6 +71,13 @@ var Request = function () {
     var isPending = status === 'pending';
     var showButtons = !isUser && isPending;
     var onAccept = function () { return navigate('VideoUpload', { id: id }); };
+    var onOpenVideo = function () { return navigate('Video', {
+        id: id,
+        duration: duration,
+        recipient: recipient,
+        timestamp: timestamp,
+        name: name
+    }); };
     var onReject = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             setRejecting(true);
@@ -100,7 +107,7 @@ var Request = function () {
                                 summarize && react_1["default"].createElement(styledComponents_1.Paragraph, { link: true }, summarizeText))),
                         isSuccess && react_1["default"].createElement(react_1["default"].Fragment, null,
                             react_1["default"].createElement(react_native_paper_1.Divider, { style: [styles.div] }),
-                            react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: function () { return console.log('dd'); }, style: { flex: 1 } },
+                            react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onOpenVideo, style: { flex: 1 } },
                                 react_1["default"].createElement(react_native_1.View, { style: styles.videoContainer },
                                     react_1["default"].createElement(react_native_1.View, { style: styles.video },
                                         react_1["default"].createElement(react_native_paper_1.TouchableRipple, null,

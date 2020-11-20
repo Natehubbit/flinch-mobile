@@ -101,7 +101,7 @@ var Book = function () {
                     amount: 0,
                     payed: false,
                     timestamp: 0
-                }, status: 'pending', price: price, payed: false, timestamp: Date.now() }, values);
+                }, status: 'pending', price: price, timestamp: Date.now() }, values);
             dispatch(request_1.requestActions.createRequest(data));
             request.id && navigate('Payment', { requestId: request.id });
             return [2 /*return*/];

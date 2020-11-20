@@ -48,7 +48,6 @@ export interface Request {
     payment: RequestPayment;
     status: RequestStatus;
     price: number;
-    payed: boolean;
     timestamp: number;
 }
 

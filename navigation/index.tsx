@@ -7,6 +7,14 @@ import { useUser } from '../hooks/useUser'
 import { Celeb } from '../services/CelebService'
 import NavigationService from '../services/NavigationService'
 
+export type VideoNavParam = {
+  id:string;
+  duration:number;
+  recipient:string;
+  timestamp:string;
+  name:string;
+}
+
 export type RouteParams = {
   Login: undefined;
   Signup: undefined;
@@ -23,7 +31,7 @@ export type RouteParams = {
   Requests: undefined;
   Profile: undefined;
   Videos: undefined;
-  Video: undefined;
+  Video: VideoNavParam;
   VideoUpload: {id:string;};
   RecordVideo: {id:string};
   WebView: {uri:string;onStopLoading?:()=>void}
@@ -34,6 +42,9 @@ export type CelebScreenRouteProp =
 
 export type BookScreenRouteProps =
   RouteProp<RouteParams, 'Book'>;
+
+export type VideoScreenRouteProps =
+  RouteProp<RouteParams, 'Video'>;
 
 export type RequestScreenRouteProps =
   RouteProp<RouteParams, 'Request'>;

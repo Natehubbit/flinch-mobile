@@ -175,7 +175,13 @@ var HelperService = /** @class */ (function () {
         });
     };
     HelperService.parseToMoney = function (val) {
-        return "GHs" + (val / 100).toFixed(2);
+        try {
+            return "GHs" + (val / 100).toFixed(2);
+        }
+        catch (e) {
+            console.log(e.message);
+            return '';
+        }
     };
     return HelperService;
 }());

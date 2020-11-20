@@ -26,7 +26,8 @@ export const initStateRequest: Request = {
   response: {
     status: 'pending',
     duration: 0,
-    videoUri: ''
+    videoUri: '',
+    timestamp: 0
   },
   instructions: '',
   occasion: '',
@@ -37,7 +38,13 @@ export const initStateRequest: Request = {
   },
   status: 'pending',
   price: 0,
-  payed: false
+  timestamp: 0,
+  payment: {
+    id: '',
+    amount: 0,
+    payed: false,
+    timestamp: 0
+  }
 }
 
 // PATHS

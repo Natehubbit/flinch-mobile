@@ -14,7 +14,9 @@ export const COLORS = {
   white: '#fff',
   red: '#cc0e74',
   warn: '#ff9966',
-  success: '#3ACC6C'
+  success: '#3ACC6C',
+  dark: '#000',
+  grey: '#808080'
 }
 
 export const settings = {

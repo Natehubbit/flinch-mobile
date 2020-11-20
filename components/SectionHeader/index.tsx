@@ -9,11 +9,12 @@ interface SectionHeaderProps extends TextProps {
 
 const SectionHeader: React.FC<SectionHeaderProps> = (
   {
-    title
+    title,
+    ...props
   }
 ) => {
   return <View style={styles.container}>
-        <SubHeading>{title}</SubHeading>
+        <SubHeading {...props} >{title}</SubHeading>
         <View style={styles.line} />
     </View>
 }

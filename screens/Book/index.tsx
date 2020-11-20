@@ -59,7 +59,6 @@ const Book: React.FC = () => {
       },
       status: 'pending',
       price,
-      payed: false,
       timestamp: Date.now(),
       ...values
     }

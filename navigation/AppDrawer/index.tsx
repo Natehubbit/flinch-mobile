@@ -5,6 +5,8 @@ import RequestStack from '../RequestStack'
 import DrawerComponent from '../../components/Drawer'
 import { createStackNavigator } from '@react-navigation/stack'
 import WebViewScreen from '../../screens/WebView'
+import VideoStack from '../VideoStack'
+import Video from '../../screens/Video'
 
 const Drawer = createDrawerNavigator()
 const AppDrawer = () => {
@@ -16,9 +18,10 @@ const AppDrawer = () => {
               header: () => null
             }}>
             <Drawer.Screen name="Home" component={HomeStack} />
-            <Drawer.Screen name="Profile" component={HomeStack} />
-            <Drawer.Screen name="Notifications" component={HomeStack} />
+            {/* <Drawer.Screen name="Profile" component={HomeStack} />
+            <Drawer.Screen name="Notifications" component={HomeStack} /> */}
             <Drawer.Screen name="Requests" component={RequestStack} />
+            <Drawer.Screen name="Videos" component={VideoStack} />
         </Drawer.Navigator>
   )
 }
@@ -32,6 +35,7 @@ const AppDrawerRoot = () => {
         >
             <Stack.Screen name="Home" component={AppDrawer} />
             <Stack.Screen name='WebView' component={WebViewScreen}/>
+            <Stack.Screen name='Video' component={Video} />
         </Stack.Navigator>
   )
 }

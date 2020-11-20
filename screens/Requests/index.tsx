@@ -1,12 +1,9 @@
-// import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { View } from 'react-native'
 import RequestCard from '../../components/RequestCard'
 import { useUser } from '../../hooks/useUser'
-// import { Routes } from '../../navigation'
 
 const Requests = () => {
-  // const { navigate } = useNavigation()
   const onOpenRequest = () => {}
   const { imageUrl: uri } = useUser()
   return (

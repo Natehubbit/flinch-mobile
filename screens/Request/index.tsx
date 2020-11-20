@@ -30,6 +30,10 @@ const Request: React.FC = () => {
     price,
     celebrity: {
       name
+    },
+    response: {
+      duration,
+      timestamp
     }
   } = useRequests('id', id)[0] || initStateRequest
   const summarize = instructions.length > 99
@@ -44,6 +48,13 @@ const Request: React.FC = () => {
   const isPending = status === 'pending'
   const showButtons = !isUser && isPending
   const onAccept = () => navigate<Routes>('VideoUpload', { id })
+  const onOpenVideo = () => navigate<Routes>('Video', {
+    id,
+    duration,
+    recipient,
+    timestamp,
+    name
+  })
   const onReject = async () => {
     setRejecting(true)
     dispatch(requestsActions.rejectRequest(id, rejectCallback))
@@ -82,7 +93,7 @@ const Request: React.FC = () => {
                         {isSuccess && <>
                             <Divider style={[styles.div]}/>
                             <TouchableRipple
-                                onPress={() => console.log('dd')}
+                                onPress={onOpenVideo}
                                 style={{ flex: 1 }}
                             >
                             <View style={styles.videoContainer}>
