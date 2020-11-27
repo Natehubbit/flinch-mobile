@@ -7,7 +7,8 @@ const initState: AppLoader = {
   bookingLoader: false,
   paymentLoader: false,
   requestsLoader: false,
-  responseLoader: false
+  responseLoader: false,
+  videosResponseLoader: false
 }
 
 export const { actions, ...loaderSlice } = createSlice({

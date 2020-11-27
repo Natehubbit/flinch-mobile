@@ -19,7 +19,6 @@ const RECORD_OPTIONS:CameraRecordingOptions = {
   quality: Camera.Constants.VideoQuality['480p']
 }
 
-let time = 0
 let timerId = null
 
 const VideoRecord = () => {
@@ -89,13 +88,6 @@ const VideoRecord = () => {
     setIsPreviewing(false)
   }
 
-  // const onSubmitted = () => {
-  //   reset({
-  //     index: 0,
-  //     routes: [{ name: 'Requests', key: null }]
-  //   })
-  // }
-
   const onSend = async () => {
     dispatch(toastActions.setToast({
       ...toast,
@@ -110,21 +102,17 @@ const VideoRecord = () => {
       requestsActions
         .approveRequest(
           id,
-          videoUri,
-          timer
-          // onSubmitted
+          videoUri
         )
     )
   }
 
   const startTimer = () => {
     timerId = setInterval(() => {
-      time = time + 1
-      setTimer(time)
+      setTimer(t => t + 1)
     }, 1000)
   }
   const resetTimer = () => {
-    time = 0
     setTimer(0)
     timerId && clearInterval(timerId)
   }
@@ -147,12 +135,17 @@ const VideoRecord = () => {
                 </View>}
             </View>
             {!isPreviewing &&
-            <Camera
-                style={styles.camera}
-                type={Camera.Constants.Type.front}
-                ref={camera}
-                ratio={ratio}
-            />}
+            <View
+              style={styles.camera}
+            >
+              <Camera
+                style={[styles.cameraModule]}
+                  type={Camera.Constants.Type.front}
+                  ref={camera}
+                  ratio={ratio}
+              />
+            </View>
+            }
             {(isPreviewing) &&
             <View style={styles.videoContainer}>
                 <View>
@@ -212,7 +205,7 @@ const VideoRecord = () => {
                         <TouchableRipple
                             style={styles.miniBtn}
                             onPress={null}>
-                            <Paragraph>{time}s</Paragraph>
+                            <Paragraph>{timer}s</Paragraph>
                         </TouchableRipple>
                     </View>
                 </View>}
@@ -221,18 +214,19 @@ const VideoRecord = () => {
   )
 }
 
-// define your styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000'
   },
   camera: {
-    // flex:1,
-    // height: '100%',
     height: '100%',
     width: '100%',
-    position: 'absolute'
+    position: 'absolute',
+    justifyContent: 'center'
+  },
+  cameraModule: {
+    flex: 1
   },
   nav: {
     flexDirection: 'row',

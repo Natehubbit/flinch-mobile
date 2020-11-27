@@ -41,7 +41,7 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
           : route === 'Notifications'
             ? 'bell-outline'
             : route === 'Videos'
-              ? 'video'
+              ? 'video-outline'
               : route === 'Profile'
                 ? 'account-outline'
                 : 'camera'

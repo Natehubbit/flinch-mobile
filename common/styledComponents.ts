@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 import { theme } from '../config/theme'
-import { Dimensions, TextProps } from 'react-native'
+import { Dimensions, TextProps, ViewProps } from 'react-native'
 
 export const maxWidth = Dimensions.get('window').width
 export const maxHeight = Dimensions.get('window').height
@@ -79,7 +79,7 @@ export const AltMiniLabel = styled.Text`
     font-family: 'Rubik-SemiBold'
 `
 
-interface FlexContainerProps {
+interface FlexContainerProps extends ViewProps {
     flex?:number;
     color?:string;
     justify?:string;

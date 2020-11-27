@@ -26,6 +26,12 @@ const getAllRequests = (id:string) => async (dispatch:Dispatch) => {
   dispatch(loaderActions.loaded('requestsLoader'))
 }
 
+const reloadRequests = (id:string, callback?:()=>void) => async (dispatch:Dispatch) => {
+  const res = await RequestService.getAllRequests(id)
+  res && dispatch(actions.getRequests(res))
+  callback && callback()
+}
+
 const rejectRequest = (id:string, callback?:()=>void) => async (dispatch:Dispatch, getState:()=>AppState) => {
   const { requests } = getState()
   const res = await RequestService.rejectRequest(id)
@@ -36,7 +42,7 @@ const rejectRequest = (id:string, callback?:()=>void) => async (dispatch:Dispatc
   callback && callback()
 }
 
-const approveRequest = (id:string, uri:string, duration:number, callback?:()=>void) =>
+const approveRequest = (id:string, uri:string, callback?:()=>void) =>
   async (dispatch:Dispatch, getState:()=>AppState) => {
     const { requests } = getState()
     const loading = () => dispatch(loaderActions.loading('responseLoader'))
@@ -44,7 +50,6 @@ const approveRequest = (id:string, uri:string, duration:number, callback?:()=>vo
       .approveRequest(
         id,
         uri,
-        duration,
         loading
       )
     if (res) {
@@ -64,5 +69,6 @@ export const requestsActions = {
   ...actions,
   rejectRequest,
   getAllRequests,
-  approveRequest
+  approveRequest,
+  reloadRequests
 }

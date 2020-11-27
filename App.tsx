@@ -45,7 +45,6 @@ function cacheFonts (fonts:Array<string | { [fontFamily: string]: Font.FontSourc
 
 const App: () => React.ReactNode = () => {
   const [appReady, setAppReady] = useState(false)
-  // const navRef = useRef<NavigationContainerRef>(null)
   useEffect(() => {
     LogBox.ignoreLogs(['Setting'])
     const lockScreen = async () => {

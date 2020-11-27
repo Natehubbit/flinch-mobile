@@ -11,6 +11,7 @@ import { Routes, UploadVideoScreenRouteProps } from '../../navigation'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
 import { toastActions } from '../../store/toast'
+import * as MediaLibrary from 'expo-media-library'
 
 const VideoUpload = () => {
   const dispatch = useDispatch()
@@ -50,16 +51,19 @@ const VideoUpload = () => {
         .approveRequest(
           id,
           videoUri,
-          10,
           onReset
         )
     )
   }
   const requestPermission = async () => {
-    await Camera.getPermissionsAsync()
+    const { status: mediaPerm } = await MediaLibrary.requestPermissionsAsync()
     const { status: videoPerm } = await Camera.requestPermissionsAsync()
     const { status: audioPerm } = await Audio.requestPermissionsAsync()
-    return (videoPerm === 'granted' && audioPerm === 'granted')
+    return (
+      videoPerm === 'granted' &&
+      audioPerm === 'granted' &&
+      mediaPerm === 'granted'
+    )
   }
   return (
         <View style={styles.container}>

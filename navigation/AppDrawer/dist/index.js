@@ -20,6 +20,7 @@ var stack_1 = require("@react-navigation/stack");
 var WebView_1 = require("../../screens/WebView");
 var VideoStack_1 = require("../VideoStack");
 var Video_1 = require("../../screens/Video");
+var Notifications_1 = require("../../screens/Notifications");
 var Drawer = drawer_1.createDrawerNavigator();
 var AppDrawer = function () {
     return (react_1["default"].createElement(Drawer.Navigator, { drawerContent: function (props) { return react_1["default"].createElement(Drawer_1["default"], __assign({}, props)); }, initialRouteName: "Home", screenOptions: {
@@ -34,6 +35,7 @@ var AppDrawerRoot = function () {
     return (react_1["default"].createElement(Stack.Navigator, { mode: 'modal', headerMode: 'none' },
         react_1["default"].createElement(Stack.Screen, { name: "Home", component: AppDrawer }),
         react_1["default"].createElement(Stack.Screen, { name: 'WebView', component: WebView_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'Video', component: Video_1["default"] })));
+        react_1["default"].createElement(Stack.Screen, { name: "Video", component: Video_1["default"] }),
+        react_1["default"].createElement(Stack.Screen, { name: "Notifications", component: Notifications_1["default"] })));
 };
 exports["default"] = AppDrawerRoot;

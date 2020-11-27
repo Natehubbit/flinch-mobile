@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import WebViewScreen from '../../screens/WebView'
 import VideoStack from '../VideoStack'
 import Video from '../../screens/Video'
+import Notifications from '../../screens/Notifications'
 
 const Drawer = createDrawerNavigator()
 const AppDrawer = () => {
@@ -35,7 +36,8 @@ const AppDrawerRoot = () => {
         >
             <Stack.Screen name="Home" component={AppDrawer} />
             <Stack.Screen name='WebView' component={WebViewScreen}/>
-            <Stack.Screen name='Video' component={Video} />
+            <Stack.Screen name="Video" component={Video} />
+            <Stack.Screen name="Notifications" component={Notifications} />
         </Stack.Navigator>
   )
 }

@@ -3,18 +3,25 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Appbar, Badge, withTheme } from 'react-native-paper'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
+import { Theme } from 'react-native-paper/lib/typescript/src/types'
 
 interface NavProps {
-    title:string;
+    title?:string;
     left?:string;
     right?:string;
     isHome?:boolean;
     hideMenu?:boolean;
     hideBell?:boolean;
+    transparent?:boolean;
+    theme: Theme;
 }
 
-const Navbar: React.FC<any> = (props:NavProps) => {
-  const { title, isHome, hideMenu, hideBell } = props
+const Navbar: React.FC<NavProps> = ({
+  title,
+  isHome,
+  hideMenu,
+  hideBell
+}) => {
   const { navigate, canGoBack, dispatch, goBack } = useNavigation()
   const backable = canGoBack()
   const onToggleDrawer = () => dispatch(DrawerActions.toggleDrawer())

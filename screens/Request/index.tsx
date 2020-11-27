@@ -18,7 +18,7 @@ import { requestsActions } from '../../store/requests'
 const Request: React.FC = () => {
   const dispatch = useDispatch()
   const [rejecting, setRejecting] = useState(false)
-  const { imageUrl: uri, role } = useUser()
+  const { role } = useUser()
   const { navigate, goBack } = useNavigation()
   const { params } = useRoute<RequestScreenRouteProps>()
   const { id } = params
@@ -29,11 +29,13 @@ const Request: React.FC = () => {
     recipient,
     price,
     celebrity: {
-      name
+      name,
+      imageUrl
     },
     response: {
       duration,
-      timestamp
+      timestamp,
+      videoUri: uri
     }
   } = useRequests('id', id)[0] || initStateRequest
   const summarize = instructions.length > 99
@@ -52,8 +54,9 @@ const Request: React.FC = () => {
     id,
     duration,
     recipient,
-    timestamp,
-    name
+    date: HelperService.parseToDate(timestamp),
+    name,
+    uri
   })
   const onReject = async () => {
     setRejecting(true)
@@ -68,8 +71,8 @@ const Request: React.FC = () => {
             <View style={styles.panelContainer}>
                 <View style={styles.panel}>
                     <Image
-                        source={{ uri }}
-                        style={styles.img}
+                      source={{ uri: imageUrl }}
+                      style={styles.img}
                     />
                     <View style={styles.panelContent}>
                         <View style={styles.userInfo}>
@@ -99,14 +102,18 @@ const Request: React.FC = () => {
                             <View style={styles.videoContainer}>
                                 <View style={styles.video}>
                                     <TouchableRipple>
-                                        <Play/>
+                                      <Play/>
                                     </TouchableRipple>
                                 </View>
-                                <Paragraph black style={styles.videoLabel} >
-                                    {occasion}{'\n'}
-                                    <Icon name='clock' color='rgba(0,0,0,0.5)' />
+                                <View style={styles.videoLabel}>
+                                  <Paragraph black>
+                                    {occasion}
+                                  </Paragraph>
+                                  <View style={[styles.length]}>
+                                    <Icon name='clock-outline' color='rgba(0,0,0,0.5)' />
                                     <MiniLabel numberOfLines={1} style={styles.duration} >50s</MiniLabel>
-                                </Paragraph>
+                                  </View>
+                                </View>
                             </View>
                             </TouchableRipple>
                         </>}
@@ -131,16 +138,16 @@ const Request: React.FC = () => {
         </ScrollView>
         {showButtons && <View style={styles.buttons}>
             <Button
-                onPress={onAccept}
-                label='Accept'
-                disabled={rejecting}
+              onPress={onAccept}
+              label='Accept'
+              disabled={rejecting}
             />
             <Button
-                onPress={onReject}
-                label='Reject'
-                type='outline'
-                loading={rejecting}
-                disabled={rejecting}
+              onPress={onReject}
+              label='Reject'
+              type='outline'
+              loading={rejecting}
+              disabled={rejecting}
             />
         </View>}
     </>
@@ -216,9 +223,15 @@ const styles = StyleSheet.create({
   videoLabel: {
     marginLeft: 15
   },
+  length: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   duration: {
     lineHeight: 25,
-    fontSize: 12
+    fontSize: 12,
+    marginLeft: 2
   },
   durationIcon: {
     opacity: 0.5

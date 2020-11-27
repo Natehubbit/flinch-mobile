@@ -14,8 +14,11 @@
     "expo-camera": "~9.0.0",
     "expo-image-picker": "~9.1.1",
     "expo-linear-gradient": "~8.3.0",
+    "expo-screen-orientation": "~2.0.0",
+    "expo-web-browser": "~8.5.0",
     "firebase": "7.9.0",
     "formik": "^2.2.4",
+    "moment": "^2.29.1",
     "react": "~16.13.0",
     "react-dom": "~16.13.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.2.tar.gz",
@@ -33,8 +36,8 @@
     "redux-persist": "^6.0.0",
     "styled-components": "^5.2.1",
     "yup": "^0.29.3",
-    "expo-screen-orientation": "~2.0.0",
-    "expo-web-browser": "~8.5.0"
+    "expo-media-library": "~9.2.1",
+    "expo-video-thumbnails": "~4.3.0"
   },
   "devDependencies": {
     "@babel/core": "7.9.0",

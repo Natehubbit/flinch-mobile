@@ -3,21 +3,33 @@ import { Video } from 'expo-av'
 import { StyleSheet } from 'react-native'
 import { COLORS } from '../../config/theme'
 
-export default function VideoPlayer () {
+const img = require('../../assets/images/logo.png')
+interface VideoPlayerProps {
+  uri: string;
+}
+
+const VideoPlayer: React.FC<VideoPlayerProps> = ({
+  uri
+}) => {
   return (
     <Video
-      source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}
+      source={{ uri }}
       rate={1.0}
       volume={1.0}
       isMuted={false}
-      resizeMode="contain"
+      resizeMode={Video.RESIZE_MODE_CONTAIN}
       shouldPlay
       isLooping
-      useNativeControls
+      // useNativeControls
       style={[styles.container]}
+      rotation={0}
+      // usePoster
+      // posterSource={img}
     />
   )
 }
+
+export default VideoPlayer
 
 const styles = StyleSheet.create({
   container: {

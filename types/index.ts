@@ -17,6 +17,7 @@ export interface AppLoader {
     paymentLoader:boolean;
     requestsLoader:boolean;
     responseLoader:boolean;
+    videosResponseLoader:boolean;
 }
 
 export type UploadProgressRef = firebase.storage.UploadTask|null;
@@ -69,6 +70,15 @@ export interface RequestResponse {
     duration:number;
     status:ResponseStatus;
     timestamp:number;
+    thmbnailUri:string;
+}
+
+export interface ResponsePayload extends RequestResponse {
+    id: string;
+    celebrity: string;
+    date: string;
+    recipient: string;
+    thumbnailUri: string;
 }
 
 export type ResponseStatus = 'pending'|'rejected'|'approved'
@@ -110,3 +120,14 @@ export interface PaymentInitResponse {
 }
 
 export type RequestStatus = 'urgent'|'failed'|'success'|'pending'
+
+export interface ResponseState {
+    approved: ResponsePayload[];
+    rejected: ResponsePayload[]
+    all: ResponsePayload[]
+  }
+
+export interface ApprovedActionPayload {
+    key: keyof ResponseState;
+    data: ResponsePayload[];
+  }

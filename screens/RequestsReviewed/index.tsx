@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { RefreshControl, StyleSheet, View } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, RefreshControl, StyleSheet, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { ActivityIndicator, HelperText } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import RequestCard from '../../components/RequestCard'
@@ -17,7 +17,7 @@ const RequestsReviewed: React.FC = () => {
   const requests = useRequests('status', 'success')
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
-  const [refresh, setRefresh] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const { id } = useUser()
   const { requestsLoader: loading } = useLoader()
   useEffect(() => {
@@ -26,40 +26,50 @@ const RequestsReviewed: React.FC = () => {
   const fetchData = () => {
     dispatch(requestsActions.getAllRequests(id))
   }
-  const onRefresh = () => {
-    setRefresh(true)
-    fetchData()
+  const onReload = () => {
+    console.log('hel')
+    setRefreshing(true)
+    const endRefresh = () => setRefreshing(false)
+    dispatch(requestsActions.reloadRequests(id, endRefresh))
   }
   const onOpenRequest = (id:string) => navigate<Routes>(
     'Request', { id }
   )
+
   const renderRequests = () => {
     const requestEmpty = requests.length < 1
-    return requestEmpty
-      ? <View style={[styles.noData]}>
-                <HelperText type='info'>
-                    No reviewed requests
-                </HelperText>
-            </View>
-      : <FlatList
-                data={requests}
-                contentContainerStyle={[styles.listContainer]}
-                renderItem={({ item }) => <RequestCard
-                    name={item.recipient}
-                    imageUrl={item.celebrity.imageUrl}
-                    occasion={item.occasion}
-                    price={HelperService.parseToMoney(item.price)}
-                    tag={item.status}
-                    onPress={() => onOpenRequest(item.id)}
-                />}
-                refreshControl={<RefreshControl
-                    refreshing={refresh}
-                    onRefresh={onRefresh}
-                    colors={[theme.colors.primary]}
-                />}
-                initialNumToRender={7}
-                keyExtractor={(item, i) => item.id || i.toString()}
-            />
+    return (
+      requestEmpty
+        ? <ScrollView
+          contentContainerStyle={[styles.noData]}
+          refreshControl={<RefreshControl
+            refreshing={refreshing}
+            onRefresh={onReload}
+            colors={[theme.colors.primary]}
+          />}
+        >
+          <HelperText type='info'>
+            No reviewed requests
+          </HelperText>
+        </ScrollView>
+        : <FlatList
+          data={requests}
+          refreshControl={<RefreshControl
+            refreshing={refreshing}
+            onRefresh={onReload}
+            colors={[theme.colors.primary]}
+          />}
+          renderItem={({ item }) => <RequestCard
+            name={item.recipient}
+            imageUrl={item.celebrity.imageUrl}
+            occasion={item.occasion}
+            price={HelperService.parseToMoney(item.price)}
+            tag={item.status}
+            onPress={() => onOpenRequest(item.id)}
+          />}
+          keyExtractor={(item, i) => item.id || i.toString()}
+        />
+    )
   }
 
   return loading
@@ -69,14 +79,19 @@ const RequestsReviewed: React.FC = () => {
             size='small'
         />
     </View>
-    : <>
+    : <View style={[styles.container]}>
         {renderRequests()}
-    </>
+    </View>
 }
 
 export default RequestsReviewed
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    flex: 1,
+    marginTop: 10
+  },
   loader: {
     flex: 1,
     justifyContent: 'center',
@@ -88,6 +103,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   listContainer: {
-    paddingBottom: 50
+    paddingBottom: 25
   }
 })

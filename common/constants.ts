@@ -50,3 +50,4 @@ export const initStateRequest: Request = {
 // PATHS
 
 export const REQUEST_VIDEO_PATH = 'request/'
+export const THUMBS_PATH = 'thumbnails/'

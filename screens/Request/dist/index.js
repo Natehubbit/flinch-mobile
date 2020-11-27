@@ -54,11 +54,11 @@ var requests_1 = require("../../store/requests");
 var Request = function () {
     var dispatch = react_redux_1.useDispatch();
     var _a = react_1.useState(false), rejecting = _a[0], setRejecting = _a[1];
-    var _b = useUser_1.useUser(), uri = _b.imageUrl, role = _b.role;
-    var _c = native_1.useNavigation(), navigate = _c.navigate, goBack = _c.goBack;
+    var role = useUser_1.useUser().role;
+    var _b = native_1.useNavigation(), navigate = _b.navigate, goBack = _b.goBack;
     var params = native_1.useRoute().params;
     var id = params.id;
-    var _d = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _d.occasion, status = _d.status, instructions = _d.instructions, recipient = _d.recipient, price = _d.price, name = _d.celebrity.name, _e = _d.response, duration = _e.duration, timestamp = _e.timestamp;
+    var _c = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _c.occasion, status = _c.status, instructions = _c.instructions, recipient = _c.recipient, price = _c.price, _d = _c.celebrity, name = _d.name, imageUrl = _d.imageUrl, _e = _c.response, duration = _e.duration, timestamp = _e.timestamp, uri = _e.videoUri;
     var summarize = instructions.length > 99;
     var info = summarize
         ? instructions.substring(0, 99)
@@ -76,7 +76,8 @@ var Request = function () {
         duration: duration,
         recipient: recipient,
         timestamp: timestamp,
-        name: name
+        name: name,
+        uri: uri
     }); };
     var onReject = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -93,7 +94,7 @@ var Request = function () {
         react_1["default"].createElement(react_native_1.ScrollView, { style: styles.container },
             react_1["default"].createElement(react_native_1.View, { style: styles.panelContainer },
                 react_1["default"].createElement(react_native_1.View, { style: styles.panel },
-                    react_1["default"].createElement(react_native_1.Image, { source: { uri: uri }, style: styles.img }),
+                    react_1["default"].createElement(react_native_1.Image, { source: { uri: imageUrl }, style: styles.img }),
                     react_1["default"].createElement(react_native_1.View, { style: styles.panelContent },
                         react_1["default"].createElement(react_native_1.View, { style: styles.userInfo },
                             react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.name }, name),

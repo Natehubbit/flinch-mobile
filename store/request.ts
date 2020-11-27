@@ -12,6 +12,7 @@ export const initState: Request = {
   response: {
     status: 'pending',
     videoUri: '',
+    thmbnailUri: '',
     duration: 0,
     timestamp: 0
   },
@@ -30,7 +31,6 @@ export const initState: Request = {
   recipient: '',
   status: 'pending',
   price: 0,
-  payed: false,
   timestamp: 0
 }
 

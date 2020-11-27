@@ -1,78 +1,78 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
-import { FAB } from 'react-native-paper'
-import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
-import LabelTag from '../../components/LabelTag'
-import SectionHeader from '../../components/SectionHeader'
-import VideoCardMini from '../../components/VideoCardMini'
+import { FAB, IconButton } from 'react-native-paper'
 import VideoPlayer from '../../components/VideoPlayer'
 import { COLORS } from '../../config/theme'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { VideoScreenRouteProps } from '../../navigation'
+import { LinearGradient } from 'expo-linear-gradient'
+import HelperService from '../../services/HelperService'
+import { useUser } from '../../hooks/useUser'
+import IconBtn from '../../components/IconBtn'
 
 const Video: React.FC = () => {
+  const { displayName } = useUser()
+  const { goBack } = useNavigation()
   const {
     params: {
       // id,
       // duration,
       name,
       recipient,
-      timestamp
+      date,
+      uri
     }
   } = useRoute<VideoScreenRouteProps>()
+  const onShare = () => {
+    HelperService.shareMedia(
+      `${displayName} sent you a FLINCH from ${name} at ${uri}`
+    )
+  }
   return (
     <View style={[styles.container]}>
-      <View style={[styles.videoContainer]}>
-        <VideoPlayer/>
-      </View>
-      <View style={[styles.videoInfo]}>
-        <View style={[styles.panel]}>
-          <View style={[styles.info]}>
-            <Text style={[styles.name]}>{recipient}</Text>
-            <LabelTag/>
-            <View style={[styles.extraContainer]}>
-              <View style={[styles.extra]}>
-                <Icon name='calendar' color={COLORS.grey} />
-                <Text style={[styles.mini]}>{timestamp}</Text>
-              </View>
-              <View style={[styles.extra]}>
-                <Icon name='star-outline' color={COLORS.grey} />
-                <Text style={[styles.mini]}>{name}</Text>
-              </View>
-            </View>
-          </View>
-          <View style={[styles.more]}>
-            <TouchableOpacity>
-              <Icon
-                name='dots-vertical'
-                size={25}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <ScrollView
-          contentContainerStyle={[styles.othersContainer]}
+      <View style={[styles.head]}>
+        <LinearGradient
+          colors={['rgba(0,0,0,0.5)', 'transparent']}
+          style={[styles.headContent]}
         >
-          <SectionHeader title='Others' />
-          <View style={[styles.videosContainer]}>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-            <VideoCardMini/>
-          </View>
-        </ScrollView>
+          <FAB
+            icon='close'
+            style={[styles.icon]}
+            small
+            onPress={goBack}
+          />
+        </LinearGradient>
       </View>
-      <FAB
-        icon='share'
-        style={[styles.fab]}
-      />
+      <View style={[styles.videoContainer]}>
+        <VideoPlayer
+          uri={uri}
+        />
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.5)']}
+          style={[styles.btnsContainer]}
+        >
+          <View style={[styles.btns]}>
+            <IconBtn
+              icon='cloud-download'
+            />
+            <IconBtn
+              icon='cloud-download-outline'
+            />
+          </View>
+          <View style={[styles.aside]}>
+            <IconBtn
+              icon='export-variant'
+              onPress={onShare}
+              style={[styles.btn]}
+            />
+            <FAB
+              icon='send'
+              onPress={onShare}
+              small
+            />
+          </View>
+        </LinearGradient>
+      </View>
     </View>
   )
 }
@@ -89,14 +89,47 @@ const styles = StyleSheet.create({
   videoInfo: {
     flex: 2
   },
-  panel: {
-    height: 90,
-    elevation: 2,
-    backgroundColor: COLORS.white,
-    justifyContent: 'space-between',
+  icon: {
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    elevation: 0,
+    left: 15
+  },
+  aside: {
+    alignItems: 'center'
+  },
+  head: {
+    height: 60,
+    zIndex: 1,
+    width: '100%',
+    position: 'absolute'
+  },
+  headContent: {
+    flex: 1,
+    paddingLeft: 15,
+    justifyContent: 'center'
+  },
+  btns: {
     flexDirection: 'row',
-    paddingHorizontal: 29,
-    paddingVertical: 15
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end'
+  },
+  btnsContainer: {
+    position: 'absolute',
+    bottom: 0,
+    height: 80,
+    paddingBottom: 2,
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: 15,
+    alignItems: 'flex-end',
+    justifyContent: 'space-between'
+  },
+  btn: {
+    marginBottom: 15
+  },
+  btnLeft: {
+    marginRight: 15
   },
   othersContainer: {
     paddingHorizontal: 20,

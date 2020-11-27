@@ -11,8 +11,9 @@ export type VideoNavParam = {
   id:string;
   duration:number;
   recipient:string;
-  timestamp:string;
+  date:string;
   name:string;
+  uri:string;
 }
 
 export type RouteParams = {

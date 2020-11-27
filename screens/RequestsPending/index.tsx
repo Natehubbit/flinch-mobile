@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { View, StyleSheet, RefreshControl } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, View, StyleSheet, RefreshControl } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { ActivityIndicator, HelperText } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import RequestCard from '../../components/RequestCard'
@@ -23,12 +23,16 @@ const RequestsPending: React.FC = () => {
   useEffect(() => {
     fetchData()
   }, [])
+  // useEffect(() => {
+  //   setRefresh(false)
+  // }, [requests])
   const fetchData = () => {
     dispatch(requestsActions.getAllRequests(id))
   }
-  const onRefresh = () => {
+  const onReload = () => {
     setRefresh(true)
-    fetchData()
+    const endRefresh = () => setRefresh(false)
+    dispatch(requestsActions.reloadRequests(id, endRefresh))
   }
   const onOpenRequest = (id:string) => navigate<Routes>(
     'Request', { id }
@@ -36,11 +40,18 @@ const RequestsPending: React.FC = () => {
   const renderRequests = () => {
     const requestEmpty = requests.length < 1
     return requestEmpty
-      ? <View style={[styles.noData]}>
+      ? <ScrollView
+          contentContainerStyle={[styles.noData]}
+          refreshControl={<RefreshControl
+            refreshing={refresh}
+            onRefresh={onReload}
+            colors={[theme.colors.primary]}
+        />}
+        >
             <HelperText type='info'>
                 No pending requests
             </HelperText>
-        </View>
+        </ScrollView>
       : <FlatList
             data={requests}
             contentContainerStyle={[styles.listContainer]}
@@ -54,7 +65,7 @@ const RequestsPending: React.FC = () => {
             />}
             refreshControl={<RefreshControl
                 refreshing={refresh}
-                onRefresh={onRefresh}
+                onRefresh={onReload}
                 colors={[theme.colors.primary]}
             />}
             initialNumToRender={7}
@@ -88,6 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   listContainer: {
-    paddingBottom: 50
+    paddingBottom: 25
   }
 })
