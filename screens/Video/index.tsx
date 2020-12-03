@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { FAB, IconButton } from 'react-native-paper'
+import { StyleSheet, View } from 'react-native'
+import { FAB } from 'react-native-paper'
 import VideoPlayer from '../../components/VideoPlayer'
 import { COLORS } from '../../config/theme'
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -9,8 +9,12 @@ import { LinearGradient } from 'expo-linear-gradient'
 import HelperService from '../../services/HelperService'
 import { useUser } from '../../hooks/useUser'
 import IconBtn from '../../components/IconBtn'
+import { VIDEO_SAVES } from '../../common/constants'
+import DownloadHookService from '../../services/DownloadHookService'
 
 const Video: React.FC = () => {
+  const [saving, setSaving] = useState(false)
+  const [progress, setProgress] = useState(0)
   const { displayName } = useUser()
   const { goBack } = useNavigation()
   const {
@@ -18,15 +22,24 @@ const Video: React.FC = () => {
       // id,
       // duration,
       name,
-      recipient,
-      date,
-      uri
+      // recipient,
+      // date,
+      uri: url
     }
   } = useRoute<VideoScreenRouteProps>()
   const onShare = () => {
     HelperService.shareMedia(
-      `${displayName} sent you a FLINCH from ${name} at ${uri}`
+      `${displayName} sent you a FLINCH from ${name} at ${url}`
     )
+  }
+  const onSaveVideo = async () => {
+    setSaving(true)
+    const label = Date.now() + '.mp4'
+    const uri = await DownloadHookService
+      .download(url, `${label}.mp4`, setProgress)
+    uri && await HelperService
+      .saveMedia(VIDEO_SAVES, uri)
+    setSaving(false)
   }
   return (
     <View style={[styles.container]}>
@@ -45,26 +58,37 @@ const Video: React.FC = () => {
       </View>
       <View style={[styles.videoContainer]}>
         <VideoPlayer
-          uri={uri}
+          uri={url}
         />
         <LinearGradient
           colors={['transparent', 'rgba(0,0,0,0.5)']}
           style={[styles.btnsContainer]}
         >
           <View style={[styles.btns]}>
-            <IconBtn
-              icon='cloud-download'
-            />
-            <IconBtn
+            {!saving
+              ? <IconBtn
+                icon='cloud-download'
+                onPress={onSaveVideo}
+              />
+              : <FAB
+                icon={null}
+                loading={saving}
+                label={`${progress}% Downloading`}
+                uppercase={false}
+                small
+                style={{ backgroundColor: 'transparent', elevation: 0 }}
+              />
+            }
+            {/* <IconBtn
               icon='cloud-download-outline'
-            />
+            /> */}
           </View>
           <View style={[styles.aside]}>
-            <IconBtn
+            {/* <IconBtn
               icon='export-variant'
               onPress={onShare}
               style={[styles.btn]}
-            />
+            /> */}
             <FAB
               icon='send'
               onPress={onShare}

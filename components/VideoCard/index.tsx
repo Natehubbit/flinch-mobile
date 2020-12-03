@@ -54,15 +54,17 @@ const VideoCard:React.FC<VideoCardProps> = ({
           />
           <View style={[styles.infoContainer]}>
             <View style={[styles.info]}>
-              <AltMiniLabel style={[styles.celeb]}>{celebrity}</AltMiniLabel>
+              <AltMiniLabel numberOfLines={3} style={[styles.celeb]}>
+                {celebrity}
+              </AltMiniLabel>
               <View style={[styles.labelContainer]}>
                 <View style={[styles.label]}>
-                  <Icon name='account-outline' color={COLORS.white} />
-                  <Paragraph>{recipient}</Paragraph>
+                  <Icon size={10} name='account-outline' color={COLORS.white} />
+                  <Paragraph style={[styles.mini]} numberOfLines={1}>{recipient}</Paragraph>
                 </View>
                 <View style={[styles.label]}>
-                  <Icon name='calendar-outline' color={COLORS.white} />
-                  <Paragraph numberOfLines={1}>{'f'}</Paragraph>
+                  <Icon size={10} name='calendar-outline' color={COLORS.white} />
+                  <Paragraph style={[styles.mini]} numberOfLines={1}>{date}</Paragraph>
                 </View>
               </View>
             </View>
@@ -102,7 +104,6 @@ const styles = StyleSheet.create({
     elevation: 0
   },
   info: {
-    paddingRight: 75,
     paddingLeft: 15,
     paddingVertical: 10,
     justifyContent: 'flex-end',
@@ -125,7 +126,11 @@ const styles = StyleSheet.create({
   },
   label: {
     flexDirection: 'row',
-    alignItems: 'center',
-    fontSize: 5
+    alignItems: 'center'
+    // fontSize: 5
+  },
+  mini: {
+    fontSize: 10,
+    marginLeft: 5
   }
 })

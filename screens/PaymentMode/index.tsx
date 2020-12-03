@@ -1,5 +1,4 @@
 import React from 'react'
-import { useNavigation } from '@react-navigation/native'
 import { Alert, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
@@ -7,14 +6,18 @@ import { PAYMENT_CALLBACK, PAYMENT_OPTIONS } from '../../common/constants'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import PaymentService from '../../services/PaymentService'
 import { useUser } from '../../hooks/useUser'
-import { Routes } from '../../navigation'
 import { loaderActions } from '../../store/loader'
 import { useDispatch } from 'react-redux'
 import { PaymentType } from '../../types'
+import { useRequest } from '../../hooks/useRequest'
+import { useNavigation } from '@react-navigation/native'
+import { Routes } from '../../navigation'
 
 const PaymentMode: React.FC = () => {
   const dispatch = useDispatch()
+  const { price, id: requestId } = useRequest()
   const { navigate } = useNavigation()
+  const cost = price.toString()
   const {
     id,
     displayName,
@@ -25,9 +28,9 @@ const PaymentMode: React.FC = () => {
     const isCreditCard = type === 'Credit Card'
     let uri = null
     if (isCreditCard) {
-      uri = await makePayment('card', '10000')
+      uri = await makePayment('card', cost)
     } else {
-      uri = await makePayment('mobile_money', '10000')
+      uri = await makePayment('mobile_money', cost)
     }
     uri
       ? navigate<Routes>('WebView', { uri, onStopLoading })
@@ -47,6 +50,7 @@ const PaymentMode: React.FC = () => {
       label: displayName,
       metadata: {
         customerName: displayName,
+        requestId,
         id
       }
     })
@@ -56,27 +60,27 @@ const PaymentMode: React.FC = () => {
   }
   const renderIcon = (icon:string) => {
     return (
-            <View style={styles.logoContainer}>
-                <Icon name={icon} size={25} />
-            </View>
+      <View style={styles.logoContainer}>
+        <Icon name={icon} size={25} />
+      </View>
     )
   }
   const renderOptions = () => {
     return PAYMENT_OPTIONS.map(({ label, icon }) => (
-            <List.Item
-                key={label}
-                onPress={() => onSelect(label)}
-                title={label}
-                left={() => renderIcon(icon)}
-                style={styles.listItem}
-            />
+      <List.Item
+        key={label}
+        onPress={() => onSelect(label)}
+        title={label}
+        left={() => renderIcon(icon)}
+        style={styles.listItem}
+      />
     ))
   }
   return <View style={styles.container}>
-        {/* <SectionHeader title='Payment Method' /> */}
-        <ScrollView style={styles.scroll}>
-            {renderOptions()}
-        </ScrollView>
+      {/* <SectionHeader title='Payment Method' /> */}
+      <ScrollView style={styles.scroll}>
+          {renderOptions()}
+      </ScrollView>
     </View>
 }
 

@@ -20,7 +20,6 @@ const VideoUpload = () => {
   const { params: { id } } = useRoute<UploadVideoScreenRouteProps>()
   const { navigate, reset } = useNavigation()
   useEffect(() => {
-    console.log(videoUri)
     videoUri && onSend()
   }, [videoUri])
   const onReset = () => {

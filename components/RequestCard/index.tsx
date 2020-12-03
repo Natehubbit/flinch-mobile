@@ -4,22 +4,27 @@ import { Divider, TouchableRipple } from 'react-native-paper'
 import { AltMiniLabel, Paragraph } from '../../common/styledComponents'
 import Tag from '../Tag'
 import { RequestStatus } from '../../types'
+import { theme } from '../../config/theme'
 
 interface RequestCardProps {
-  name:string;
+  celeb:string;
   imageUrl:string;
   tag:RequestStatus;
   occasion:string;
   price:string;
+  recipient:string;
+  date:string;
   onPress:()=>void;
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({
-  name,
+  celeb,
   tag,
   occasion,
   imageUrl: uri,
   price,
+  recipient,
+  date,
   onPress
 }) => {
   return <View style={styles.container}>
@@ -33,8 +38,14 @@ const RequestCard: React.FC<RequestCardProps> = ({
                         />
                         <View style={styles.label}>
                             <AltMiniLabel>
-                                {name}
+                                {celeb}
                             </AltMiniLabel>
+                            <Paragraph black style={[styles.bottomLabel, styles.mini]}>
+                              For {recipient}
+                            </Paragraph>
+                            <Paragraph black style={[styles.bottomLabel, styles.mini]}>
+                              {date}
+                            </Paragraph>
                         </View>
                     </View>
                     <View style={styles.tagContainer}>
@@ -49,13 +60,13 @@ const RequestCard: React.FC<RequestCardProps> = ({
                         <Paragraph style={styles.bottomLabel}>
                             Occasion:
                             <Paragraph style={styles.bottomText}>
-                                {occasion}
+                              {'\t'}{occasion}
                             </Paragraph>
                         </Paragraph>
                     </View>
                     <View>
                         <Paragraph style={styles.bottomText}>
-                            {price}
+                          {price}
                         </Paragraph>
                     </View>
                 </View>
@@ -66,7 +77,7 @@ const RequestCard: React.FC<RequestCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 76,
+    height: 100,
     marginTop: 10,
     marginHorizontal: 10,
     borderRadius: 13,
@@ -83,8 +94,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   image: {
-    height: 30,
-    width: 30,
+    height: 40,
+    width: 40,
     borderRadius: 100
   },
   user: {
@@ -108,9 +119,15 @@ const styles = StyleSheet.create({
   bottomLabel: {
     color: 'rgba(0,0,0,0.5)'
   },
+  occasion: {
+    color: theme.colors.primary
+  },
   bottomText: {
     color: '#000'
     // fontWeight:'bold'
+  },
+  mini: {
+    fontSize: 12
   }
 })
 

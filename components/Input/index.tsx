@@ -6,6 +6,7 @@ import { TextInputProps } from 'react-native-paper/lib/typescript/src/components
 
 interface InputProps extends TextInputProps {
   onIconClicked?:()=>void;
+  left?:string|React.ReactNode;
 }
 
 const AuthInput: React.FC<InputProps> = ({

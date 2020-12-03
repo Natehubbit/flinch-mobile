@@ -4,6 +4,7 @@ import RequestsPending from '../../screens/RequestsPending'
 import RequestsReviewed from '../../screens/RequestsReviewed'
 import { StyleSheet } from 'react-native'
 import { theme } from '../../config/theme'
+import Requests from '../../screens/Requests'
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -19,8 +20,8 @@ function RequestsTabs () {
             }}
             style={styles.tab}
         >
-            <Tab.Screen name="Pending" component={RequestsPending} />
-            <Tab.Screen name="Reviewed" component={RequestsReviewed} />
+            <Tab.Screen name="Pending" component={Requests} />
+            <Tab.Screen name="Reviewed" component={Requests} />
         </Tab.Navigator>
   )
 }

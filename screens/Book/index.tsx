@@ -30,11 +30,11 @@ const Book: React.FC = () => {
       mounted.current = true
     } else {
       !booking &&
-            request.id &&
-            navigate<Routes>('Payment')
+      request.id &&
+      navigate<Routes>('Payment')
     }
   }, [booking])
-  const onSubmit = async (values:BookForm) => {
+  const onSubmit = (values:BookForm) => {
     const data:Request = {
       celebrity: {
         id,
@@ -49,6 +49,7 @@ const Book: React.FC = () => {
         status: 'pending',
         videoUri: '',
         duration: 0,
+        thumbnailUri: '',
         timestamp: Date.now()
       },
       payment: {
@@ -63,7 +64,8 @@ const Book: React.FC = () => {
       ...values
     }
     dispatch(requestActions.createRequest(data))
-    request.id && navigate<Routes>('Payment', { requestId: request.id })
+    request.id &&
+    navigate<Routes>('Payment')
   }
   const renderForm = () => {
     return (
@@ -121,7 +123,7 @@ const Book: React.FC = () => {
                             loading={booking}
                             disabled={booking}
                         >
-                            Submit
+                          Submit
                         </Button>
                     </>
                 }}

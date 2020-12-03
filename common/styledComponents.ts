@@ -25,12 +25,19 @@ export const AppContainer = styled.FlatList`
 `
 
 export const Paragraph = styled.Text<ParagraphProps>`
-    color:${({ black, link }) => black ? '#000' : link ? theme.colors.primary : '#fff'};
+    color:${({ black, link, light }) => black
+        ? '#000'
+        : link
+            ? theme.colors.primary
+            : light
+                ? 'rgba(0,0,0,0.5)'
+                : '#fff'
+        };
     font-weight:${({ link }) => link ? 'bold' : 'normal'};
     font-family: 'Karla-Regular';
 `
 
-export const FormContainer = styled.View`
+export const FormContainer = styled.View<ViewProps>`
     height:${maxHeight - 24}px
 `
 
@@ -42,24 +49,24 @@ export const FlexContainer = styled.View<FlexContainerProps>`
     align-items:${(props:FlexContainerProps) => props.align || 'stretch'}
 `
 
-export const MainTitle = styled.Text`
+export const MainTitle = styled.Text<TextProps>`
     font-size: 25px;
     color: ${theme.colors.accent};
     font-family: 'SuezOne-Regular';
 `
 
-export const SubHeading = styled.Text`
+export const SubHeading = styled.Text<TextProps>`
     font-size: 15px;
     font-family: 'MontserratAlternates-Bold'
 `
 
-export const MainLabel = styled.Text`
+export const MainLabel = styled.Text<TextProps>`
     font-size:25px;
     line-height: 33px;
     font-family: 'SuezOne-Regular'
 `
 
-export const AltMainLabel = styled.Text`
+export const AltMainLabel = styled.Text<TextProps>`
     font-size:25px;
     line-height: 33px;
     font-weight: bold;
@@ -90,4 +97,5 @@ interface FlexContainerProps extends ViewProps {
 interface ParagraphProps extends TextProps {
     black?:boolean;
     link?:boolean;
+    light?:boolean;
 }

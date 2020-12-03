@@ -26,19 +26,21 @@ export const { actions, ...responseSlice } = createSlice({
   }
 })
 
-const getApproved = (id:string, callback?:()=>void) => async (dispatch:Dispatch) => {
-  dispatch(loaderActions.loading('videosResponseLoader'))
-  const data = await ResponseService.getApproved(id)
-  data && dispatch(actions.getResponse({ key: 'approved', data }))
-  dispatch(loaderActions.loaded('videosResponseLoader'))
-  callback && callback()
-}
+const getApproved = (id:string, callback?:()=>void) =>
+  async (dispatch:Dispatch) => {
+    dispatch(loaderActions.loading('videosResponseLoader'))
+    const data = await ResponseService.getApproved(id)
+    data && dispatch(actions.getResponse({ key: 'approved', data }))
+    dispatch(loaderActions.loaded('videosResponseLoader'))
+    callback && callback()
+  }
 
-const reloadApproved = (id:string, callback?:()=>void) => async (dispatch:Dispatch) => {
-  const data = await ResponseService.getApproved(id)
-  data && dispatch(actions.getResponse({ key: 'approved', data }))
-  callback && callback()
-}
+const reloadApproved = (id:string, callback?:()=>void) =>
+  async (dispatch:Dispatch) => {
+    const data = await ResponseService.getApproved(id)
+    data && dispatch(actions.getResponse({ key: 'approved', data }))
+    callback && callback()
+  }
 
 export const responseActions = {
   ...actions,

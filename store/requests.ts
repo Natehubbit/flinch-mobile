@@ -3,6 +3,7 @@ import { AppState } from '.'
 import RequestService from '../services/RequestService'
 import { Request } from '../types'
 import { loaderActions } from './loader'
+import { responseActions } from './response'
 
 const initState: Request[] = []
 
@@ -44,7 +45,7 @@ const rejectRequest = (id:string, callback?:()=>void) => async (dispatch:Dispatc
 
 const approveRequest = (id:string, uri:string, callback?:()=>void) =>
   async (dispatch:Dispatch, getState:()=>AppState) => {
-    const { requests } = getState()
+    const { requests, user: { id: userId } } = getState()
     const loading = () => dispatch(loaderActions.loading('responseLoader'))
     const res = await RequestService
       .approveRequest(
@@ -60,9 +61,9 @@ const approveRequest = (id:string, uri:string, callback?:()=>void) =>
         return d
       })
       dispatch(actions.getRequests(data))
+      dispatch<any>(responseActions.reloadApproved(userId))
       callback && callback()
     }
-    dispatch(loaderActions.loaded('responseLoader'))
   }
 
 export const requestsActions = {

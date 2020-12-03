@@ -50,12 +50,13 @@ exports.__esModule = true;
 var firebase_1 = require("../config/firebase");
 var constants_1 = require("../common/constants");
 var HelperService_1 = require("./HelperService");
+var VideoThumbnails = require("expo-video-thumbnails");
 var RequestRef = firebase_1.db.collection('requests');
 var RequestService = /** @class */ (function () {
     function RequestService() {
     }
     RequestService.createRequest = function (data) {
-        return __awaiter(this, void 0, void 0, function () {
+        return __awaiter(this, void 0, Promise, function () {
             var id, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -81,46 +82,79 @@ var RequestService = /** @class */ (function () {
             });
         });
     };
-    RequestService.approveRequest = function (id, appUri, duration, loading) {
+    RequestService.approveRequest = function (id, appUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var video, uri, e_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var _a, assetId, duration, video, uri, thumbUri, thumb, thumbUrl, e_2;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, HelperService_1["default"].parseToBlob(appUri)];
+                        _b.trys.push([0, 11, , 12]);
+                        return [4 /*yield*/, HelperService_1["default"].getMediaInfo(appUri)
+                            // parse video to blob to upload to firebase storage
+                        ];
                     case 1:
-                        video = _a.sent();
-                        return [4 /*yield*/, HelperService_1["default"]
-                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, loading)];
+                        _a = _b.sent(), assetId = _a.id, duration = _a.duration;
+                        return [4 /*yield*/, HelperService_1["default"].parseToBlob(appUri)
+                            // upload video blob to firebase storage
+                        ];
                     case 2:
-                        uri = _a.sent();
-                        console.log(uri);
-                        if (!uri) return [3 /*break*/, 4];
+                        video = _b.sent();
+                        return [4 /*yield*/, HelperService_1["default"]
+                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, loading, true)
+                            // generate thumbnail for local uri midway through video
+                        ];
+                    case 3:
+                        uri = _b.sent();
+                        return [4 /*yield*/, VideoThumbnails
+                                .getThumbnailAsync(uri, {
+                                time: duration / 2
+                            })
+                            // parse thumbnail to blob to upload to storage
+                        ];
+                    case 4:
+                        thumbUri = (_b.sent()).uri;
+                        return [4 /*yield*/, HelperService_1["default"].parseToBlob(thumbUri)
+                            // upload thumb to storage
+                        ];
+                    case 5:
+                        thumb = _b.sent();
+                        return [4 /*yield*/, HelperService_1["default"]
+                                .generateBlobUrl("" + constants_1.THUMBS_PATH + id, thumb)];
+                    case 6:
+                        thumbUrl = _b.sent();
+                        if (!uri) return [3 /*break*/, 9];
                         return [4 /*yield*/, RequestRef.doc(id)
                                 .update({
                                 'response.videoUri': uri,
                                 'response.status': 'approved',
                                 'response.duration': duration,
-                                status: 'success'
+                                status: 'success',
+                                'response.thumbnailUri': thumbUrl
                             })];
-                    case 3:
-                        _a.sent();
+                    case 7:
+                        _b.sent();
+                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([assetId])];
+                    case 8:
+                        _b.sent();
                         return [2 /*return*/, {
                                 status: 'success',
                                 response: {
                                     duration: duration,
                                     status: 'approved',
                                     videoUri: uri,
+                                    thumbnailUri: thumbUrl,
                                     timestamp: Date.now()
                                 }
                             }];
-                    case 4: return [2 /*return*/, null];
-                    case 5:
-                        e_2 = _a.sent();
+                    case 9: return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([assetId])];
+                    case 10:
+                        _b.sent();
+                        return [2 /*return*/, null];
+                    case 11:
+                        e_2 = _b.sent();
                         console.log(e_2.message);
                         return [2 /*return*/, null];
-                    case 6: return [2 /*return*/];
+                    case 12: return [2 /*return*/];
                 }
             });
         });
@@ -163,13 +197,14 @@ var RequestService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, RequestRef
                                 .where('requestor.id', '==', id)
+                                .orderBy('timestamp', 'desc')
                                 .get()];
                     case 1:
                         res = _a.sent();
                         return [2 /*return*/, res.docs.map(function (d) { return (__assign(__assign(__assign({}, constants_1.initStateRequest), d.data()), { id: d.id })); })];
                     case 2:
                         e_4 = _a.sent();
-                        alert(e_4.message);
+                        console.log(e_4.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }

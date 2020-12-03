@@ -5,8 +5,9 @@ var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
 var styledComponents_1 = require("../../common/styledComponents");
 var Tag_1 = require("../Tag");
+var theme_1 = require("../../config/theme");
 var RequestCard = function (_a) {
-    var name = _a.name, tag = _a.tag, occasion = _a.occasion, uri = _a.imageUrl, price = _a.price, onPress = _a.onPress;
+    var celeb = _a.celeb, tag = _a.tag, occasion = _a.occasion, uri = _a.imageUrl, price = _a.price, recipient = _a.recipient, date = _a.date, onPress = _a.onPress;
     return react_1["default"].createElement(react_native_1.View, { style: styles.container },
         react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onPress },
             react_1["default"].createElement(react_1["default"].Fragment, null,
@@ -14,7 +15,11 @@ var RequestCard = function (_a) {
                     react_1["default"].createElement(react_native_1.View, { style: styles.user },
                         react_1["default"].createElement(react_native_1.Image, { source: { uri: uri }, style: styles.image }),
                         react_1["default"].createElement(react_native_1.View, { style: styles.label },
-                            react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, name))),
+                            react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, celeb),
+                            react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] },
+                                "For ",
+                                recipient),
+                            react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] }, date))),
                     react_1["default"].createElement(react_native_1.View, { style: styles.tagContainer },
                         react_1["default"].createElement(Tag_1["default"], { label: tag }))),
                 react_1["default"].createElement(react_native_paper_1.Divider, null),
@@ -22,13 +27,15 @@ var RequestCard = function (_a) {
                     react_1["default"].createElement(react_native_1.View, null,
                         react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomLabel },
                             "Occasion:",
-                            react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText }, occasion))),
+                            react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText },
+                                '\t',
+                                occasion))),
                     react_1["default"].createElement(react_native_1.View, null,
                         react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText }, price))))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
-        height: 76,
+        height: 100,
         marginTop: 10,
         marginHorizontal: 10,
         borderRadius: 13,
@@ -45,8 +52,8 @@ var styles = react_native_1.StyleSheet.create({
         flexDirection: 'row'
     },
     image: {
-        height: 30,
-        width: 30,
+        height: 40,
+        width: 40,
         borderRadius: 100
     },
     user: {
@@ -70,9 +77,15 @@ var styles = react_native_1.StyleSheet.create({
     bottomLabel: {
         color: 'rgba(0,0,0,0.5)'
     },
+    occasion: {
+        color: theme_1.theme.colors.primary
+    },
     bottomText: {
         color: '#000'
         // fontWeight:'bold'
+    },
+    mini: {
+        fontSize: 12
     }
 });
 exports["default"] = RequestCard;

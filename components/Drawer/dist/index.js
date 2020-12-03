@@ -41,6 +41,9 @@ var Drawer = function (props) {
     var renderRoutes = function () {
         return routeNames.map(function (route, i) {
             var isHome = route === 'Home';
+            var label = route === 'Videos'
+                ? 'My Videos'
+                : route;
             var icon = isHome
                 ? 'home-outline'
                 : route === 'Requests'
@@ -52,7 +55,7 @@ var Drawer = function (props) {
                             : route === 'Profile'
                                 ? 'account-outline'
                                 : 'camera';
-            return react_1["default"].createElement(drawer_1.DrawerItem, { key: i, icon: function (props) { return react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, __assign({}, props, { name: icon, style: styles.drawerIcon })); }, label: route, onPress: function () { return onNavigate(route); }, activeBackgroundColor: '#fff', labelStyle: styles.drawerLabel, style: styles.drawerItem });
+            return react_1["default"].createElement(drawer_1.DrawerItem, { key: i, icon: function (props) { return react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, __assign({}, props, { name: icon, style: styles.drawerIcon })); }, label: label, onPress: function () { return onNavigate(route); }, activeBackgroundColor: '#fff', labelStyle: styles.drawerLabel, style: styles.drawerItem });
         });
     };
     var imageUrl = user.imageUrl, role = user.role, displayName = user.displayName;

@@ -37,11 +37,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var react_native_1 = require("react-native");
-var expo_1 = require("expo");
 var ImagePicker = require("expo-image-picker");
 var firebase_1 = require("../config/firebase");
 var constants_1 = require("../common/constants");
 var UploadHookService_1 = require("./UploadHookService");
+var moment_1 = require("moment");
+var MediaLibrary = require("expo-media-library");
+var VideoThumbnails = require("expo-video-thumbnails");
+var FileSystem = require("expo-file-system");
+var WebBrowser = require("expo-web-browser");
+var theme_1 = require("../config/theme");
 var IMG_OPTIONS = {
     allowsEditing: true,
     mediaTypes: ImagePicker.MediaTypeOptions.Images
@@ -87,7 +92,6 @@ var HelperService = /** @class */ (function () {
                     case 1:
                         res = _a.sent();
                         if (res.cancelled === false) {
-                            console.log(res.exif);
                             getVideo(res.uri);
                         }
                         return [3 /*break*/, 3];
@@ -115,13 +119,13 @@ var HelperService = /** @class */ (function () {
                     case 2:
                         error_2 = _a.sent();
                         alert(error_2.message);
-                        return [3 /*break*/, 3];
+                        return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    HelperService.generateBlobUrl = function (path, blob, loading) {
+    HelperService.generateBlobUrl = function (path, blob, loading, showHook) {
         return __awaiter(this, void 0, Promise, function () {
             var bucket, promise, error_3, isCancelled;
             return __generator(this, function (_a) {
@@ -130,7 +134,7 @@ var HelperService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         bucket = firebase_1.storage.ref().child(path);
                         promise = bucket.put(blob);
-                        UploadHookService_1["default"].setHook(promise);
+                        showHook && UploadHookService_1["default"].setHook(promise);
                         loading && loading();
                         return [4 /*yield*/, promise];
                     case 1:
@@ -146,30 +150,204 @@ var HelperService = /** @class */ (function () {
             });
         });
     };
-    HelperService.openBrowser = function (url) {
+    HelperService.generateThumbnail = function (videoUri, time) {
         return __awaiter(this, void 0, void 0, function () {
-            var supported, error_4;
+            var uri, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 5, , 6]);
-                        return [4 /*yield*/, expo_1.Linking.canOpenURL(url)];
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, VideoThumbnails.getThumbnailAsync(videoUri, {
+                                time: time * 1000
+                            })];
                     case 1:
-                        supported = _a.sent();
-                        if (!supported) return [3 /*break*/, 3];
-                        return [4 /*yield*/, expo_1.Linking.openURL(url)];
+                        uri = (_a.sent()).uri;
+                        return [2 /*return*/, uri];
                     case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
+                        e_1 = _a.sent();
+                        console.warn(e_1);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.saveMedia = function (album, uri) {
+        return __awaiter(this, void 0, void 0, function () {
+            var asset, albumExists, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 7, , 8]);
+                        return [4 /*yield*/, MediaLibrary.createAssetAsync(uri)];
+                    case 1:
+                        asset = _a.sent();
+                        return [4 /*yield*/, MediaLibrary.getAlbumAsync(album)];
+                    case 2:
+                        albumExists = _a.sent();
+                        if (!albumExists) return [3 /*break*/, 4];
+                        return [4 /*yield*/, MediaLibrary.addAssetsToAlbumAsync([asset], albumExists)];
                     case 3:
-                        alert("Don't know how to open this URL: " + url);
-                        _a.label = 4;
-                    case 4: return [3 /*break*/, 6];
+                        _a.sent();
+                        return [3 /*break*/, 6];
+                    case 4: return [4 /*yield*/, MediaLibrary.createAlbumAsync(album, asset, false)];
                     case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6: return [2 /*return*/, false];
+                    case 7:
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
+                        return [2 /*return*/, false];
+                    case 8: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.createDownload = function (id, uri, ext, callback) {
+        var _this = this;
+        try {
+            var hook = FileSystem
+                .createDownloadResumable(uri, "" + FileSystem.cacheDirectory + ext, {}, function (progress) { return _this.downloadCallback(progress, callback); });
+            var download = {
+                id: id,
+                hook: hook,
+                state: 'pending',
+                progress: 0
+            };
+            return download;
+        }
+        catch (e) {
+            console.log(e.message);
+            return null;
+        }
+    };
+    HelperService.startDownload = function (download) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, download.hook.downloadAsync()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, download];
+                    case 2:
+                        e_3 = _a.sent();
+                        console.log(e_3.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.downloadFile = function (id, url, ext, callback) {
+        return __awaiter(this, void 0, void 0, function () {
+            var download, downloaded, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        download = this.createDownload(id, url, ext, callback);
+                        _a = download;
+                        if (!_a) return [3 /*break*/, 2];
+                        return [4 /*yield*/, this.startDownload(download)];
+                    case 1:
+                        _a = (_b.sent());
+                        _b.label = 2;
+                    case 2:
+                        downloaded = _a;
+                        return [2 /*return*/, downloaded];
+                }
+            });
+        });
+    };
+    HelperService.downloadCallback = function (progressInfo, callback) {
+        var totalBytesExpectedToWrite = progressInfo.totalBytesExpectedToWrite, totalBytesWritten = progressInfo.totalBytesWritten;
+        var progress = (totalBytesWritten / totalBytesExpectedToWrite) * 100;
+        callback(Math.ceil(progress));
+    };
+    // static async openBrowser (url:string) {
+    //   try {
+    //     const supported = await Linking.canOpenURL(url)
+    //     if (supported) {
+    //       await Linking.openURL(url)
+    //     } else {
+    //       alert(`Don't know how to open this URL: ${url}`)
+    //     }
+    //   } catch (error) {
+    //     alert(error.message)
+    //   }
+    // }
+    HelperService.shareMedia = function (msg) {
+        return __awaiter(this, void 0, void 0, function () {
+            var result, error_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, react_native_1.Share.share({
+                                message: msg
+                            })];
+                    case 1:
+                        result = _a.sent();
+                        if (result.action === react_native_1.Share.sharedAction) {
+                            if (result.activityType) {
+                                // shared with activity type of result.activityType
+                            }
+                            else {
+                                // shared
+                            }
+                        }
+                        else if (result.action === react_native_1.Share.dismissedAction) {
+                            // dismissed
+                        }
+                        return [3 /*break*/, 3];
+                    case 2:
                         error_4 = _a.sent();
                         alert(error_4.message);
-                        return [3 /*break*/, 6];
-                    case 6: return [2 /*return*/];
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.getMediaInfo = function (uri) {
+        return __awaiter(this, void 0, void 0, function () {
+            var asset, e_4;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, MediaLibrary.createAssetAsync(uri)];
+                    case 1:
+                        asset = _a.sent();
+                        return [2 /*return*/, asset];
+                    case 2:
+                        e_4 = _a.sent();
+                        console.log(e_4.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.deleteMediaInfo = function (assets) {
+        return __awaiter(this, void 0, void 0, function () {
+            var deleted, e_5;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, MediaLibrary.deleteAssetsAsync(assets)];
+                    case 1:
+                        deleted = _a.sent();
+                        return [2 /*return*/, deleted];
+                    case 2:
+                        e_5 = _a.sent();
+                        console.log(e_5.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -182,6 +360,51 @@ var HelperService = /** @class */ (function () {
             console.log(e.message);
             return '';
         }
+    };
+    HelperService.openBrowser = function (uri) {
+        return __awaiter(this, void 0, void 0, function () {
+            var e_6;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, WebBrowser.openBrowserAsync(uri, {
+                                showTitle: true,
+                                toolbarColor: theme_1.theme.colors.primary
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_6 = _a.sent();
+                        console.log(e_6.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    HelperService.closeBrowser = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                try {
+                    WebBrowser.dismissBrowser();
+                    return [2 /*return*/, true];
+                }
+                catch (e) {
+                    console.log(e.message);
+                    return [2 /*return*/, false];
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    HelperService.parseToDate = function (val) {
+        var diffDays = moment_1["default"]().diff(val, 'day');
+        var date = diffDays < 3
+            ? moment_1["default"](val).fromNow()
+            : moment_1["default"](val).format('DD MMM YY');
+        return date;
     };
     return HelperService;
 }());

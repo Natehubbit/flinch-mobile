@@ -1,6 +1,7 @@
 import firebase from 'firebase'
 export default class UploadHookService {
   static uploadHookRef: firebase.storage.UploadTask = null
+
   static setHook (hook:firebase.storage.UploadTask) {
     this.uploadHookRef = hook
   }
@@ -43,6 +44,5 @@ export default class UploadHookService {
 
   static complete (onComplete?:()=>void) {
     onComplete && onComplete()
-    console.log('completed')
   }
 }

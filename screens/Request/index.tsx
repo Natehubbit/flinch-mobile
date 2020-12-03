@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Image, ScrollView, StyleSheet, View } from 'react-native'
+import { Image, ImageBackground, ScrollView, StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import { MiniLabel, SubHeading, Paragraph } from '../../common/styledComponents'
@@ -35,7 +35,8 @@ const Request: React.FC = () => {
     response: {
       duration,
       timestamp,
-      videoUri: uri
+      videoUri: uri,
+      thumbnailUri
     }
   } = useRequests('id', id)[0] || initStateRequest
   const summarize = instructions.length > 99
@@ -101,9 +102,11 @@ const Request: React.FC = () => {
                             >
                             <View style={styles.videoContainer}>
                                 <View style={styles.video}>
-                                    <TouchableRipple>
-                                      <Play/>
-                                    </TouchableRipple>
+                                  <ImageBackground
+                                    source={{ uri: thumbnailUri }}
+                                    style={[styles.thumbnail]}
+                                  />
+                                  <Play/>
                                 </View>
                                 <View style={styles.videoLabel}>
                                   <Paragraph black>
@@ -111,7 +114,9 @@ const Request: React.FC = () => {
                                   </Paragraph>
                                   <View style={[styles.length]}>
                                     <Icon name='clock-outline' color='rgba(0,0,0,0.5)' />
-                                    <MiniLabel numberOfLines={1} style={styles.duration} >50s</MiniLabel>
+                                    <MiniLabel numberOfLines={1} style={styles.duration} >
+                                      {Math.ceil(duration)}s
+                                    </MiniLabel>
                                   </View>
                                 </View>
                             </View>
@@ -186,6 +191,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'column'
   },
+  thumbnail: {
+    height: '100%',
+    width: '100%',
+    position: 'absolute'
+  },
   name: {
     fontSize: 15,
     marginVertical: 5
@@ -221,7 +231,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   videoLabel: {
-    marginLeft: 15
+    marginLeft: 15,
+    alignItems: 'flex-start'
   },
   length: {
     flexDirection: 'row',

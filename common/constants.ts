@@ -27,7 +27,8 @@ export const initStateRequest: Request = {
     status: 'pending',
     duration: 0,
     videoUri: '',
-    timestamp: 0
+    timestamp: 0,
+    thumbnailUri: ''
   },
   instructions: '',
   occasion: '',
@@ -48,6 +49,19 @@ export const initStateRequest: Request = {
 }
 
 // PATHS
-
 export const REQUEST_VIDEO_PATH = 'request/'
 export const THUMBS_PATH = 'thumbnails/'
+export const VIDEO_SAVES = 'FlinchSaves'
+
+export const PROFILE_FORM = [
+  {
+    left: 'account',
+    placeholder: 'Name',
+    right: ''
+  },
+  {
+    left: 'email',
+    placeholder: 'Email',
+    right: ''
+  }
+]

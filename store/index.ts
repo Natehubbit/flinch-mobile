@@ -13,6 +13,7 @@ import { requestSlice } from './request'
 import { requestsSlice } from './requests'
 import { toastSlice } from './toast'
 import { responseSlice } from './response'
+import { downloadsSlice } from './downloads'
 
 const rootReducer = combineReducers({
   [userSlice.name]: userSlice.reducer,
@@ -21,12 +22,13 @@ const rootReducer = combineReducers({
   [requestSlice.name]: requestSlice.reducer,
   [requestsSlice.name]: requestsSlice.reducer,
   [toastSlice.name]: toastSlice.reducer,
-  [responseSlice.name]: responseSlice.reducer
+  [responseSlice.name]: responseSlice.reducer,
+  [downloadsSlice.name]: downloadsSlice.reducer
 })
 
 const persistConfig:PersistConfig<unknown, any, any, any> = {
   key: 'root',
-  blacklist: ['loader', 'toast'],
+  blacklist: ['loader', 'toast', 'downloads'],
   storage: AsyncStorage,
   timeout: 10000
 }
@@ -36,7 +38,8 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: getDefaultMiddleware({
-    serializableCheck: false
+    serializableCheck: false,
+    immutableCheck: false
   })
 })
 

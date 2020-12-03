@@ -4,7 +4,9 @@ import { Toast } from '../types'
 const initState: Toast = {
   show: false,
   msg: '',
-  label: 'Okay',
+  label: '',
+  mode: 'default',
+  duration: 7000,
   onDismiss: () => {},
   onPress: () => {}
 }

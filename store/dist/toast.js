@@ -28,7 +28,9 @@ var toolkit_1 = require("@reduxjs/toolkit");
 var initState = {
     show: false,
     msg: '',
-    label: 'Okay',
+    label: '',
+    mode: 'default',
+    duration: 7000,
     onDismiss: function () { },
     onPress: function () { }
 };

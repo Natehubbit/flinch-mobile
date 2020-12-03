@@ -56,6 +56,7 @@ const App: () => React.ReactNode = () => {
 
   const loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
+      require('./assets/images/profileBck.png')
       // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
       // require('./assets/images/play.svg'),
     ])

@@ -15,7 +15,7 @@ interface AppOverlayProps {
 
 const AppOverlay: React.FC<AppOverlayProps> = ({
   children,
-  ...p
+  ...props
 }) => {
   const dispatch = useDispatch()
   const [progress, setProgress] = useState(0)
@@ -27,10 +27,21 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   const {
     onDismiss,
     onPress,
+    mode,
     msg,
     show,
-    label
+    label,
+    duration
   } = useToast()
+  const style =
+    mode === 'danger'
+      ? { backgroundColor: COLORS.red, color: COLORS.dark }
+      : mode === 'info'
+        ? { backgroundColor: theme.colors.primary, color: COLORS.dark }
+        : mode === 'success'
+          ? { backgroundColor: COLORS.success, color: COLORS.dark }
+          : null
+
   useEffect(() => {
     const unsubscribe = UploadHookService.uploadHookRef &&
       UploadHookService.listen(
@@ -55,7 +66,6 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   }
   const onHideUpload = () => {
     dispatch(loaderActions.loaded('responseLoader'))
-    // NavigationService.reset('Home')
   }
   const onUploadComplete = () => {
     dispatch(
@@ -63,10 +73,12 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
         show: true,
         label: 'Okay',
         msg: 'Upload completed',
+        mode: 'success',
         onDismiss: onHideToast,
         onPress: onHideToast
       })
     )
+    onHideUpload()
   }
 
   const renderSubmitting = () => {
@@ -79,7 +91,7 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   }
   const renderUploading = () => {
     return <View style={[styles.progressContainer]}>
-      <AltMiniLabel black>
+      <AltMiniLabel>
         Uploading
       </AltMiniLabel>
       <ProgressBar
@@ -121,8 +133,11 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
       </View>}
       {/* TOASTS */}
       <Snackbar
+        style={style}
         visible={show}
+        theme={{ colors: { accent: style && style.color } }}
         onDismiss={onDismiss}
+        duration={duration}
         action={{
           label,
           onPress

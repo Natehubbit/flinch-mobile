@@ -20,6 +20,7 @@ exports.COLORS = {
     warn: '#ff9966',
     success: '#3ACC6C',
     dark: '#000',
-    grey: '#808080'
+    grey: '#808080',
+    light: 'rgba(0,0,0,0.5)'
 };
 exports.settings = {};

@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var native_1 = require("@react-navigation/native");
-var react_native_background_timer_1 = require("react-native-background-timer");
 var react_1 = require("react");
 var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
@@ -60,12 +59,14 @@ var react_redux_1 = require("react-redux");
 var requests_1 = require("../../store/requests");
 var useToast_1 = require("../../hooks/useToast");
 var toast_1 = require("../../store/toast");
+var theme_1 = require("../../config/theme");
+var constants_1 = require("../../common/constants");
+var useRequests_1 = require("../../hooks/useRequests");
 var RECORD_OPTIONS = {
     mute: false,
     maxDuration: 60,
     quality: expo_camera_1.Camera.Constants.VideoQuality['480p']
 };
-var time = 0;
 var timerId = null;
 var VideoRecord = function () {
     var camera = react_1.useRef(null);
@@ -73,18 +74,20 @@ var VideoRecord = function () {
     var toast = useToast_1.useToast();
     var id = native_1.useRoute().params.id;
     var _a = react_1.useState(false), isRecording = _a[0], setIsRecording = _a[1];
-    var _b = react_1.useState('16:9'), ratio = _b[0], setRatio = _b[1];
-    var _c = react_1.useState(false), isPreviewing = _c[0], setIsPreviewing = _c[1];
-    var _d = react_1.useState(''), videoUri = _d[0], setVideoUri = _d[1];
-    var _e = react_1.useState(0), timer = _e[0], setTimer = _e[1];
-    var _f = react_1.useState(false), showControls = _f[0], setShowControls = _f[1];
+    var _b = react_1.useState(true), showInstructions = _b[0], setShowInstructions = _b[1];
+    var _c = react_1.useState('16:9'), ratio = _c[0], setRatio = _c[1];
+    var _d = react_1.useState(false), isPreviewing = _d[0], setIsPreviewing = _d[1];
+    var _e = react_1.useState(''), videoUri = _e[0], setVideoUri = _e[1];
+    var _f = react_1.useState(61), timer = _f[0], setTimer = _f[1];
+    var _g = react_1.useState(expo_camera_1.Camera.Constants.Type.front), cameraView = _g[0], setCameraView = _g[1];
+    var _h = react_1.useState(false), showControls = _h[0], setShowControls = _h[1];
     var goBack = native_1.useNavigation().goBack;
+    var _j = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, instructions = _j.instructions, recipient = _j.recipient;
     react_1.useEffect(function () {
         var cleanUp = function () { return __awaiter(void 0, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (isRecording) {
                     resetTimer();
-                    react_native_background_timer_1["default"].stopBackgroundTimer();
                     camera.current.stopRecording();
                 }
                 return [2 /*return*/];
@@ -108,6 +111,20 @@ var VideoRecord = function () {
             cleanUp();
         };
     }, []);
+    var onHideInstructions = function () {
+        setShowInstructions(false);
+    };
+    var onShowInstructions = function () {
+        setShowInstructions(true);
+    };
+    var onRotateCamera = function () {
+        if (cameraView === expo_camera_1.Camera.Constants.Type.front) {
+            setCameraView(expo_camera_1.Camera.Constants.Type.back);
+        }
+        else {
+            setCameraView(expo_camera_1.Camera.Constants.Type.front);
+        }
+    };
     var onGoBack = function () { return goBack(); };
     var onStopVideo = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -160,12 +177,6 @@ var VideoRecord = function () {
     var onRecordAgain = function () {
         setIsPreviewing(false);
     };
-    // const onSubmitted = () => {
-    //   reset({
-    //     index: 0,
-    //     routes: [{ name: 'Requests', key: null }]
-    //   })
-    // }
     var onSend = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             dispatch(toast_1.toastActions.setToast(__assign(__assign({}, toast), { show: false, onPress: send })));
@@ -175,19 +186,15 @@ var VideoRecord = function () {
     }); };
     var send = function () {
         dispatch(requests_1.requestsActions
-            .approveRequest(id, videoUri, timer
-        // onSubmitted
-        ));
+            .approveRequest(id, videoUri));
     };
     var startTimer = function () {
         timerId = setInterval(function () {
-            time = time + 1;
-            setTimer(time);
+            setTimer(function (t) { return t - 1; });
         }, 1000);
     };
     var resetTimer = function () {
-        time = 0;
-        setTimer(0);
+        setTimer(61);
         timerId && clearInterval(timerId);
     };
     return (react_1["default"].createElement(react_native_1.View, { style: styles.container },
@@ -198,9 +205,20 @@ var VideoRecord = function () {
             isRecording && react_1["default"].createElement(react_native_1.View, { style: styles.recording },
                 react_1["default"].createElement(react_native_1.View, { style: styles.recordingText },
                     react_1["default"].createElement(styledComponents_1.Paragraph, null, "Recording"),
-                    react_1["default"].createElement(react_native_1.View, { style: styles.recordIndicator })))),
+                    react_1["default"].createElement(react_native_1.View, { style: styles.recordIndicator }))),
+            !showInstructions &&
+                react_1["default"].createElement(react_native_paper_1.FAB, { icon: "eye-outline", style: [styles.showIcon], small: true, onPress: onShowInstructions })),
         !isPreviewing &&
-            react_1["default"].createElement(expo_camera_1.Camera, { style: styles.camera, type: expo_camera_1.Camera.Constants.Type.front, ref: camera, ratio: ratio }),
+            react_1["default"].createElement(react_native_1.View, { style: styles.camera },
+                showInstructions && react_1["default"].createElement(react_native_1.View, { style: [styles.instructions] },
+                    react_1["default"].createElement(react_native_1.ScrollView, { style: [styles.scroll] },
+                        react_1["default"].createElement(styledComponents_1.Paragraph, null,
+                            "Receipient: ",
+                            recipient,
+                            '\n'),
+                        react_1["default"].createElement(styledComponents_1.Paragraph, null, instructions)),
+                    react_1["default"].createElement(react_native_paper_1.Button, { uppercase: false, icon: 'eye-off-outline', onPress: onHideInstructions }, "Hide")),
+                react_1["default"].createElement(expo_camera_1.Camera, { style: [styles.cameraModule], type: cameraView, ref: camera, ratio: ratio })),
         (isPreviewing) &&
             react_1["default"].createElement(react_native_1.View, { style: styles.videoContainer },
                 react_1["default"].createElement(react_native_1.View, null,
@@ -211,34 +229,43 @@ var VideoRecord = function () {
                     react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'refresh', style: styles.save, label: 'Record again', small: true, onPress: onRecordAgain })),
         react_1["default"].createElement(react_native_1.View, { style: styles.content },
             !isRecording && !isPreviewing &&
-                react_1["default"].createElement(react_native_1.View, { style: styles.recordButton },
-                    react_1["default"].createElement(react_native_paper_1.TouchableRipple, { style: { flex: 1 }, onPress: onRecordVideo },
-                        react_1["default"].createElement(react_native_1.View, null))),
+                react_1["default"].createElement(react_native_1.View, { style: [styles.recordContainer] },
+                    react_1["default"].createElement(react_native_1.View, { style: styles.recordButton },
+                        react_1["default"].createElement(react_native_paper_1.TouchableRipple, { style: { flex: 1 }, onPress: onRecordVideo },
+                            react_1["default"].createElement(react_native_1.View, null))),
+                    react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'camera-retake-outline', style: [styles.rotateBtn], onPress: onRotateCamera })),
             isRecording && react_1["default"].createElement(react_native_1.View, { style: styles.recordBtns },
-                react_1["default"].createElement(react_native_1.View, { style: styles.miniBtn },
-                    react_1["default"].createElement(react_native_paper_1.TouchableRipple, { style: styles.miniBtn, onPress: null },
-                        react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { size: 35, color: '#fff', name: 'pause' }))),
                 react_1["default"].createElement(react_native_1.View, { style: styles.stopBtn },
                     react_1["default"].createElement(react_native_paper_1.TouchableRipple, { style: styles.stopBtn, onPress: onStopVideo },
                         react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { size: 50, name: 'stop' }))),
                 react_1["default"].createElement(react_native_1.View, { style: styles.miniBtn },
                     react_1["default"].createElement(react_native_paper_1.TouchableRipple, { style: styles.miniBtn, onPress: null },
                         react_1["default"].createElement(styledComponents_1.Paragraph, null,
-                            time,
+                            timer,
                             "s")))))));
 };
-// define your styles
 var styles = react_native_1.StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#000'
     },
     camera: {
-        // flex:1,
-        // height: '100%',
         height: '100%',
         width: '100%',
-        position: 'absolute'
+        position: 'absolute',
+        justifyContent: 'center'
+    },
+    instructions: {
+        position: 'absolute',
+        top: 80,
+        minHeight: 100,
+        padding: 15,
+        width: '100%',
+        backgroundColor: theme_1.COLORS.light,
+        zIndex: 10
+    },
+    cameraModule: {
+        flex: 1
     },
     nav: {
         flexDirection: 'row',
@@ -265,6 +292,9 @@ var styles = react_native_1.StyleSheet.create({
         overflow: 'hidden',
         alignSelf: 'center',
         margin: 12
+    },
+    recordContainer: {
+        justifyContent: 'center'
     },
     ripple: {
         height: '100%',
@@ -298,6 +328,19 @@ var styles = react_native_1.StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    rotateBtn: {
+        position: 'absolute',
+        right: 15,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        elevation: 0
+    },
+    scroll: {
+        maxHeight: 180,
+        marginBottom: 25
+    },
+    showIcon: {
+        right: 12
     },
     stopBtn: {
         backgroundColor: '#fff',

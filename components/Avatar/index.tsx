@@ -1,25 +1,26 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, View, ViewProps } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import { MaterialIcons as Icon } from '@expo/vector-icons'
 import { theme } from '../../config/theme'
 
-interface AvatarProps {
+interface AvatarProps extends ViewProps {
     onPress:()=>void;
     source:string;
 }
 
 const Avatar: React.FC<AvatarProps> = ({
   onPress,
-  source
+  source,
+  style
 }) => {
   const showImage = source.length > 0
   return <TouchableOpacity
-        style={styles.container}
+        style={[styles.container, style && style]}
         onPress={onPress}
     >
         <View
-            style={styles.container}
+          style={[styles.container]}
         >
             {showImage
               ? <Image

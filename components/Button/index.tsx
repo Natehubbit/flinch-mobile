@@ -32,8 +32,9 @@ const Button:React.FC<ButtonComponentProps> = ({
             theme={{ roundness: 100 }}
             loading={loading}
             disabled={disabled}
+            uppercase={false}
         >
-            {label}
+          {label}
         </Btn>
   )
 }

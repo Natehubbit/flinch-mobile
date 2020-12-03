@@ -58,7 +58,7 @@ var Request = function () {
     var _b = native_1.useNavigation(), navigate = _b.navigate, goBack = _b.goBack;
     var params = native_1.useRoute().params;
     var id = params.id;
-    var _c = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _c.occasion, status = _c.status, instructions = _c.instructions, recipient = _c.recipient, price = _c.price, _d = _c.celebrity, name = _d.name, imageUrl = _d.imageUrl, _e = _c.response, duration = _e.duration, timestamp = _e.timestamp, uri = _e.videoUri;
+    var _c = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _c.occasion, status = _c.status, instructions = _c.instructions, recipient = _c.recipient, price = _c.price, _d = _c.celebrity, name = _d.name, imageUrl = _d.imageUrl, _e = _c.response, duration = _e.duration, timestamp = _e.timestamp, uri = _e.videoUri, thumbnailUri = _e.thumbnailUri;
     var summarize = instructions.length > 99;
     var info = summarize
         ? instructions.substring(0, 99)
@@ -75,7 +75,7 @@ var Request = function () {
         id: id,
         duration: duration,
         recipient: recipient,
-        timestamp: timestamp,
+        date: HelperService_1["default"].parseToDate(timestamp),
         name: name,
         uri: uri
     }); };
@@ -111,13 +111,15 @@ var Request = function () {
                             react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onOpenVideo, style: { flex: 1 } },
                                 react_1["default"].createElement(react_native_1.View, { style: styles.videoContainer },
                                     react_1["default"].createElement(react_native_1.View, { style: styles.video },
-                                        react_1["default"].createElement(react_native_paper_1.TouchableRipple, null,
-                                            react_1["default"].createElement(play_svg_1["default"], null))),
-                                    react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: styles.videoLabel },
-                                        occasion,
-                                        '\n',
-                                        react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'clock', color: 'rgba(0,0,0,0.5)' }),
-                                        react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.duration }, "50s"))))),
+                                        react_1["default"].createElement(react_native_1.ImageBackground, { source: { uri: thumbnailUri }, style: [styles.thumbnail] }),
+                                        react_1["default"].createElement(play_svg_1["default"], null)),
+                                    react_1["default"].createElement(react_native_1.View, { style: styles.videoLabel },
+                                        react_1["default"].createElement(styledComponents_1.Paragraph, { black: true }, occasion),
+                                        react_1["default"].createElement(react_native_1.View, { style: [styles.length] },
+                                            react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'clock-outline', color: 'rgba(0,0,0,0.5)' }),
+                                            react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.duration },
+                                                Math.ceil(duration),
+                                                "s")))))),
                         react_1["default"].createElement(react_native_paper_1.Divider, { style: [styles.div] }),
                         react_1["default"].createElement(react_native_1.View, { style: styles.bottom },
                             react_1["default"].createElement(react_native_1.View, { style: styles.bottomLabel },
@@ -163,6 +165,11 @@ var styles = react_native_1.StyleSheet.create({
         alignSelf: 'center',
         flexDirection: 'column'
     },
+    thumbnail: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute'
+    },
     name: {
         fontSize: 15,
         marginVertical: 5
@@ -198,11 +205,18 @@ var styles = react_native_1.StyleSheet.create({
         alignItems: 'center'
     },
     videoLabel: {
-        marginLeft: 15
+        marginLeft: 15,
+        alignItems: 'flex-start'
+    },
+    length: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     duration: {
         lineHeight: 25,
-        fontSize: 12
+        fontSize: 12,
+        marginLeft: 2
     },
     durationIcon: {
         opacity: 0.5

@@ -23,11 +23,18 @@ var UploadHookService_1 = require("../../services/UploadHookService");
 var loader_1 = require("../../store/loader");
 var toast_1 = require("../../store/toast");
 var AppOverlay = function (_a) {
-    var children = _a.children, p = __rest(_a, ["children"]);
+    var children = _a.children, props = __rest(_a, ["children"]);
     var dispatch = react_redux_1.useDispatch();
     var _b = react_1.useState(0), progress = _b[0], setProgress = _b[1];
     var _c = useLoader_1.useLoader(), paymentLoader = _c.paymentLoader, responseLoader = _c.responseLoader, authLoader = _c.authLoader;
-    var _d = useToast_1.useToast(), onDismiss = _d.onDismiss, onPress = _d.onPress, msg = _d.msg, show = _d.show, label = _d.label;
+    var _d = useToast_1.useToast(), onDismiss = _d.onDismiss, onPress = _d.onPress, mode = _d.mode, msg = _d.msg, show = _d.show, label = _d.label, duration = _d.duration;
+    var style = mode === 'danger'
+        ? { backgroundColor: theme_1.COLORS.red, color: theme_1.COLORS.dark }
+        : mode === 'info'
+            ? { backgroundColor: theme_1.theme.colors.primary, color: theme_1.COLORS.dark }
+            : mode === 'success'
+                ? { backgroundColor: theme_1.COLORS.success, color: theme_1.COLORS.dark }
+                : null;
     react_1.useEffect(function () {
         var unsubscribe = UploadHookService_1["default"].uploadHookRef &&
             UploadHookService_1["default"].listen(setProgress, onUploadError, onUploadComplete);
@@ -48,16 +55,17 @@ var AppOverlay = function (_a) {
     };
     var onHideUpload = function () {
         dispatch(loader_1.loaderActions.loaded('responseLoader'));
-        // NavigationService.reset('Home')
     };
     var onUploadComplete = function () {
         dispatch(toast_1.toastActions.setToast({
             show: true,
             label: 'Okay',
             msg: 'Upload completed',
+            mode: 'success',
             onDismiss: onHideToast,
             onPress: onHideToast
         }));
+        onHideUpload();
     };
     var renderSubmitting = function () {
         return react_1["default"].createElement(react_native_1.View, { style: [styles.submitting] },
@@ -67,7 +75,7 @@ var AppOverlay = function (_a) {
     };
     var renderUploading = function () {
         return react_1["default"].createElement(react_native_1.View, { style: [styles.progressContainer] },
-            react_1["default"].createElement(styledComponents_1.AltMiniLabel, { black: true }, "Uploading"),
+            react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, "Uploading"),
             react_1["default"].createElement(react_native_paper_1.ProgressBar, { progress: progress, style: [styles.progressBar], color: theme_1.theme.colors.primary }),
             react_1["default"].createElement(react_native_1.View, { style: [styles.btns] },
                 react_1["default"].createElement(react_native_paper_1.Button, { color: theme_1.theme.colors.primary, onPress: onHideUpload }, "Hide"),
@@ -82,7 +90,7 @@ var AppOverlay = function (_a) {
             paymentLoader && renderLoader(),
             responseLoader && renderUploading(),
             authLoader && renderSubmitting()),
-        react_1["default"].createElement(react_native_paper_1.Snackbar, { visible: show, onDismiss: onDismiss, action: {
+        react_1["default"].createElement(react_native_paper_1.Snackbar, { style: style, visible: show, theme: { colors: { accent: style && style.color } }, onDismiss: onDismiss, duration: duration, action: {
                 label: label,
                 onPress: onPress
             } },

@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var react_1 = require("react");
-var native_1 = require("@react-navigation/native");
 var react_native_1 = require("react-native");
 var react_native_gesture_handler_1 = require("react-native-gesture-handler");
 var react_native_paper_1 = require("react-native-paper");
@@ -47,10 +46,14 @@ var PaymentService_1 = require("../../services/PaymentService");
 var useUser_1 = require("../../hooks/useUser");
 var loader_1 = require("../../store/loader");
 var react_redux_1 = require("react-redux");
+var useRequest_1 = require("../../hooks/useRequest");
+var native_1 = require("@react-navigation/native");
 var PaymentMode = function () {
     var dispatch = react_redux_1.useDispatch();
+    var _a = useRequest_1.useRequest(), price = _a.price, requestId = _a.id;
     var navigate = native_1.useNavigation().navigate;
-    var _a = useUser_1.useUser(), id = _a.id, displayName = _a.displayName, email = _a.email;
+    var cost = price.toString();
+    var _b = useUser_1.useUser(), id = _b.id, displayName = _b.displayName, email = _b.email;
     var onSelect = function (type) { return __awaiter(void 0, void 0, void 0, function () {
         var isCreditCard, uri;
         return __generator(this, function (_a) {
@@ -60,11 +63,11 @@ var PaymentMode = function () {
                     isCreditCard = type === 'Credit Card';
                     uri = null;
                     if (!isCreditCard) return [3 /*break*/, 2];
-                    return [4 /*yield*/, makePayment('card', '10000')];
+                    return [4 /*yield*/, makePayment('card', cost)];
                 case 1:
                     uri = _a.sent();
                     return [3 /*break*/, 4];
-                case 2: return [4 /*yield*/, makePayment('mobile_money', '10000')];
+                case 2: return [4 /*yield*/, makePayment('mobile_money', cost)];
                 case 3:
                     uri = _a.sent();
                     _a.label = 4;
@@ -93,6 +96,7 @@ var PaymentMode = function () {
                         label: displayName,
                         metadata: {
                             customerName: displayName,
+                            requestId: requestId,
                             id: id
                         }
                     })];

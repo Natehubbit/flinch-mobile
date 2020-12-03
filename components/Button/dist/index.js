@@ -10,7 +10,7 @@ var Button = function (_a) {
     var _b = type === 'outline'
         ? { text: primary, back: '#fff', border: 2 }
         : { text: '#fff', back: primary, border: 0 }, text = _b.text, back = _b.back, border = _b.border;
-    return (react_1["default"].createElement(react_native_paper_1.Button, { onPress: onPress, style: [styles.container, { borderWidth: border }], color: back, labelStyle: { color: text }, mode: 'contained', theme: { roundness: 100 }, loading: loading, disabled: disabled }, label));
+    return (react_1["default"].createElement(react_native_paper_1.Button, { onPress: onPress, style: [styles.container, { borderWidth: border }], color: back, labelStyle: { color: text }, mode: 'contained', theme: { roundness: 100 }, loading: loading, disabled: disabled, uppercase: false }, label));
 };
 // define your styles
 var styles = react_native_1.StyleSheet.create({

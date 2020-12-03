@@ -32,7 +32,6 @@ var UploadHookService = /** @class */ (function () {
     };
     UploadHookService.complete = function (onComplete) {
         onComplete && onComplete();
-        console.log('completed');
     };
     UploadHookService.uploadHookRef = null;
     return UploadHookService;

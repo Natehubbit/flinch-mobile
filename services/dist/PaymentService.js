@@ -37,10 +37,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var axios_1 = require("axios");
+var firebase_1 = require("../config/firebase");
 var API = 'https://us-central1-shoutouts-3c57c.cloudfunctions.net/';
+var RequestRef = firebase_1.db.collection('requests');
 var PaymentService = /** @class */ (function () {
     function PaymentService() {
     }
+    /**
+   * listener for checking payment
+   * @param id request id
+   */
+    PaymentService.onPayed = function (id, callBack) {
+        RequestRef.doc(id).onSnapshot(function (snap) {
+            var req = snap.data();
+            req.payment.payed &&
+                callBack &&
+                callBack();
+        });
+    };
     PaymentService.init = function (data) { return __awaiter(void 0, void 0, Promise, function () {
         var result, res, error_1;
         return __generator(this, function (_a) {
@@ -54,7 +68,6 @@ var PaymentService = /** @class */ (function () {
                     return [2 /*return*/, res];
                 case 2:
                     error_1 = _a.sent();
-                    console.log('bh');
                     alert(error_1.message);
                     return [2 /*return*/, null];
                 case 3: return [2 /*return*/];

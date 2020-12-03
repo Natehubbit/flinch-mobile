@@ -1,3 +1,4 @@
+import { DownloadResumable } from 'expo-file-system'
 import firebase from 'firebase'
 export type User = {
     id:string;
@@ -34,6 +35,7 @@ export interface Toast {
     msg:string;
     label:string;
     duration?:number;
+    mode?:'default'|'danger'|'info'|'success'
     onPress?:()=>void;
     onDismiss?:()=>void;
 }
@@ -70,7 +72,14 @@ export interface RequestResponse {
     duration:number;
     status:ResponseStatus;
     timestamp:number;
-    thmbnailUri:string;
+    thumbnailUri:string;
+}
+
+export interface Download {
+    id: string;
+    hook: DownloadResumable;
+    progress: number;
+    state: 'pending'|'downloading'|'paused'|'done'
 }
 
 export interface ResponsePayload extends RequestResponse {
@@ -111,6 +120,7 @@ export interface PaymentInitData {
 interface PaymentMetaData {
   id:string;
   customerName:string;
+  requestId: string;
 }
 
 export interface PaymentInitResponse {
@@ -131,3 +141,9 @@ export interface ApprovedActionPayload {
     key: keyof ResponseState;
     data: ResponsePayload[];
   }
+
+export interface UpdateDownloadActionPayload {
+    id:string;
+    key:keyof Download;
+    val:any;
+}

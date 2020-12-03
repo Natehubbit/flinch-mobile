@@ -9,6 +9,7 @@ export default class ResponseService {
       const snapshot = await RequestRef
         .where('requestor.id', '==', id)
         .where('response.status', '==', 'approved')
+        .orderBy('response.timestamp', 'desc')
         .get()
       return snapshot.docs.map(d => ({
         id: d.id,
@@ -17,7 +18,7 @@ export default class ResponseService {
         ...d.data().response
       }))
     } catch (e) {
-      alert(e.message)
+      console.log(e.message)
       return null
     }
   }

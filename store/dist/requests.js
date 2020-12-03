@@ -63,6 +63,7 @@ exports.requestsActions = exports.requestsSlice = exports.actions = void 0;
 var toolkit_1 = require("@reduxjs/toolkit");
 var RequestService_1 = require("../services/RequestService");
 var loader_1 = require("./loader");
+var response_1 = require("./response");
 var initState = [];
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'requests',
@@ -120,18 +121,18 @@ var rejectRequest = function (id, callback) { return function (dispatch, getStat
         }
     });
 }); }; };
-var approveRequest = function (id, uri, duration, callback) {
+var approveRequest = function (id, uri, callback) {
     return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-        var requests, loading, res, data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, requests, userId, loading, res, data;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
-                    requests = getState().requests;
+                    _a = getState(), requests = _a.requests, userId = _a.user.id;
                     loading = function () { return dispatch(loader_1.loaderActions.loading('responseLoader')); };
                     return [4 /*yield*/, RequestService_1["default"]
-                            .approveRequest(id, uri, duration, loading)];
+                            .approveRequest(id, uri, loading)];
                 case 1:
-                    res = _a.sent();
+                    res = _b.sent();
                     if (res) {
                         data = requests.map(function (d) {
                             if (d.id === id) {
@@ -140,9 +141,9 @@ var approveRequest = function (id, uri, duration, callback) {
                             return d;
                         });
                         dispatch(exports.actions.getRequests(data));
+                        dispatch(response_1.responseActions.reloadApproved(userId));
                         callback && callback();
                     }
-                    dispatch(loader_1.loaderActions.loaded('responseLoader'));
                     return [2 /*return*/];
             }
         });

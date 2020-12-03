@@ -12,7 +12,7 @@ interface ApproveResponse {
 }
 
 export default class RequestService {
-  static async createRequest (data:Request) {
+  static async createRequest (data:Request): Promise<Request> {
     try {
       const { id } = await RequestRef.add(data)
       return { ...data, id }
@@ -41,7 +41,8 @@ export default class RequestService {
         .generateBlobUrl(
           `${REQUEST_VIDEO_PATH}${id}`,
           video,
-          loading
+          loading,
+          true
         )
       // generate thumbnail for local uri midway through video
       const { uri: thumbUri } = await VideoThumbnails
@@ -65,18 +66,19 @@ export default class RequestService {
             status: 'success',
             'response.thumbnailUri': thumbUrl
           })
+        await HelperService.deleteMediaInfo([assetId])
         return {
           status: 'success',
           response: {
             duration,
             status: 'approved',
             videoUri: uri,
-            thmbnailUri: thumbUrl,
+            thumbnailUri: thumbUrl,
             timestamp: Date.now()
           }
         }
       }
-      HelperService.deleteMediaInfo([assetId])
+      await HelperService.deleteMediaInfo([assetId])
       return null
     } catch (e) {
       console.log(e.message)
@@ -107,6 +109,7 @@ export default class RequestService {
     try {
       const res = await RequestRef
         .where('requestor.id', '==', id)
+        .orderBy('timestamp', 'desc')
         .get()
       return res.docs.map(d => ({
         ...initStateRequest,
@@ -114,7 +117,7 @@ export default class RequestService {
         id: d.id
       }))
     } catch (e) {
-      alert(e.message)
+      console.log(e.message)
       return null
     }
   }

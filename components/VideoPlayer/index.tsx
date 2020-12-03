@@ -3,7 +3,6 @@ import { Video } from 'expo-av'
 import { StyleSheet } from 'react-native'
 import { COLORS } from '../../config/theme'
 
-const img = require('../../assets/images/logo.png')
 interface VideoPlayerProps {
   uri: string;
 }

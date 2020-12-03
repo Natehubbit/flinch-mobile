@@ -1,8 +1,7 @@
 import { useNavigation, useRoute } from '@react-navigation/native'
-import BackgroundTimer from 'react-native-background-timer'
 import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet } from 'react-native'
-import { FAB, TouchableRipple } from 'react-native-paper'
+import { View, StyleSheet, ScrollView } from 'react-native'
+import { Button, FAB, TouchableRipple } from 'react-native-paper'
 import { maxWidth, Paragraph } from '../../common/styledComponents'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { Video } from 'expo-av'
@@ -12,6 +11,9 @@ import { useDispatch } from 'react-redux'
 import { requestsActions } from '../../store/requests'
 import { useToast } from '../../hooks/useToast'
 import { toastActions } from '../../store/toast'
+import { COLORS } from '../../config/theme'
+import { initStateRequest } from '../../common/constants'
+import { useRequests } from '../../hooks/useRequests'
 
 const RECORD_OPTIONS:CameraRecordingOptions = {
   mute: false,
@@ -27,17 +29,22 @@ const VideoRecord = () => {
   const toast = useToast()
   const { params: { id } } = useRoute<RecordVideoScreenRouteProps>()
   const [isRecording, setIsRecording] = useState(false)
+  const [showInstructions, setShowInstructions] = useState(true)
   const [ratio, setRatio] = useState('16:9')
   const [isPreviewing, setIsPreviewing] = useState(false)
   const [videoUri, setVideoUri] = useState('')
-  const [timer, setTimer] = useState(0)
+  const [timer, setTimer] = useState(61)
+  const [cameraView, setCameraView] = useState(Camera.Constants.Type.front)
   const [showControls, setShowControls] = useState(false)
   const { goBack } = useNavigation()
+  const {
+    instructions,
+    recipient
+  } = useRequests('id', id)[0] || initStateRequest
   useEffect(() => {
     const cleanUp = async () => {
       if (isRecording) {
         resetTimer()
-        BackgroundTimer.stopBackgroundTimer()
         camera.current.stopRecording()
       }
     }
@@ -51,6 +58,19 @@ const VideoRecord = () => {
       cleanUp()
     }
   }, [])
+  const onHideInstructions = () => {
+    setShowInstructions(false)
+  }
+  const onShowInstructions = () => {
+    setShowInstructions(true)
+  }
+  const onRotateCamera = () => {
+    if (cameraView === Camera.Constants.Type.front) {
+      setCameraView(Camera.Constants.Type.back)
+    } else {
+      setCameraView(Camera.Constants.Type.front)
+    }
+  }
   const onGoBack = () => goBack()
   const onStopVideo = async () => {
     if (!camera.current) return
@@ -109,11 +129,11 @@ const VideoRecord = () => {
 
   const startTimer = () => {
     timerId = setInterval(() => {
-      setTimer(t => t + 1)
+      setTimer(t => t - 1)
     }, 1000)
   }
   const resetTimer = () => {
-    setTimer(0)
+    setTimer(61)
     timerId && clearInterval(timerId)
   }
   return (
@@ -133,16 +153,40 @@ const VideoRecord = () => {
                         <View style={styles.recordIndicator}/>
                     </View>
                 </View>}
+                {!showInstructions &&
+                  <FAB
+                    icon="eye-outline"
+                    style={[styles.showIcon]}
+                    small
+                    onPress={onShowInstructions}
+                />}
             </View>
             {!isPreviewing &&
             <View
               style={styles.camera}
             >
+              {showInstructions && <View style={[styles.instructions]}>
+                <ScrollView style={[styles.scroll]}>
+                  <Paragraph>
+                    Receipient: {recipient}{'\n'}
+                  </Paragraph>
+                  <Paragraph>
+                    {instructions}
+                  </Paragraph>
+                </ScrollView>
+                <Button
+                  uppercase={false}
+                  icon='eye-off-outline'
+                  onPress={onHideInstructions}
+                >
+                  Hide
+                </Button>
+              </View>}
               <Camera
                 style={[styles.cameraModule]}
-                  type={Camera.Constants.Type.front}
-                  ref={camera}
-                  ratio={ratio}
+                type={cameraView}
+                ref={camera}
+                ratio={ratio}
               />
             </View>
             }
@@ -179,21 +223,21 @@ const VideoRecord = () => {
             </View>}
             <View style={styles.content}>
                 {!isRecording && !isPreviewing &&
-                <View style={styles.recordButton}>
-                    <TouchableRipple
-                        style={{ flex: 1 }}
-                        onPress={onRecordVideo}>
-                        <View/>
-                    </TouchableRipple>
+                <View style={[styles.recordContainer]}>
+                  <View style={styles.recordButton}>
+                      <TouchableRipple
+                          style={{ flex: 1 }}
+                          onPress={onRecordVideo}>
+                          <View/>
+                      </TouchableRipple>
+                  </View>
+                  <FAB
+                    icon='camera-retake-outline'
+                    style={[styles.rotateBtn]}
+                    onPress={onRotateCamera}
+                  />
                 </View>}
                 {isRecording && <View style={styles.recordBtns}>
-                    <View style={styles.miniBtn}>
-                        <TouchableRipple
-                            style={styles.miniBtn}
-                            onPress={null}>
-                            <Icon size={35} color='#fff' name='pause' />
-                        </TouchableRipple>
-                    </View>
                     <View style={styles.stopBtn}>
                         <TouchableRipple
                             style={styles.stopBtn}
@@ -225,6 +269,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center'
   },
+  instructions: {
+    position: 'absolute',
+    top: 80,
+    minHeight: 100,
+    padding: 15,
+    width: '100%',
+    backgroundColor: COLORS.light,
+    zIndex: 10
+  },
   cameraModule: {
     flex: 1
   },
@@ -253,6 +306,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     alignSelf: 'center',
     margin: 12
+  },
+  recordContainer: {
+    justifyContent: 'center'
   },
   ripple: {
     height: '100%',
@@ -286,6 +342,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  rotateBtn: {
+    position: 'absolute',
+    right: 15,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    elevation: 0
+  },
+  scroll: {
+    maxHeight: 180,
+    marginBottom: 25
+  },
+  showIcon: {
+    right: 12
   },
   stopBtn: {
     backgroundColor: '#fff',

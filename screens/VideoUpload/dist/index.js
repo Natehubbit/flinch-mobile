@@ -59,6 +59,7 @@ var useToast_1 = require("../../hooks/useToast");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
 var toast_1 = require("../../store/toast");
+var MediaLibrary = require("expo-media-library");
 var VideoUpload = function () {
     var dispatch = react_redux_1.useDispatch();
     var toast = useToast_1.useToast();
@@ -66,7 +67,6 @@ var VideoUpload = function () {
     var id = native_1.useRoute().params.id;
     var _b = native_1.useNavigation(), navigate = _b.navigate, reset = _b.reset;
     react_1.useEffect(function () {
-        console.log(videoUri);
         videoUri && onSend();
     }, [videoUri]);
     var onReset = function () {
@@ -107,22 +107,24 @@ var VideoUpload = function () {
     }); };
     var send = function () {
         dispatch(requests_1.requestsActions
-            .approveRequest(id, videoUri, 10, onReset));
+            .approveRequest(id, videoUri, onReset));
     };
     var requestPermission = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var videoPerm, audioPerm;
+        var mediaPerm, videoPerm, audioPerm;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, expo_camera_1.Camera.getPermissionsAsync()];
+                case 0: return [4 /*yield*/, MediaLibrary.requestPermissionsAsync()];
                 case 1:
-                    _a.sent();
+                    mediaPerm = (_a.sent()).status;
                     return [4 /*yield*/, expo_camera_1.Camera.requestPermissionsAsync()];
                 case 2:
                     videoPerm = (_a.sent()).status;
                     return [4 /*yield*/, expo_av_1.Audio.requestPermissionsAsync()];
                 case 3:
                     audioPerm = (_a.sent()).status;
-                    return [2 /*return*/, (videoPerm === 'granted' && audioPerm === 'granted')];
+                    return [2 /*return*/, (videoPerm === 'granted' &&
+                            audioPerm === 'granted' &&
+                            mediaPerm === 'granted')];
             }
         });
     }); };

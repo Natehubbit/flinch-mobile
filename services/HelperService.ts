@@ -1,5 +1,4 @@
 import { Alert, Share } from 'react-native'
-import { Linking } from 'expo'
 import * as ImagePicker from 'expo-image-picker'
 import { storage } from '../config/firebase'
 import { RECORD_DURATION } from '../common/constants'
@@ -7,6 +6,10 @@ import UploadHookService from './UploadHookService'
 import moment from 'moment'
 import * as MediaLibrary from 'expo-media-library'
 import * as VideoThumbnails from 'expo-video-thumbnails'
+import * as FileSystem from 'expo-file-system'
+import { Download } from '../types'
+import * as WebBrowser from 'expo-web-browser'
+import { theme } from '../config/theme'
 
 const IMG_OPTIONS:ImagePicker.ImagePickerOptions = {
   allowsEditing: true,
@@ -34,7 +37,6 @@ export default class HelperService {
       const res = await ImagePicker
         .launchImageLibraryAsync(VID_OPTIONS)
       if (res.cancelled === false) {
-        console.log(res.exif)
         getVideo(res.uri)
       }
     } catch (error) {
@@ -49,18 +51,20 @@ export default class HelperService {
       return data
     } catch (error) {
       alert(error.message)
+      return null
     }
   }
 
   static async generateBlobUrl (
     path:string,
     blob:Blob,
-    loading?:()=>void
+    loading?:()=>void,
+    showHook?:boolean
   ):Promise<null|string> {
     try {
       const bucket = storage.ref().child(path)
       const promise = bucket.put(blob)
-      UploadHookService.setHook(promise)
+      showHook && UploadHookService.setHook(promise)
       loading && loading()
       await promise
       return bucket.getDownloadURL()
@@ -86,18 +90,95 @@ export default class HelperService {
     }
   }
 
-  static async openBrowser (url:string) {
+  static async saveMedia (album:string, uri:string) {
     try {
-      const supported = await Linking.canOpenURL(url)
-      if (supported) {
-        await Linking.openURL(url)
+      const asset = await MediaLibrary.createAssetAsync(uri)
+      const albumExists = await MediaLibrary.getAlbumAsync(album)
+      if (albumExists) {
+        await MediaLibrary.addAssetsToAlbumAsync([asset], albumExists)
       } else {
-        alert(`Don't know how to open this URL: ${url}`)
+        await MediaLibrary.createAlbumAsync(album, asset, false)
       }
-    } catch (error) {
-      alert(error.message)
+      return false
+    } catch (e) {
+      console.log(e.message)
+      return false
     }
   }
+
+  static createDownload (
+    id:string,
+    uri:string,
+    ext:string,
+    callback:(val:number)=>void
+  ) {
+    try {
+      const hook = FileSystem
+        .createDownloadResumable(
+          uri,
+          `${FileSystem.cacheDirectory}${ext}`,
+          {},
+          progress => this.downloadCallback(progress, callback)
+        )
+      const download: Download = {
+        id,
+        hook,
+        state: 'pending',
+        progress: 0
+      }
+      return download
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
+  }
+
+  static async startDownload (download:Download) {
+    try {
+      await download.hook.downloadAsync()
+      return download
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
+  }
+
+  static async downloadFile (
+    id:string,
+    url:string,
+    ext:string,
+    callback:(val:number)=>void
+  ) {
+    const download = this.createDownload(id, url, ext, callback)
+    const downloaded = download && await this.startDownload(download)
+    return downloaded
+  }
+
+  static downloadCallback (
+    progressInfo:FileSystem.DownloadProgressData,
+    callback:(val:number)=>void
+  ) {
+    const {
+      totalBytesExpectedToWrite,
+      totalBytesWritten
+    } = progressInfo
+    const progress =
+      (totalBytesWritten / totalBytesExpectedToWrite) * 100
+    callback(Math.ceil(progress))
+  }
+
+  // static async openBrowser (url:string) {
+  //   try {
+  //     const supported = await Linking.canOpenURL(url)
+  //     if (supported) {
+  //       await Linking.openURL(url)
+  //     } else {
+  //       alert(`Don't know how to open this URL: ${url}`)
+  //     }
+  //   } catch (error) {
+  //     alert(error.message)
+  //   }
+  // }
 
   static async shareMedia (msg?:string) {
     try {
@@ -147,7 +228,34 @@ export default class HelperService {
     }
   }
 
+  static async openBrowser (uri:string) {
+    try {
+      await WebBrowser.openBrowserAsync(uri, {
+        showTitle: true,
+        toolbarColor: theme.colors.primary
+      })
+      return true
+    } catch (e) {
+      console.log(e.message)
+      return false
+    }
+  }
+
+  static async closeBrowser () {
+    try {
+      WebBrowser.dismissBrowser()
+      return true
+    } catch (e) {
+      console.log(e.message)
+      return false
+    }
+  }
+
   static parseToDate (val:number) {
-    return moment(val).format('DD MMMM YYYY')
+    const diffDays = moment().diff(val, 'day')
+    const date = diffDays < 3
+      ? moment(val).fromNow()
+      : moment(val).format('DD MMM YY')
+    return date
   }
 }
