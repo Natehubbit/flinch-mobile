@@ -1,22 +1,23 @@
 import 'react-native-gesture-handler'
 import React from 'react'
-import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
-import Navbar from '../../components/Navbar'
+import { createStackNavigator } from '@react-navigation/stack'
 import { RouteParams } from '..'
 import Profile from '../../screens/Profile'
+import { SLIDE_ANIMATION } from '../../common/constants'
 
 const Stack = createStackNavigator<RouteParams>()
 
 const ProfileStack = () => {
-  const renderHeader = (props:StackHeaderProps) => {
-    const { scene: { route: { name } } } = props
-    return <Navbar title={name}/>
-  }
+  // const renderHeader = (props:StackHeaderProps) => {
+  //   const { scene: { route: { name } } } = props
+  //   return <Navbar title={name} hideBell/>
+  // }
 
   return (
     <Stack.Navigator
+      headerMode='none'
       screenOptions={{
-        header: props => renderHeader(props)
+        ...SLIDE_ANIMATION
       }}
     >
       <Stack.Screen name='Profile' component={Profile} />

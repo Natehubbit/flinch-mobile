@@ -13,14 +13,17 @@ export default class AuthService {
      */
   static authStateListener (
     onAuthChange
-        : (user: firebase.User) => void
+    : (user: firebase.User) => void
   ) {
     const subscriber = auth
       .onAuthStateChanged(onAuthChange)
     return subscriber
   }
 
-  static async signUp (email: string, password: string): Promise<UserResponse> {
+  static async signUp (
+    email: string,
+    password: string
+  ): Promise<UserResponse> {
     try {
       const { user } = await auth
         .createUserWithEmailAndPassword(email, password)
@@ -43,7 +46,10 @@ export default class AuthService {
     }
   }
 
-  static async login (email: string, password: string): Promise<UserResponse> {
+  static async login (
+    email: string,
+    password: string
+  ): Promise<UserResponse> {
     try {
       const { user } = await auth
         .signInWithEmailAndPassword(email, password)
@@ -70,6 +76,28 @@ export default class AuthService {
       return true
     } catch (error) {
       alert(error.message)
+      return false
+    }
+  }
+
+  static async sendVerificationEmail (): Promise<boolean> {
+    try {
+      const user = auth.currentUser
+      await user.sendEmailVerification()
+      return true
+    } catch (e) {
+      Alert.alert(e.message)
+      return false
+    }
+  }
+
+  static async updateAuthEmail (email:string) {
+    try {
+      const user = auth.currentUser
+      await user.updateEmail(email)
+      return true
+    } catch (e) {
+      Alert.alert(e.message)
       return false
     }
   }

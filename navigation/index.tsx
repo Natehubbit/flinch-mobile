@@ -17,6 +17,7 @@ export type VideoNavParam = {
 }
 
 export type RouteParams = {
+  Welcome: undefined;
   Login: undefined;
   Signup: undefined;
   Signup2: undefined;

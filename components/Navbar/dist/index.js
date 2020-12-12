@@ -5,26 +5,43 @@ var react_1 = require("react");
 var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
 var vector_icons_1 = require("@expo/vector-icons");
-var Navbar = function (props) {
-    var title = props.title, isHome = props.isHome, hideMenu = props.hideMenu, hideBell = props.hideBell;
-    var _a = native_1.useNavigation(), navigate = _a.navigate, canGoBack = _a.canGoBack, dispatch = _a.dispatch, goBack = _a.goBack;
+var theme_1 = require("../../config/theme");
+var menu_svg_1 = require("../../assets/images/menu.svg");
+var Navbar = function (_a) {
+    var title = _a.title, isHome = _a.isHome, hideMenu = _a.hideMenu, hideBell = _a.hideBell, edit = _a.edit, showCancel = _a.showCancel, onCancel = _a.onCancel, onEdit = _a.onEdit;
+    var _b = native_1.useNavigation(), navigate = _b.navigate, canGoBack = _b.canGoBack, dispatch = _b.dispatch, goBack = _b.goBack;
     var backable = canGoBack();
-    var onToggleDrawer = function () { return dispatch(native_1.DrawerActions.toggleDrawer()); };
-    var onSearch = function () { return navigate('Search'); };
+    var onToggleDrawer = function () {
+        return dispatch(native_1.DrawerActions.toggleDrawer());
+    };
+    var onSearch = function () {
+        return navigate('Search');
+    };
     var renderIcon = function (icon, badge) { return (react_1["default"].createElement(react_native_1.View, { style: styles.iconContainer },
         react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: icon, style: styles.icon, size: 24 }),
         badge && react_1["default"].createElement(react_native_paper_1.Badge, { size: 9, style: styles.badge, visible: true }))); };
-    return react_1["default"].createElement(react_native_paper_1.Appbar, { theme: { colors: { primary: 'white' } }, style: styles.container },
+    var openNotifs = function () {
+        return navigate('Notifications');
+    };
+    return react_1["default"].createElement(react_native_paper_1.Appbar, { theme: { colors: { primary: theme_1.COLORS.white } }, style: styles.container },
         backable
             ? react_1["default"].createElement(react_native_paper_1.Appbar.BackAction, { onPress: goBack })
-            : !hideMenu && react_1["default"].createElement(react_native_paper_1.Appbar.Action, { onPress: onToggleDrawer, icon: 'menu' }),
+            : !hideMenu &&
+                react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onToggleDrawer },
+                    react_1["default"].createElement(menu_svg_1["default"], { width: 35, height: 30 })),
         react_1["default"].createElement(react_native_paper_1.Appbar.Content, { title: title, titleStyle: styles.title }),
         isHome && react_1["default"].createElement(react_native_paper_1.Appbar.Action, { icon: function () { return renderIcon('magnify'); }, onPress: onSearch, animated: false }),
-        !hideBell && react_1["default"].createElement(react_native_paper_1.Appbar.Action, { animated: false, icon: function () { return renderIcon('bell-outline', true); } }));
+        !hideBell
+            ? react_1["default"].createElement(react_native_paper_1.Appbar.Action, { animated: false, icon: function () { return renderIcon('bell-outline', true); }, onPress: openNotifs })
+            : !edit && react_1["default"].createElement(react_native_paper_1.Appbar.Action, { animated: false, icon: function () { return null; }, disabled: true }),
+        edit && !showCancel &&
+            react_1["default"].createElement(react_native_paper_1.Appbar.Action, { icon: function () { return renderIcon('account-edit'); }, onPress: onEdit }),
+        edit && showCancel &&
+            react_1["default"].createElement(react_native_paper_1.Appbar.Action, { icon: function () { return renderIcon('close'); }, onPress: onCancel }));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
-        elevation: 0,
+        elevation: 1,
         height: 50
     },
     title: {

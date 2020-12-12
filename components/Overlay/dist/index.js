@@ -17,16 +17,19 @@ var react_native_paper_1 = require("react-native-paper");
 var react_redux_1 = require("react-redux");
 var styledComponents_1 = require("../../common/styledComponents");
 var theme_1 = require("../../config/theme");
+var selector_1 = require("../../hooks/selector");
 var useLoader_1 = require("../../hooks/useLoader");
 var useToast_1 = require("../../hooks/useToast");
 var UploadHookService_1 = require("../../services/UploadHookService");
 var loader_1 = require("../../store/loader");
 var toast_1 = require("../../store/toast");
+var Selector_1 = require("../Selector");
 var AppOverlay = function (_a) {
     var children = _a.children, props = __rest(_a, ["children"]);
     var dispatch = react_redux_1.useDispatch();
     var _b = react_1.useState(0), progress = _b[0], setProgress = _b[1];
     var _c = useLoader_1.useLoader(), paymentLoader = _c.paymentLoader, responseLoader = _c.responseLoader, authLoader = _c.authLoader;
+    var showSelector = selector_1.useSelect().show;
     var _d = useToast_1.useToast(), onDismiss = _d.onDismiss, onPress = _d.onPress, mode = _d.mode, msg = _d.msg, show = _d.show, label = _d.label, duration = _d.duration;
     var style = mode === 'danger'
         ? { backgroundColor: theme_1.COLORS.red, color: theme_1.COLORS.dark }
@@ -40,7 +43,10 @@ var AppOverlay = function (_a) {
             UploadHookService_1["default"].listen(setProgress, onUploadError, onUploadComplete);
         return function () { return unsubscribe && unsubscribe(); };
     }, [UploadHookService_1["default"].uploadHookRef]);
-    var loading = paymentLoader || responseLoader;
+    var loading = paymentLoader ||
+        responseLoader ||
+        authLoader ||
+        showSelector;
     var onUploadError = function () {
         dispatch(toast_1.toastActions.setToast({
             label: 'Retry',
@@ -89,7 +95,8 @@ var AppOverlay = function (_a) {
         loading && react_1["default"].createElement(react_native_1.View, { style: styles.container },
             paymentLoader && renderLoader(),
             responseLoader && renderUploading(),
-            authLoader && renderSubmitting()),
+            authLoader && renderSubmitting(),
+            react_1["default"].createElement(Selector_1["default"], null)),
         react_1["default"].createElement(react_native_paper_1.Snackbar, { style: style, visible: show, theme: { colors: { accent: style && style.color } }, onDismiss: onDismiss, duration: duration, action: {
                 label: label,
                 onPress: onPress

@@ -5,7 +5,7 @@
     "icon": "./assets/images/logo.png",
     "version": "1.2",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/splash5.png",
       "resizeMode": "cover"
     },
     "assetBundlePatterns": [

@@ -1,7 +1,5 @@
 import React from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import RequestsPending from '../../screens/RequestsPending'
-import RequestsReviewed from '../../screens/RequestsReviewed'
 import { StyleSheet } from 'react-native'
 import { theme } from '../../config/theme'
 import Requests from '../../screens/Requests'

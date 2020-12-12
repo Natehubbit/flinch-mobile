@@ -1,5 +1,6 @@
 import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
 import React from 'react'
+import { SLIDE_ANIMATION } from '../../common/constants'
 import Navbar from '../../components/Navbar'
 import { useUser } from '../../hooks/useUser'
 import Request from '../../screens/Request'
@@ -23,24 +24,19 @@ const RequestStack: React.FC = () => {
       ? 'Upload Video'
       : name
     const show = name === 'RecordVideo'
-    return !show ? <Navbar title={heading}/> : null
+    return !show ? <Navbar title={heading} hideBell/> : null
   }
 
   return <Stack.Navigator
         screenOptions={{
-          header: props => renderHeader(props)
+          header: props => renderHeader(props),
+          ...SLIDE_ANIMATION
         }}
     >
         <Stack.Screen name='Requests' component={renderRequests()} />
         <Stack.Screen name='Request' component={Request} />
         <Stack.Screen name='VideoUpload' component={VideoUpload} />
         <Stack.Screen name='RecordVideo' component={VideoRecord} />
-        {/* <Stack.Screen name='Request' component={Search} />
-        <Stack.Screen name='Celeb' component={CelebScreen} />
-        <Stack.Screen name='Book' component={Book} />
-        <Stack.Screen name='Payment' component={PaymentMode} />
-        <Stack.Screen name='PaymentCard' component={PaymentCard} />
-        <Stack.Screen name='PaymentMobile' component={PaymentMobile} /> */}
     </Stack.Navigator>
 }
 

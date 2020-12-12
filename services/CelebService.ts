@@ -22,6 +22,25 @@ export default class CelebService {
       return null
     }
   }
+
+  static async getCeleb (id:string):Promise<Celeb> {
+    try {
+      const res = await CelebsRef.doc(id).get()
+      return {
+        id: res.id,
+        alias: '',
+        bio: '',
+        craft: '',
+        imageUrl: '',
+        popularity: 0,
+        price: 0,
+        ...res.data()
+      }
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
+  }
 }
 
 export interface Celeb {
@@ -31,7 +50,8 @@ export interface Celeb {
     craft:string;
     imageUrl:string;
     popularity:number;
-    price:number
+    price:number;
+    objectID?:string;
 }
 
 export type Celebs = Celeb[]

@@ -11,6 +11,9 @@ export type User = {
     role:'celebrity'|'user';
 } | null;
 
+export type UserResponse =
+    Partial<User>
+
 export interface AppLoader {
     authLoader:boolean;
     celebsLoader:boolean;
@@ -146,4 +149,12 @@ export interface UpdateDownloadActionPayload {
     id:string;
     key:keyof Download;
     val:any;
+}
+
+export interface Selector {
+    value: string;
+    title?: string;
+    show: boolean;
+    options?: string[];
+    onSelect?: () => void;
 }

@@ -1,3 +1,4 @@
+import { TransitionPresets } from '@react-navigation/stack'
 import { PaymentMode, Request } from '../types'
 
 export const API = 'http://localhost:5001/shoutouts-3c57c/us-central1/'
@@ -5,6 +6,10 @@ export const API = 'http://localhost:5001/shoutouts-3c57c/us-central1/'
 export const RECORD_DURATION = 60 // seconds
 
 export const PAYMENT_CALLBACK = 'https://us-central1-shoutouts-3c57c.cloudfunctions.net/paymentCallback'
+
+export const SLIDE_ANIMATION = {
+  ...TransitionPresets.SlideFromRightIOS
+}
 
 export const PAYMENT_OPTIONS:PaymentMode[] = [
   {
@@ -55,13 +60,30 @@ export const VIDEO_SAVES = 'FlinchSaves'
 
 export const PROFILE_FORM = [
   {
+    type: 'name',
     left: 'account',
     placeholder: 'Name',
     right: ''
   },
   {
+    type: 'email',
     left: 'email',
     placeholder: 'Email',
     right: ''
+  },
+  {
+    type: 'password',
+    left: 'lock',
+    placeholder: 'Password',
+    right: 'eye'
   }
+]
+
+export const OCCASIONS = [
+  'Birthday',
+  'Wedding',
+  'Advice',
+  'Anniversary',
+  'Gift',
+  'Motivation'
 ]

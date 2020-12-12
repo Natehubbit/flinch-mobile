@@ -6,13 +6,12 @@ import Avatar from '../../components/Avatar'
 import Input from '../../components/Input'
 import { useDispatch } from 'react-redux'
 import { userActions } from '../../store/user'
-import { useUser } from '../../hooks/useUser'
 import { useLoader } from '../../hooks/useLoader'
 import HelperService from '../../services/HelperService'
 
 const Signup2: React.FC = () => {
   const dispatch = useDispatch()
-  const user = useUser()
+  // const user = useUser()
   const { authLoader } = useLoader()
   const [name, setName] = useState('')
   const [submit, setSubmit] = useState(false)
@@ -20,13 +19,14 @@ const Signup2: React.FC = () => {
   const onProceed = () => {
     dispatch(
       userActions.update({
-        ...user,
+        // ...user,
         displayName: name,
         imageUrl: imgUri
       })
     )
   }
-  const onUploadImage = () => HelperService.uploadPhoto(setImgUri)
+  const onUploadImage = () => HelperService
+    .uploadPhoto(setImgUri)
   const onInput = (input:string) => {
     if (input) {
       setSubmit(true)

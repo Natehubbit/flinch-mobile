@@ -15,6 +15,7 @@ var requests_1 = require("./requests");
 var toast_1 = require("./toast");
 var response_1 = require("./response");
 var downloads_1 = require("./downloads");
+var selector_1 = require("./selector");
 var rootReducer = toolkit_1.combineReducers((_a = {},
     _a[user_1.userSlice.name] = user_1.userSlice.reducer,
     _a[loader_1.loaderSlice.name] = loader_1.loaderSlice.reducer,
@@ -24,10 +25,11 @@ var rootReducer = toolkit_1.combineReducers((_a = {},
     _a[toast_1.toastSlice.name] = toast_1.toastSlice.reducer,
     _a[response_1.responseSlice.name] = response_1.responseSlice.reducer,
     _a[downloads_1.downloadsSlice.name] = downloads_1.downloadsSlice.reducer,
+    _a[selector_1.selectorSlice.name] = selector_1.selectorSlice.reducer,
     _a));
 var persistConfig = {
     key: 'root',
-    blacklist: ['loader', 'toast', 'downloads'],
+    blacklist: ['loader', 'toast', 'downloads', 'selector'],
     storage: async_storage_1["default"],
     timeout: 10000
 };

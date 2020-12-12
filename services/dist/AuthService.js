@@ -127,6 +127,48 @@ var AuthService = /** @class */ (function () {
             });
         });
     };
+    AuthService.sendVerificationEmail = function () {
+        return __awaiter(this, void 0, Promise, function () {
+            var user, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        user = firebase_1.auth.currentUser;
+                        return [4 /*yield*/, user.sendEmailVerification()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_1 = _a.sent();
+                        react_native_1.Alert.alert(e_1.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AuthService.updateAuthEmail = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            var user, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        user = firebase_1.auth.currentUser;
+                        return [4 /*yield*/, user.updateEmail(email)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_2 = _a.sent();
+                        react_native_1.Alert.alert(e_2.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     return AuthService;
 }());
 exports["default"] = AuthService;

@@ -1,10 +1,10 @@
 import { db } from '../config/firebase'
-import { User } from '../types'
+import { User, UserResponse } from '../types'
 
 const UsersRef = db.collection('users')
 
 export default class UserService {
-  static async addUser (user:User) {
+  static async addUser (user:UserResponse) {
     try {
       await UsersRef.doc(user.id).set(user)
       return user
@@ -24,7 +24,7 @@ export default class UserService {
     }
   }
 
-  static async updateUser (data:User):Promise<User> {
+  static async updateUser (data:Partial<User>):Promise<Partial<User>> {
     try {
       const {
         id,

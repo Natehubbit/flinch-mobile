@@ -4,11 +4,13 @@ import { ActivityIndicator, Button, ProgressBar, Snackbar } from 'react-native-p
 import { useDispatch } from 'react-redux'
 import { AltMiniLabel, maxWidth, Paragraph } from '../../common/styledComponents'
 import { COLORS, theme } from '../../config/theme'
+import { useSelect } from '../../hooks/selector'
 import { useLoader } from '../../hooks/useLoader'
 import { useToast } from '../../hooks/useToast'
 import UploadHookService from '../../services/UploadHookService'
 import { loaderActions } from '../../store/loader'
 import { toastActions } from '../../store/toast'
+import Selector from '../Selector'
 interface AppOverlayProps {
   children: any;
 }
@@ -24,6 +26,9 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
     responseLoader,
     authLoader
   } = useLoader()
+  const {
+    show: showSelector
+  } = useSelect()
   const {
     onDismiss,
     onPress,
@@ -41,7 +46,6 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
         : mode === 'success'
           ? { backgroundColor: COLORS.success, color: COLORS.dark }
           : null
-
   useEffect(() => {
     const unsubscribe = UploadHookService.uploadHookRef &&
       UploadHookService.listen(
@@ -51,7 +55,10 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
       )
     return () => unsubscribe && unsubscribe()
   }, [UploadHookService.uploadHookRef])
-  const loading = paymentLoader || responseLoader
+  const loading = paymentLoader ||
+    responseLoader ||
+    authLoader ||
+    showSelector
   const onUploadError = () => {
     dispatch(toastActions.setToast({
       label: 'Retry',
@@ -130,6 +137,7 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
         {paymentLoader && renderLoader()}
         {responseLoader && renderUploading()}
         {authLoader && renderSubmitting()}
+        <Selector />
       </View>}
       {/* TOASTS */}
       <Snackbar

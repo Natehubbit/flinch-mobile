@@ -38,6 +38,9 @@ var Drawer = function (props) {
             routes: [{ name: 'Home', key: null }]
         });
     };
+    var onLogout = function () {
+        dispatch(user_1.userActions.signout());
+    };
     var renderRoutes = function () {
         return routeNames.map(function (route, i) {
             var isHome = route === 'Home';
@@ -68,7 +71,12 @@ var Drawer = function (props) {
                     react_1["default"].createElement(styledComponents_1.MiniLabel, { style: styles.role }, role || 'user'))),
             react_1["default"].createElement(react_native_1.View, null,
                 react_1["default"].createElement(react_native_paper_1.Switch, { theme: { colors: { accent: 'white' } }, value: toggle, onValueChange: function (val) { return onToggleSwitch(val); } }))),
-        renderRoutes());
+        renderRoutes(),
+        react_1["default"].createElement(react_native_1.View, { style: [styles.bottom] },
+            react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onLogout, style: [styles.logout] },
+                react_1["default"].createElement(react_1["default"].Fragment, null,
+                    react_1["default"].createElement(styledComponents_1.Paragraph, null, "Logout"),
+                    react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'logout', size: 20, color: theme_1.COLORS.white })))));
 };
 var styles = react_native_1.StyleSheet.create({
     drawer: {
@@ -116,6 +124,20 @@ var styles = react_native_1.StyleSheet.create({
         fontSize: 12,
         lineHeight: 10,
         color: '#fff'
+    },
+    bottom: {
+        position: 'absolute',
+        bottom: 0,
+        height: 50,
+        justifyContent: 'center',
+        width: '100%'
+    },
+    logout: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 12
     }
 });
 exports["default"] = Drawer;

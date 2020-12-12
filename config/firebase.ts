@@ -21,3 +21,5 @@ firebase.initializeApp(firebaseConfig)
 export const auth = firebase.auth()
 export const db = firebase.firestore()
 export const storage = firebase.storage()
+export const batch = firebase.firestore().batch
+export const transaction = firebase.firestore().runTransaction

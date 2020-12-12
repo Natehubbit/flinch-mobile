@@ -1,9 +1,12 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Appbar, Badge, withTheme } from 'react-native-paper'
+import { Appbar, Badge, TouchableRipple, withTheme } from 'react-native-paper'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { Theme } from 'react-native-paper/lib/typescript/src/types'
+import { COLORS } from '../../config/theme'
+import MenuIcon from '../../assets/images/menu.svg'
+import { Routes } from '../../navigation'
 
 interface NavProps {
     title?:string;
@@ -13,19 +16,34 @@ interface NavProps {
     hideMenu?:boolean;
     hideBell?:boolean;
     transparent?:boolean;
+    edit?:boolean;
+    showCancel?:boolean;
     theme: Theme;
+    onCancel?:()=>void;
+    onEdit?:()=>void;
 }
 
 const Navbar: React.FC<NavProps> = ({
   title,
   isHome,
   hideMenu,
-  hideBell
+  hideBell,
+  edit,
+  showCancel,
+  onCancel,
+  onEdit
 }) => {
-  const { navigate, canGoBack, dispatch, goBack } = useNavigation()
+  const {
+    navigate,
+    canGoBack,
+    dispatch,
+    goBack
+  } = useNavigation()
   const backable = canGoBack()
-  const onToggleDrawer = () => dispatch(DrawerActions.toggleDrawer())
-  const onSearch = () => navigate('Search')
+  const onToggleDrawer = () =>
+    dispatch(DrawerActions.toggleDrawer())
+  const onSearch = () =>
+    navigate<Routes>('Search')
   const renderIcon = (icon:string, badge?:boolean) => (
         <View style={styles.iconContainer}>
             <Icon
@@ -33,30 +51,62 @@ const Navbar: React.FC<NavProps> = ({
                 style={styles.icon}
                 size={24}
             />
-            {badge && <Badge size={9} style={styles.badge} visible />}
+            {badge && <Badge
+              size={9}
+              style={styles.badge}
+              visible
+            />}
         </View>
   )
+  const openNotifs = () =>
+    navigate<Routes>('Notifications')
 
   return <Appbar
-        theme={{ colors: { primary: 'white' } }}
+        theme={{ colors: { primary: COLORS.white } }}
         style={styles.container}>
         {backable
           ? <Appbar.BackAction onPress={goBack}/>
-          : !hideMenu && <Appbar.Action onPress={onToggleDrawer} icon='menu' />
+          : !hideMenu &&
+            <TouchableRipple onPress={onToggleDrawer}>
+              <MenuIcon width={35} height={30}/>
+            </TouchableRipple>
         }
-        <Appbar.Content title={title} titleStyle={styles.title} />
+        <Appbar.Content
+          title={title}
+          titleStyle={styles.title}
+        />
         {isHome && <Appbar.Action
             icon={() => renderIcon('magnify')}
             onPress={onSearch}
             animated={false}
         />}
-        {!hideBell && <Appbar.Action animated={false} icon={() => renderIcon('bell-outline', true)} />}
+        {!hideBell
+          ? <Appbar.Action
+            animated={false}
+            icon={() => renderIcon('bell-outline', true)}
+            onPress={openNotifs}
+          />
+          : !edit && <Appbar.Action
+            animated={false}
+            icon={() => null}
+            disabled
+          />}
+          {edit && !showCancel &&
+          <Appbar.Action
+            icon={() => renderIcon('account-edit')}
+            onPress={onEdit}
+          />}
+          {edit && showCancel &&
+          <Appbar.Action
+            icon={() => renderIcon('close')}
+            onPress={onCancel}
+          />}
     </Appbar>
 }
 
 const styles = StyleSheet.create({
   container: {
-    elevation: 0,
+    elevation: 1,
     height: 50
   },
   title: {

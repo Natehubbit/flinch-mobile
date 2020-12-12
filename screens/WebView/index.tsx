@@ -59,6 +59,7 @@ const WebViewScreen:React.FC<WebViewScreenProps> = () => {
         onLoadProgress={onProgress}
         source={{ uri }}
         onError={params?.onStopLoading}
+        // onNavigationStateChange={e=>{}}
       />
       {!showProgress && <ProgressBar progress={progress} />}
     </>

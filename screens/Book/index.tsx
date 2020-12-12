@@ -15,6 +15,9 @@ import { useDispatch } from 'react-redux'
 import { requestActions } from '../../store/request'
 import { useLoader } from '../../hooks/useLoader'
 import { useRequest } from '../../hooks/useRequest'
+import InputSelect from '../../components/InputSelect'
+import { useSelect } from '../../hooks/selector'
+import { OCCASIONS } from '../../common/constants'
 
 const Book: React.FC = () => {
   const dispatch = useDispatch()
@@ -25,6 +28,7 @@ const Book: React.FC = () => {
   const { params: { data } } = useRoute<BookScreenRouteProps>()
   const { displayName, id: userId } = useUser()
   const { id, price, alias, imageUrl } = data
+  const { value: occasion } = useSelect()
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true
@@ -70,49 +74,63 @@ const Book: React.FC = () => {
   const renderForm = () => {
     return (
             <Formik
-                initialValues={BOOK_FORM}
-                onSubmit={onSubmit}
-                validationSchema={BookSchema}
-                enableReinitialize
+              initialValues={BOOK_FORM}
+              onSubmit={onSubmit}
+              validationSchema={BookSchema}
+              enableReinitialize
             >
-                {({ errors, touched, values, handleSubmit, handleChange }) => {
+                {({
+                  errors,
+                  touched,
+                  values,
+                  handleSubmit,
+                  handleChange,
+                  setFieldValue
+                }) => {
                   const {
                     instructions,
-                    occasion,
                     recipient
                   } = values
                   return <>
                         <Input
-                            label='Recipient Name'
-                            left='account'
-                            value={recipient}
-                            disabled={booking}
-                            onChangeText={handleChange('recipient')}
+                          label='Recipient Name'
+                          left='account-outline'
+                          value={recipient}
+                          disabled={booking}
+                          onChangeText={handleChange('recipient')}
                         />
                         {errors.recipient && touched.recipient && (
                             <HelperText type='error'>{errors.recipient}</HelperText>
                         )}
-                        <Input
-                            label='Occasion'
-                            left='calendar'
-                            disabled={booking}
-                            value={occasion}
-                            onChangeText={handleChange('occasion')}
+                        <InputSelect
+                          value={occasion}
+                          placeholder='Ocassion'
+                          right='chevron-down'
+                          field='occasion'
+                          onChange={setFieldValue}
+                          options={OCCASIONS}
                         />
+                        {/* <Input
+                          label='Occasion'
+                          left='calendar'
+                          disabled={booking}
+                          value={occasion}
+                          onChangeText={handleChange('occasion')}
+                        /> */}
                         {errors.occasion && touched.occasion && (
-                            <HelperText type='error'>{errors.occasion}</HelperText>
+                          <HelperText type='error'>{errors.occasion}</HelperText>
                         )}
                         <Input
                             disabled={booking}
                             label='Instructions'
-                            left='information'
+                            left='information-outline'
                             style={{ height: 83 }}
                             value={instructions}
                             onChangeText={handleChange('instructions')}
                             multiline
                         />
                         {errors.instructions && touched.instructions && (
-                            <HelperText type='error'>{errors.instructions}</HelperText>
+                          <HelperText type='error'>{errors.instructions}</HelperText>
                         )}
                         <Button
                             uppercase={false}
@@ -156,7 +174,6 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 24,
     marginBottom: 12,
-    height: 50,
     justifyContent: 'center'
   },
   celeb: {

@@ -17,7 +17,7 @@ var RequestCard = function (_a) {
                         react_1["default"].createElement(react_native_1.View, { style: styles.label },
                             react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, celeb),
                             react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] },
-                                "For ",
+                                "for ",
                                 recipient),
                             react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] }, date))),
                     react_1["default"].createElement(react_native_1.View, { style: styles.tagContainer },

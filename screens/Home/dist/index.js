@@ -13,7 +13,7 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
-var react_native_gesture_handler_1 = require("react-native-gesture-handler");
+// import { FlatList } from 'react-native-gesture-handler'
 var react_native_paper_1 = require("react-native-paper");
 var react_redux_1 = require("react-redux");
 var styledComponents_1 = require("../../common/styledComponents");
@@ -21,6 +21,7 @@ var CelebImage_1 = require("../../components/CelebImage");
 var SectionHeader_1 = require("../../components/SectionHeader");
 var useCelebs_1 = require("../../hooks/useCelebs");
 var useLoader_1 = require("../../hooks/useLoader");
+// import { Celeb } from '../../services/CelebService'
 var celebs_1 = require("../../store/celebs");
 var Home = function () {
     var dispatch = react_redux_1.useDispatch();
@@ -33,22 +34,33 @@ var Home = function () {
     if (celebsLoader) {
         return react_1["default"].createElement(react_native_paper_1.ActivityIndicator, { animating: true });
     }
-    var featured = celebs && celebs.slice(0, 4);
-    var renderFeatured = function (_a) {
-        var item = _a.item;
-        return react_1["default"].createElement(CelebImage_1["default"], __assign({}, item));
-    };
+    // const featured = celebs && celebs.slice(0, 4)
+    // const renderFeatured = ({ item }:{item:Celeb}) => {
+    //   return <CelebImage
+    //       {...item}
+    //     />
+    // }
     var renderAll = function () {
         return celebs && celebs.slice(4).map(function (celeb) { return (react_1["default"].createElement(CelebImage_1["default"], __assign({ key: celeb.id }, celeb, { large: true }))); });
     };
-    var featureView = function () {
-        return (react_1["default"].createElement(react_1["default"].Fragment, null,
-            react_1["default"].createElement(SectionHeader_1["default"], { title: 'Featured' }),
-            react_1["default"].createElement(react_native_gesture_handler_1.FlatList, { data: featured, horizontal: true, showsHorizontalScrollIndicator: false, renderItem: renderFeatured, contentContainerStyle: styles.section, keyExtractor: function (item) { return item.id; } })));
-    };
+    // const featureView = () => {
+    //   return (
+    //     <>
+    //       <SectionHeader title='Featured' />
+    //       <FlatList
+    //         data={featured}
+    //         horizontal
+    //         showsHorizontalScrollIndicator={false}
+    //         renderItem={renderFeatured}
+    //         contentContainerStyle={styles.section}
+    //         keyExtractor={(item) => item.id}
+    //       />
+    //     </>
+    //   )
+    // }
     var allView = function () {
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
-            react_1["default"].createElement(SectionHeader_1["default"], { title: 'All' }),
+            react_1["default"].createElement(SectionHeader_1["default"], { title: 'Celebrities' }),
             react_1["default"].createElement(react_native_1.View, { style: styles.allSection }, renderAll())));
     };
     var renderViews = function (_a) {
@@ -56,7 +68,11 @@ var Home = function () {
         return item;
     };
     return react_1["default"].createElement(react_native_1.View, null,
-        react_1["default"].createElement(styledComponents_1.AppContainer, { data: [featureView(), allView()], renderItem: renderViews, keyExtractor: function (item, index) { return index.toString(); } }));
+        react_1["default"].createElement(styledComponents_1.AppContainer
+        // data={[featureView(), allView()]}
+        , { 
+            // data={[featureView(), allView()]}
+            data: [allView()], renderItem: renderViews, keyExtractor: function (item, index) { return index.toString(); } }));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {},

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { User } from '../types'
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import { User, UserResponse } from '../types'
 import AuthService from '../services/AuthService'
 import { loaderActions } from './loader'
 import UserService from '../services/UserService'
@@ -23,9 +23,9 @@ export const { actions, ...userSlice } = createSlice({
   reducers: {
     getUser (
       state,
-      { payload }: PayloadAction<User>
+      { payload }: PayloadAction<UserResponse>
     ):User {
-      return payload
+      return { ...state, ...payload }
     },
     updateUser (
       state,
@@ -72,21 +72,42 @@ const signout = () => async (dispatch:any) => {
   dispatch(loaderActions.loaded('authLoader'))
 }
 
-const update = (data:User) => async (dispatch:any, getState:()=>AppState) => {
+const update = (
+  data:UserResponse,
+  pass?:string
+) => async (
+  dispatch:Dispatch,
+  getState:()=>AppState
+) => {
   dispatch(loaderActions.loading('authLoader'))
-  const { imageUrl } = getState().user
+  const { imageUrl, email: mail } = getState().user
   const { imageUrl: img, id } = data
   if (img && (imageUrl !== img)) {
-    const blob = await HelperService.parseToBlob(img)
-    const uri = await HelperService.generateBlobUrl(`user/${id}`, blob)
+    const blob = await HelperService
+      .parseToBlob(img)
+    const uri = await HelperService
+      .generateBlobUrl(`user/${id}`, blob)
     data = { ...data, imageUrl: uri }
   }
-  const user = await UserService.updateUser(data)
-  user && dispatch(actions.getUser({ ...user, profileUpdated: true }))
+  if (data.email && pass) {
+    const auth = await AuthService
+      .login(mail, pass)
+    const updated = auth && await AuthService
+      .updateAuthEmail(data.email)
+    const user = updated && await UserService
+      .updateUser(data)
+    user && dispatch(actions
+      .getUser({ ...user, profileUpdated: true }))
+  } else {
+    const updated = await UserService
+      .updateUser(data)
+    updated && dispatch(actions
+      .getUser({ ...updated, profileUpdated: true }))
+  }
   dispatch(loaderActions.loaded('authLoader'))
 }
 
-const updateProfile = (data:User) => (dispatch:any) => {
+const updateProfile = (data:User) => (dispatch:Dispatch) => {
   dispatch(actions.updateUser(data))
 }
 

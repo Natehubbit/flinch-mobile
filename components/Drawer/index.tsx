@@ -6,10 +6,10 @@ import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
 import { userActions } from '../../store/user'
 import { MaterialCommunityIcons as MaterialIcon } from '@expo/vector-icons'
-import { theme } from '../../config/theme'
+import { COLORS, theme } from '../../config/theme'
 import { Image, StyleSheet, View } from 'react-native'
-import { MiniLabel, SubHeading } from '../../common/styledComponents'
-import { Switch } from 'react-native-paper'
+import { MiniLabel, Paragraph, SubHeading } from '../../common/styledComponents'
+import { Switch, TouchableRipple } from 'react-native-paper'
 
 const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (props) => {
   const dispatch = useDispatch()
@@ -30,6 +30,9 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
       index: 0,
       routes: [{ name: 'Home', key: null }]
     })
+  }
+  const onLogout = () => {
+    dispatch(userActions.signout())
   }
   const renderRoutes = () => {
     return routeNames.map((route:Routes, i:number) => {
@@ -86,6 +89,23 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
             </View>
         </View>
         {renderRoutes()}
+        <View style={[styles.bottom]}>
+          <TouchableRipple
+            onPress={onLogout}
+            style={[styles.logout]}
+          >
+            <>
+              <Paragraph>
+                Logout
+              </Paragraph>
+              <MaterialIcon
+                name='logout'
+                size={20}
+                color={COLORS.white}
+              />
+            </>
+          </TouchableRipple>
+        </View>
     </View>
 }
 
@@ -135,6 +155,20 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 10,
     color: '#fff'
+  },
+  bottom: {
+    position: 'absolute',
+    bottom: 0,
+    height: 50,
+    justifyContent: 'center',
+    width: '100%'
+  },
+  logout: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12
   }
 })
 

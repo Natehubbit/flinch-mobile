@@ -9,6 +9,7 @@ import VideoStack from '../VideoStack'
 import Video from '../../screens/Video'
 import Notifications from '../../screens/Notifications'
 import ProfileStack from '../ProfileStack'
+import Search from '../../screens/Search'
 
 const Drawer = createDrawerNavigator()
 const AppDrawer = () => {
@@ -21,7 +22,7 @@ const AppDrawer = () => {
             }}>
             <Drawer.Screen name="Home" component={HomeStack} />
             <Drawer.Screen name="Profile" component={ProfileStack} />
-            {/* <Drawer.Screen name="Notifications" component={HomeStack} /> */}
+            <Drawer.Screen name="Notifications" component={Notifications} />
             <Drawer.Screen name="Requests" component={RequestStack} />
             <Drawer.Screen name="Videos" component={VideoStack} />
         </Drawer.Navigator>
@@ -39,6 +40,7 @@ const AppDrawerRoot = () => {
             <Stack.Screen name='WebView' component={WebViewScreen}/>
             <Stack.Screen name="Video" component={Video} />
             <Stack.Screen name="Notifications" component={Notifications} />
+            <Stack.Screen name='Search' component={Search} />
         </Stack.Navigator>
   )
 }

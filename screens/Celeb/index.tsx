@@ -4,11 +4,6 @@ import { Image, ImageBackground, StyleSheet, View } from 'react-native'
 import { FAB } from 'react-native-paper'
 import { MainLabel, AltMainLabel, MiniLabel, maxHeight, maxWidth, Paragraph } from '../../common/styledComponents'
 import { CelebScreenRouteProp, Routes } from '../../navigation'
-// import { Celeb } from '../../services/CelebService'
-
-// interface CelebProps extends Celeb {
-
-// }
 
 const CelebScreen: React.FC = () => {
   const { navigate } = useNavigation()
@@ -27,23 +22,24 @@ const CelebScreen: React.FC = () => {
         style={styles.container}
     >
         <ImageBackground
-            source={{ uri: imageUrl }}
-            style={styles.image}
-            blurRadius={100}
+          source={{ uri: imageUrl }}
+          style={styles.image}
+          blurRadius={100}
         >
-            <Image
-                source={{
-                  uri: imageUrl
-                }}
-                style={{ flex: 1, width: undefined, height: undefined }}
-                resizeMode='contain'
-            />
+          <Image
+            source={{
+              uri: imageUrl
+            }}
+            style={[styles.img]}
+            resizeMode='contain'
+          />
         </ImageBackground>
         <View style={styles.dets}>
             <FAB
+                uppercase={false}
                 icon='wallet'
                 style={styles.fab}
-                label='book'
+                label='Book'
                 onPress={onBook}
             />
             <View style={styles.label}>
@@ -70,7 +66,7 @@ const styles = StyleSheet.create({
   },
   fab: {
     position: 'absolute',
-    bottom: '115%',
+    top: -25,
     right: 12
   },
   label: {
@@ -88,6 +84,11 @@ const styles = StyleSheet.create({
   },
   price: {
 
+  },
+  img: {
+    flex: 1,
+    width: undefined,
+    height: undefined
   }
 })
 

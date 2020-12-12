@@ -24,7 +24,6 @@ const CelebImage: React.FC<CelebImageProps> = ({
   const size = large ? { width: '47%' } : null
   const {
     navigate
-
   } = useNavigation()
   const onPressed = () => navigate<Routes>('Celeb', { data: props })
   return <Card

@@ -33,15 +33,15 @@ const RequestCard: React.FC<RequestCardProps> = ({
                 <View style={styles.top}>
                     <View style={styles.user}>
                         <Image
-                            source={{ uri }}
-                            style={styles.image}
+                          source={{ uri }}
+                          style={styles.image}
                         />
                         <View style={styles.label}>
                             <AltMiniLabel>
-                                {celeb}
+                              {celeb}
                             </AltMiniLabel>
                             <Paragraph black style={[styles.bottomLabel, styles.mini]}>
-                              For {recipient}
+                              for {recipient}
                             </Paragraph>
                             <Paragraph black style={[styles.bottomLabel, styles.mini]}>
                               {date}
@@ -50,7 +50,7 @@ const RequestCard: React.FC<RequestCardProps> = ({
                     </View>
                     <View style={styles.tagContainer}>
                         <Tag
-                            label={tag}
+                          label={tag}
                         />
                     </View>
                 </View>

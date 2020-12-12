@@ -26,6 +26,9 @@ var react_redux_1 = require("react-redux");
 var request_1 = require("../../store/request");
 var useLoader_1 = require("../../hooks/useLoader");
 var useRequest_1 = require("../../hooks/useRequest");
+var InputSelect_1 = require("../../components/InputSelect");
+var selector_1 = require("../../hooks/selector");
+var constants_1 = require("../../common/constants");
 var Book = function () {
     var dispatch = react_redux_1.useDispatch();
     var request = useRequest_1.useRequest();
@@ -35,6 +38,7 @@ var Book = function () {
     var data = native_1.useRoute().params.data;
     var _a = useUser_1.useUser(), displayName = _a.displayName, userId = _a.id;
     var id = data.id, price = data.price, alias = data.alias, imageUrl = data.imageUrl;
+    var occasion = selector_1.useSelect().value;
     react_1.useEffect(function () {
         if (!mounted.current) {
             mounted.current = true;
@@ -71,14 +75,14 @@ var Book = function () {
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {
-            var errors = _a.errors, touched = _a.touched, values = _a.values, handleSubmit = _a.handleSubmit, handleChange = _a.handleChange;
-            var instructions = values.instructions, occasion = values.occasion, recipient = values.recipient;
+            var errors = _a.errors, touched = _a.touched, values = _a.values, handleSubmit = _a.handleSubmit, handleChange = _a.handleChange, setFieldValue = _a.setFieldValue;
+            var instructions = values.instructions, recipient = values.recipient;
             return react_1["default"].createElement(react_1["default"].Fragment, null,
-                react_1["default"].createElement(Input_1["default"], { label: 'Recipient Name', left: 'account', value: recipient, disabled: booking, onChangeText: handleChange('recipient') }),
+                react_1["default"].createElement(Input_1["default"], { label: 'Recipient Name', left: 'account-outline', value: recipient, disabled: booking, onChangeText: handleChange('recipient') }),
                 errors.recipient && touched.recipient && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.recipient)),
-                react_1["default"].createElement(Input_1["default"], { label: 'Occasion', left: 'calendar', disabled: booking, value: occasion, onChangeText: handleChange('occasion') }),
+                react_1["default"].createElement(InputSelect_1["default"], { value: occasion, placeholder: 'Ocassion', right: 'chevron-down', field: 'occasion', onChange: setFieldValue, options: constants_1.OCCASIONS }),
                 errors.occasion && touched.occasion && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.occasion)),
-                react_1["default"].createElement(Input_1["default"], { disabled: booking, label: 'Instructions', left: 'information', style: { height: 83 }, value: instructions, onChangeText: handleChange('instructions'), multiline: true }),
+                react_1["default"].createElement(Input_1["default"], { disabled: booking, label: 'Instructions', left: 'information-outline', style: { height: 83 }, value: instructions, onChangeText: handleChange('instructions'), multiline: true }),
                 errors.instructions && touched.instructions && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.instructions)),
                 react_1["default"].createElement(react_native_paper_1.Button, { uppercase: false, mode: 'contained', theme: { roundness: 100 }, style: styles.btn, onPress: handleSubmit, loading: booking, disabled: booking }, "Submit"));
         }));
@@ -102,7 +106,6 @@ var styles = react_native_1.StyleSheet.create({
     btn: {
         marginTop: 24,
         marginBottom: 12,
-        height: 50,
         justifyContent: 'center'
     },
     celeb: {

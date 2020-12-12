@@ -7,6 +7,8 @@ import Signup2 from '../../screens/Signup2'
 import { useUser } from '../../hooks/useUser'
 import Navbar from '../../components/Navbar'
 import { RouteParams } from '..'
+import Welcome from '../../screens/Welcome'
+import { SLIDE_ANIMATION } from '../../common/constants'
 
 const Stack = createStackNavigator<RouteParams>()
 
@@ -25,11 +27,14 @@ const AuthStack = () => {
   }
   return (
         <Stack.Navigator
-            initialRouteName='Login'
-            screenOptions={{
-              header: props => renderHeader(props)
-            }}
+          screenOptions={
+            {
+              header: props => renderHeader(props),
+              ...SLIDE_ANIMATION
+            }
+          }
         >
+            <Stack.Screen name='Welcome' component={Welcome} />
             {allowLogin && <Stack.Screen name='Login' component={Login}/>}
             {allowLogin && <Stack.Screen name='Signup' component={Signup}/>}
             <Stack.Screen name='Signup2' component={Signup2} />

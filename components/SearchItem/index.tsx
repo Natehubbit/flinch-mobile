@@ -1,36 +1,36 @@
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { Paragraph, TouchableRipple } from 'react-native-paper'
-
-const img = require('../../assets/images/celeb.jpg')
-
 interface SearchItemProps {
   uri:string;
   label:string;
+  onPress:()=>void;
 }
 
 const SearchItem: React.FC<SearchItemProps> = ({
-  uri
+  uri,
+  label,
+  onPress
 }) => {
   return (
     <View>
       <TouchableRipple
-        onPress={() => console.log('bb')}
+        onPress={onPress}
         style={[styles.container]}
       >
         <>
-      <Image
-        source={img}
-        style={[styles.img]}
-      />
-      <View
-        style={[styles.label]}
-      >
-        <Paragraph>
-          James Hello
-        </Paragraph>
-      </View>
-      </>
+          <Image
+            source={{ uri }}
+            style={[styles.img]}
+          />
+          <View
+            style={[styles.label]}
+          >
+            <Paragraph>
+              {label}
+            </Paragraph>
+          </View>
+        </>
       </TouchableRipple>
     </View>
   )

@@ -5,9 +5,6 @@ var react_1 = require("react");
 var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
 var styledComponents_1 = require("../../common/styledComponents");
-// import { Celeb } from '../../services/CelebService'
-// interface CelebProps extends Celeb {
-// }
 var CelebScreen = function () {
     var navigate = native_1.useNavigation().navigate;
     var params = native_1.useRoute().params;
@@ -18,9 +15,9 @@ var CelebScreen = function () {
         react_1["default"].createElement(react_native_1.ImageBackground, { source: { uri: imageUrl }, style: styles.image, blurRadius: 100 },
             react_1["default"].createElement(react_native_1.Image, { source: {
                     uri: imageUrl
-                }, style: { flex: 1, width: undefined, height: undefined }, resizeMode: 'contain' })),
+                }, style: [styles.img], resizeMode: 'contain' })),
         react_1["default"].createElement(react_native_1.View, { style: styles.dets },
-            react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'wallet', style: styles.fab, label: 'book', onPress: onBook }),
+            react_1["default"].createElement(react_native_paper_1.FAB, { uppercase: false, icon: 'wallet', style: styles.fab, label: 'Book', onPress: onBook }),
             react_1["default"].createElement(react_native_1.View, { style: styles.label },
                 react_1["default"].createElement(styledComponents_1.MainLabel, null, alias),
                 react_1["default"].createElement(styledComponents_1.MiniLabel, null, craft)),
@@ -41,7 +38,7 @@ var styles = react_native_1.StyleSheet.create({
     },
     fab: {
         position: 'absolute',
-        bottom: '115%',
+        top: -25,
         right: 12
     },
     label: {
@@ -57,6 +54,11 @@ var styles = react_native_1.StyleSheet.create({
         paddingBottom: 12,
         flex: 1
     },
-    price: {}
+    price: {},
+    img: {
+        flex: 1,
+        width: undefined,
+        height: undefined
+    }
 });
 exports["default"] = CelebScreen;

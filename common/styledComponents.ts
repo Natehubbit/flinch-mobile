@@ -1,5 +1,5 @@
 import styled from 'styled-components/native'
-import { theme } from '../config/theme'
+import { COLORS, theme } from '../config/theme'
 import { Dimensions, TextProps, ViewProps } from 'react-native'
 
 export const maxWidth = Dimensions.get('window').width
@@ -42,11 +42,11 @@ export const FormContainer = styled.View<ViewProps>`
 `
 
 export const FlexContainer = styled.View<FlexContainerProps>`
-    flex:${(props:FlexContainerProps) => props.flex || 1};
-    background:${(props:FlexContainerProps) => props.color || 'transparent'};
-    justify-content:${(props:FlexContainerProps) => props.justify || 'flex-start'};
-    flex-direction:${(props:FlexContainerProps) => props.direction || 'column'};
-    align-items:${(props:FlexContainerProps) => props.align || 'stretch'}
+    flex:${(props) => props.flex || 1};
+    background:${(props) => props.color || 'transparent'};
+    justify-content:${(props) => props.justify || 'flex-start'};
+    flex-direction:${(props) => props.direction || 'column'};
+    align-items:${(props) => props.align || 'stretch'}
 `
 
 export const MainTitle = styled.Text<TextProps>`
@@ -55,13 +55,15 @@ export const MainTitle = styled.Text<TextProps>`
     font-family: 'SuezOne-Regular';
 `
 
-export const SubHeading = styled.Text<TextProps>`
+export const SubHeading = styled.Text<SubHeadingProps>`
     font-size: 15px;
-    font-family: 'MontserratAlternates-Bold'
+    font-family: 'MontserratAlternates-Bold';
+    color: ${props => props.white ? COLORS.white : COLORS.dark}
 `
 
-export const MainLabel = styled.Text<TextProps>`
+export const MainLabel = styled.Text<MainLabelProps>`
     font-size:25px;
+    color:${(props) => props.white ? COLORS.white : COLORS.dark}
     line-height: 33px;
     font-family: 'SuezOne-Regular'
 `
@@ -92,6 +94,14 @@ interface FlexContainerProps extends ViewProps {
     justify?:string;
     direction?:'row'|'column';
     align?:string;
+}
+
+interface MainLabelProps extends TextProps {
+    white?: boolean;
+}
+
+interface SubHeadingProps extends TextProps {
+    white?: boolean;
 }
 
 interface ParagraphProps extends TextProps {
