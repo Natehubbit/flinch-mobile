@@ -18,24 +18,20 @@ var RequestCard = function (_a) {
                             react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, celeb),
                             react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] },
                                 "for ",
-                                recipient),
-                            react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.mini] }, date))),
+                                recipient))),
                     react_1["default"].createElement(react_native_1.View, { style: styles.tagContainer },
+                        react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.bottomLabel, styles.date] }, date),
                         react_1["default"].createElement(Tag_1["default"], { label: tag }))),
                 react_1["default"].createElement(react_native_paper_1.Divider, null),
                 react_1["default"].createElement(react_native_1.View, { style: styles.bottom },
                     react_1["default"].createElement(react_native_1.View, null,
-                        react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomLabel },
-                            "Occasion:",
-                            react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText },
-                                '\t',
-                                occasion))),
+                        react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText }, occasion)),
                     react_1["default"].createElement(react_native_1.View, null,
                         react_1["default"].createElement(styledComponents_1.Paragraph, { style: styles.bottomText }, price))))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
-        height: 100,
+        height: 90,
         marginTop: 10,
         marginHorizontal: 10,
         borderRadius: 13,
@@ -86,6 +82,10 @@ var styles = react_native_1.StyleSheet.create({
     },
     mini: {
         fontSize: 12
+    },
+    date: {
+        fontSize: 10,
+        marginBottom: 5
     }
 });
 exports["default"] = RequestCard;

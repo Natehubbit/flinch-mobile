@@ -43,12 +43,12 @@ const RequestCard: React.FC<RequestCardProps> = ({
                             <Paragraph black style={[styles.bottomLabel, styles.mini]}>
                               for {recipient}
                             </Paragraph>
-                            <Paragraph black style={[styles.bottomLabel, styles.mini]}>
-                              {date}
-                            </Paragraph>
                         </View>
                     </View>
                     <View style={styles.tagContainer}>
+                        <Paragraph black style={[styles.bottomLabel, styles.date]}>
+                          {date}
+                        </Paragraph>
                         <Tag
                           label={tag}
                         />
@@ -57,12 +57,9 @@ const RequestCard: React.FC<RequestCardProps> = ({
                 <Divider/>
                 <View style={styles.bottom}>
                     <View>
-                        <Paragraph style={styles.bottomLabel}>
-                            Occasion:
-                            <Paragraph style={styles.bottomText}>
-                              {'\t'}{occasion}
-                            </Paragraph>
-                        </Paragraph>
+                      <Paragraph style={styles.bottomText}>
+                        {occasion}
+                      </Paragraph>
                     </View>
                     <View>
                         <Paragraph style={styles.bottomText}>
@@ -77,7 +74,7 @@ const RequestCard: React.FC<RequestCardProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
+    height: 90,
     marginTop: 10,
     marginHorizontal: 10,
     borderRadius: 13,
@@ -128,6 +125,10 @@ const styles = StyleSheet.create({
   },
   mini: {
     fontSize: 12
+  },
+  date: {
+    fontSize: 10,
+    marginBottom: 5
   }
 })
 

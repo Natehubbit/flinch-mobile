@@ -10,9 +10,15 @@ import Video from '../../screens/Video'
 import Notifications from '../../screens/Notifications'
 import ProfileStack from '../ProfileStack'
 import Search from '../../screens/Search'
+import { useUser } from '../../hooks/useUser'
+import CelebHome from '../../screens/CelebHome'
 
 const Drawer = createDrawerNavigator()
 const AppDrawer = () => {
+  const { role } = useUser()
+  const Home = role === 'celebrity'
+    ? CelebHome
+    : HomeStack
   return (
         <Drawer.Navigator
             drawerContent={props => <DrawerComponent {...props}/>}
@@ -20,7 +26,7 @@ const AppDrawer = () => {
             screenOptions={{
               header: () => null
             }}>
-            <Drawer.Screen name="Home" component={HomeStack} />
+            <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="Profile" component={ProfileStack} />
             <Drawer.Screen name="Notifications" component={Notifications} />
             <Drawer.Screen name="Requests" component={RequestStack} />

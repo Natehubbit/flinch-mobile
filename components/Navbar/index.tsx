@@ -4,9 +4,10 @@ import { StyleSheet, View } from 'react-native'
 import { Appbar, Badge, TouchableRipple, withTheme } from 'react-native-paper'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { Theme } from 'react-native-paper/lib/typescript/src/types'
-import { COLORS } from '../../config/theme'
+import { COLORS, theme } from '../../config/theme'
 import MenuIcon from '../../assets/images/menu.svg'
 import { Routes } from '../../navigation'
+import MenuIconAlt from '../../assets/images/menuWhite.svg'
 
 interface NavProps {
     title?:string;
@@ -19,6 +20,7 @@ interface NavProps {
     edit?:boolean;
     showCancel?:boolean;
     theme: Theme;
+    invert?: boolean;
     onCancel?:()=>void;
     onEdit?:()=>void;
 }
@@ -30,6 +32,7 @@ const Navbar: React.FC<NavProps> = ({
   hideBell,
   edit,
   showCancel,
+  invert,
   onCancel,
   onEdit
 }) => {
@@ -39,6 +42,12 @@ const Navbar: React.FC<NavProps> = ({
     dispatch,
     goBack
   } = useNavigation()
+  const iconColor = invert
+    ? COLORS.white
+    : COLORS.iconGrey
+  const barStyle = invert
+    ? { backgroundColor: theme.colors.primary, elevation: 0 }
+    : null
   const backable = canGoBack()
   const onToggleDrawer = () =>
     dispatch(DrawerActions.toggleDrawer())
@@ -47,9 +56,10 @@ const Navbar: React.FC<NavProps> = ({
   const renderIcon = (icon:string, badge?:boolean) => (
         <View style={styles.iconContainer}>
             <Icon
-                name={icon}
-                style={styles.icon}
-                size={24}
+              color={iconColor}
+              name={icon}
+              style={[styles.icon]}
+              size={24}
             />
             {badge && <Badge
               size={9}
@@ -63,12 +73,14 @@ const Navbar: React.FC<NavProps> = ({
 
   return <Appbar
         theme={{ colors: { primary: COLORS.white } }}
-        style={styles.container}>
+        style={[styles.container, barStyle && barStyle]}>
         {backable
-          ? <Appbar.BackAction onPress={goBack}/>
+          ? <Appbar.BackAction color={iconColor} onPress={goBack}/>
           : !hideMenu &&
             <TouchableRipple onPress={onToggleDrawer}>
-              <MenuIcon width={35} height={30}/>
+              {!invert
+                ? <MenuIcon width={35} height={30}/>
+                : <MenuIconAlt width={35} height={30} /> }
             </TouchableRipple>
         }
         <Appbar.Content
@@ -79,12 +91,14 @@ const Navbar: React.FC<NavProps> = ({
             icon={() => renderIcon('magnify')}
             onPress={onSearch}
             animated={false}
+            color={iconColor}
         />}
         {!hideBell
           ? <Appbar.Action
             animated={false}
             icon={() => renderIcon('bell-outline', true)}
             onPress={openNotifs}
+            color={iconColor}
           />
           : !edit && <Appbar.Action
             animated={false}
@@ -95,11 +109,13 @@ const Navbar: React.FC<NavProps> = ({
           <Appbar.Action
             icon={() => renderIcon('account-edit')}
             onPress={onEdit}
+            color={iconColor}
           />}
           {edit && showCancel &&
           <Appbar.Action
             icon={() => renderIcon('close')}
             onPress={onCancel}
+            color={iconColor}
           />}
     </Appbar>
 }
@@ -118,7 +134,7 @@ const styles = StyleSheet.create({
 
   },
   icon: {
-    opacity: 0.5
+    // opacity: 0.5
   },
   badge: {
     position: 'absolute',
