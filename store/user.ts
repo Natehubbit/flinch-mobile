@@ -14,7 +14,8 @@ const initState: User = {
   loggedIn: false,
   profileUpdated: false,
   role: 'user',
-  isCelebrity: false
+  isCelebrity: false,
+  token: null
 }
 
 export const { actions, ...userSlice } = createSlice({
@@ -29,7 +30,7 @@ export const { actions, ...userSlice } = createSlice({
     },
     updateUser (
       state,
-      { payload }: PayloadAction<User>
+      { payload }: PayloadAction<UserResponse>
     ):User {
       return { ...state, ...payload }
     },
@@ -39,7 +40,12 @@ export const { actions, ...userSlice } = createSlice({
   }
 })
 
-const login = (email:string, password:string) => async (dispatch:any) => {
+const login = (
+  email:string,
+  password:string
+) => async (
+  dispatch:Dispatch
+) => {
   dispatch(loaderActions.loading('authLoader'))
   const user = await AuthService.login(email, password)
   const userData = user && await UserService.getUser(user.id)
@@ -57,7 +63,12 @@ const login = (email:string, password:string) => async (dispatch:any) => {
   dispatch(loaderActions.loaded('authLoader'))
 }
 
-const signup = (email:string, password:string) => async (dispatch:any) => {
+const signup = (
+  email:string,
+  password:string
+) => async (
+  dispatch:Dispatch
+) => {
   dispatch(loaderActions.loading('authLoader'))
   const user = await AuthService.signUp(email, password)
   const userData = user && await UserService.addUser(user)
@@ -95,19 +106,19 @@ const update = (
     const updated = auth && await AuthService
       .updateAuthEmail(data.email)
     const user = updated && await UserService
-      .updateUser(data)
+      .update(data)
     user && dispatch(actions
       .getUser({ ...user, profileUpdated: true }))
   } else {
     const updated = await UserService
-      .updateUser(data)
+      .update(data)
     updated && dispatch(actions
       .getUser({ ...updated, profileUpdated: true }))
   }
   dispatch(loaderActions.loaded('authLoader'))
 }
 
-const updateProfile = (data:User) => (dispatch:Dispatch) => {
+const updateProfile = (data:UserResponse) => (dispatch:Dispatch) => {
   dispatch(actions.updateUser(data))
 }
 

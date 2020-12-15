@@ -73,7 +73,8 @@ var initState = {
     loggedIn: false,
     profileUpdated: false,
     role: 'user',
-    isCelebrity: false
+    isCelebrity: false,
+    token: null
 };
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'user',
@@ -190,7 +191,7 @@ var update = function (data, pass) { return function (dispatch, getState) { retu
                 _c = updated;
                 if (!_c) return [3 /*break*/, 8];
                 return [4 /*yield*/, UserService_1["default"]
-                        .updateUser(data)];
+                        .update(data)];
             case 7:
                 _c = (_d.sent());
                 _d.label = 8;
@@ -200,7 +201,7 @@ var update = function (data, pass) { return function (dispatch, getState) { retu
                     .getUser(__assign(__assign({}, user), { profileUpdated: true })));
                 return [3 /*break*/, 11];
             case 9: return [4 /*yield*/, UserService_1["default"]
-                    .updateUser(data)];
+                    .update(data)];
             case 10:
                 updated = _d.sent();
                 updated && dispatch(exports.actions

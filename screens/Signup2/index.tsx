@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { FAB, HelperText } from 'react-native-paper'
 import { AuthContainer2, FlexContainer, maxHeight } from '../../common/styledComponents'
@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { userActions } from '../../store/user'
 import { useLoader } from '../../hooks/useLoader'
 import HelperService from '../../services/HelperService'
+import { ExpoPushToken, getExpoPushTokenAsync } from 'expo-notifications'
 
 const Signup2: React.FC = () => {
   const dispatch = useDispatch()
@@ -16,17 +17,26 @@ const Signup2: React.FC = () => {
   const [name, setName] = useState('')
   const [submit, setSubmit] = useState(false)
   const [imgUri, setImgUri] = useState('')
+  const [token, setToken] = useState<ExpoPushToken|null>()
+  useEffect(() => {
+    const getNotificationToken = async () => {
+      const tkn = await getExpoPushTokenAsync()
+      setToken(tkn)
+    }
+    getNotificationToken()
+  }, [])
   const onProceed = () => {
     dispatch(
       userActions.update({
-        // ...user,
         displayName: name,
-        imageUrl: imgUri
+        imageUrl: imgUri,
+        token
       })
     )
   }
   const onUploadImage = () => HelperService
     .uploadPhoto(setImgUri)
+
   const onInput = (input:string) => {
     if (input) {
       setSubmit(true)

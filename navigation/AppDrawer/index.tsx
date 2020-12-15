@@ -3,17 +3,14 @@ import { createDrawerNavigator } from '@react-navigation/drawer'
 import HomeStack from '../HomeStack'
 import RequestStack from '../RequestStack'
 import DrawerComponent from '../../components/Drawer'
-import { createStackNavigator } from '@react-navigation/stack'
-import WebViewScreen from '../../screens/WebView'
 import VideoStack from '../VideoStack'
-import Video from '../../screens/Video'
 import Notifications from '../../screens/Notifications'
 import ProfileStack from '../ProfileStack'
-import Search from '../../screens/Search'
 import { useUser } from '../../hooks/useUser'
 import CelebHome from '../../screens/CelebHome'
 
 const Drawer = createDrawerNavigator()
+
 const AppDrawer = () => {
   const { role } = useUser()
   const Home = role === 'celebrity'
@@ -35,20 +32,4 @@ const AppDrawer = () => {
   )
 }
 
-const Stack = createStackNavigator()
-const AppDrawerRoot = () => {
-  return (
-        <Stack.Navigator
-            mode='modal'
-            headerMode='none'
-        >
-            <Stack.Screen name="Home" component={AppDrawer} />
-            <Stack.Screen name='WebView' component={WebViewScreen}/>
-            <Stack.Screen name="Video" component={Video} />
-            <Stack.Screen name="Notifications" component={Notifications} />
-            <Stack.Screen name='Search' component={Search} />
-        </Stack.Navigator>
-  )
-}
-
-export default AppDrawerRoot
+export default AppDrawer

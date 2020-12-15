@@ -2,10 +2,10 @@ import 'react-native-gesture-handler'
 import React from 'react'
 import { NavigationContainer, RouteProp } from '@react-navigation/native'
 import AuthStack from './AuthStack'
-import AppDrawer from './AppDrawer'
 import { useUser } from '../hooks/useUser'
 import { Celeb } from '../services/CelebService'
 import NavigationService from '../services/NavigationService'
+import RootStack from './RootStack'
 
 export type VideoNavParam = {
   id:string;
@@ -65,7 +65,7 @@ const Navigation: React.FC = () => {
     ref={ref => NavigationService.setRef(ref)}
   >
     {profileUpdated
-      ? <AppDrawer/>
+      ? <RootStack/>
       : <AuthStack/>}
     </NavigationContainer>
 }

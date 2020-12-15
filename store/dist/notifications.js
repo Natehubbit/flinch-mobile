@@ -57,73 +57,50 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
+var _a;
 exports.__esModule = true;
-var firebase_1 = require("../config/firebase");
-var UsersRef = firebase_1.db.collection('users');
-var UserService = /** @class */ (function () {
-    function UserService() {
+exports.notificationsActions = exports.celebsSlice = exports.actions = void 0;
+var toolkit_1 = require("@reduxjs/toolkit");
+var NotificationService_1 = require("../services/NotificationService");
+var user_1 = require("./user");
+var initState = [];
+exports.actions = (_a = toolkit_1.createSlice({
+    name: 'notifications',
+    initialState: initState,
+    reducers: {
+        getNotifications: function (state) {
+            return state;
+        },
+        updateNotifications: function (state, _a) {
+            var payload = _a.payload;
+            return __spreadArrays(state, [payload]);
+        },
+        clearNotifications: function () {
+            return [];
+        }
     }
-    UserService.addUser = function (user) {
-        return __awaiter(this, void 0, void 0, function () {
-            var error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, UsersRef.doc(user.id).set(user)];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, user];
-                    case 2:
-                        error_1 = _a.sent();
-                        alert(error_1.message);
-                        return [2 /*return*/, null];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    UserService.getUser = function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var data, error_2;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, UsersRef.doc(id).get()];
-                    case 1:
-                        data = _a.sent();
-                        return [2 /*return*/, data.data()];
-                    case 2:
-                        error_2 = _a.sent();
-                        alert(error_2.message);
-                        return [2 /*return*/, null];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    UserService.update = function (data) {
-        return __awaiter(this, void 0, Promise, function () {
-            var id, details, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        id = data.id, details = __rest(data, ["id"]);
-                        return [4 /*yield*/, UsersRef.doc(id).update(__assign({}, details))];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, data];
-                    case 2:
-                        error_3 = _a.sent();
-                        alert(error_3.message);
-                        return [2 /*return*/, null];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    return UserService;
-}());
-exports["default"] = UserService;
+}), _a).actions, exports.celebsSlice = __rest(_a, ["actions"]);
+var getDeviceToken = function () { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, token, tkn;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = getState().user, id = _a.id, token = _a.token;
+                if (!!token) return [3 /*break*/, 2];
+                return [4 /*yield*/, NotificationService_1["default"].getToken()];
+            case 1:
+                tkn = _b.sent();
+                dispatch(user_1.userActions.updateProfile({ id: id, token: tkn }));
+                _b.label = 2;
+            case 2: return [2 /*return*/];
+        }
+    });
+}); }; };
+exports.notificationsActions = __assign(__assign({}, exports.actions), { getDeviceToken: getDeviceToken });

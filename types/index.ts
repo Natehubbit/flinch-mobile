@@ -1,4 +1,5 @@
 import { DownloadResumable } from 'expo-file-system'
+import { ExpoPushToken } from 'expo-notifications'
 import firebase from 'firebase'
 export type User = {
     id:string;
@@ -9,6 +10,7 @@ export type User = {
     profileUpdated:boolean;
     isCelebrity:boolean;
     role:'celebrity'|'user';
+    token: ExpoPushToken
 } | null;
 
 export type UserResponse =
@@ -28,6 +30,10 @@ export type UploadProgressRef = firebase.storage.UploadTask|null;
 
 export type LoaderString = keyof AppLoader
 
+export interface Notification {
+    title: string;
+    body: string;
+}
 export interface PaymentMode {
     label:string;
     icon:string;
