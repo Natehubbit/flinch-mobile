@@ -1,9 +1,6 @@
 "use strict";
 exports.__esModule = true;
 exports.transaction = exports.batch = exports.storage = exports.db = exports.auth = void 0;
-// import '@react-native-firebase/app';
-// import firestore from '@react-native-firebase/firestore';
-// import storageRef from '@react-native-firebase/storage';
 var firebase = require("firebase");
 require("firebase/firestore");
 require("firebase/storage");

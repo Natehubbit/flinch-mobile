@@ -1,7 +1,7 @@
 import { DownloadResumable } from 'expo-file-system'
 import { ExpoPushToken } from 'expo-notifications'
 import firebase from 'firebase'
-import { Celeb } from '../services/CelebService'
+
 export type User = {
     id:string;
     displayName:string;
@@ -175,3 +175,18 @@ export interface Selector {
     options?: string[];
     onSelect?: () => void;
 }
+
+export interface Celeb {
+    id:string;
+    alias:string;
+    bio:string;
+    craft:string;
+    imageUrl:string;
+    popularity:number;
+    price:number;
+    objectID?:string;
+    role?:'celebrity'|'user';
+    token?: ExpoPushToken;
+}
+
+export type Celebs = Celeb[]

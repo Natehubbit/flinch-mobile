@@ -1,6 +1,3 @@
-// import '@react-native-firebase/app';
-// import firestore from '@react-native-firebase/firestore';
-// import storageRef from '@react-native-firebase/storage';
 import * as firebase from 'firebase'
 import 'firebase/firestore'
 import 'firebase/storage'

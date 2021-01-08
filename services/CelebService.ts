@@ -1,4 +1,5 @@
 import { db } from '../config/firebase'
+import { Celeb, Celebs } from '../types'
 
 const CelebsRef = db.collection('celebs')
 
@@ -41,18 +42,21 @@ export default class CelebService {
       return null
     }
   }
-}
 
-export interface Celeb {
-    id:string;
-    alias:string;
-    bio:string;
-    craft:string;
-    imageUrl:string;
-    popularity:number;
-    price:number;
-    objectID?:string;
-    role?:'celebrity'|'user'
+  static async updateCeleb (
+    data:Partial<Celeb>):Promise<boolean> {
+    try {
+      const { id, ...payload } = data
+      if (!id) throw new Error('Missing Celeb id')
+      await CelebsRef
+        .doc(id)
+        .update({
+          ...payload
+        })
+      return true
+    } catch (e) {
+      console.log(e.message)
+      return false
+    }
+  }
 }
-
-export type Celebs = Celeb[]

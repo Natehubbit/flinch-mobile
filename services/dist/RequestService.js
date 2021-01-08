@@ -82,9 +82,33 @@ var RequestService = /** @class */ (function () {
             });
         });
     };
+    RequestService.getCelebRequests = function (id) {
+        return __awaiter(this, void 0, Promise, function () {
+            var res, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, RequestRef
+                                .where('celebrity.id', '==', id)
+                                .get()];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res
+                                .docs
+                                .map(function (d) { return d.data(); })];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
     RequestService.approveRequest = function (id, appUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var _a, assetId, duration, video, uri, thumbUri, thumb, thumbUrl, e_2;
+            var _a, assetId, duration, video, uri, thumbUri, thumb, thumbUrl, e_3;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -151,8 +175,8 @@ var RequestService = /** @class */ (function () {
                         _b.sent();
                         return [2 /*return*/, null];
                     case 11:
-                        e_2 = _b.sent();
-                        console.log(e_2.message);
+                        e_3 = _b.sent();
+                        console.log(e_3.message);
                         return [2 /*return*/, null];
                     case 12: return [2 /*return*/];
                 }
@@ -161,7 +185,7 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.rejectRequest = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var e_3;
+            var e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -176,8 +200,8 @@ var RequestService = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, true];
                     case 2:
-                        e_3 = _a.sent();
-                        alert(e_3.message);
+                        e_4 = _a.sent();
+                        alert(e_4.message);
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
@@ -190,7 +214,7 @@ var RequestService = /** @class */ (function () {
        */
     RequestService.getAllRequests = function (id) {
         return __awaiter(this, void 0, Promise, function () {
-            var res, e_4;
+            var res, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -203,8 +227,8 @@ var RequestService = /** @class */ (function () {
                         res = _a.sent();
                         return [2 /*return*/, res.docs.map(function (d) { return (__assign(__assign(__assign({}, constants_1.initStateRequest), d.data()), { id: d.id })); })];
                     case 2:
-                        e_4 = _a.sent();
-                        console.log(e_4.message);
+                        e_5 = _a.sent();
+                        console.log(e_5.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }

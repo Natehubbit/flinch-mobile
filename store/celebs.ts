@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import CelebService, { Celebs } from '../services/CelebService'
+import CelebService from '../services/CelebService'
+import { Celebs } from '../types'
 import { loaderActions } from './loader'
 
 const initState: Celebs = []

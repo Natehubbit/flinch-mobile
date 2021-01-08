@@ -26,6 +26,22 @@ export default class RequestService {
 
   }
 
+  static async getCelebRequests (
+    id:string
+  ):Promise<Request[]|null> {
+    try {
+      const res = await RequestRef
+        .where('celebrity.id', '==', id)
+        .get()
+      return res
+        .docs
+        .map(d => d.data()) as Request[]
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
+  }
+
   static async approveRequest (
     id:string,
     appUri:string,

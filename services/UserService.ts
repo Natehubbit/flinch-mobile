@@ -24,7 +24,9 @@ export default class UserService {
     }
   }
 
-  static async update (data:Partial<User>):Promise<Partial<User>> {
+  static async update (
+    data:Partial<User>
+  ):Promise<UserResponse> {
     try {
       const {
         id,

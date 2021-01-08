@@ -3,9 +3,9 @@ import React from 'react'
 import { NavigationContainer, RouteProp } from '@react-navigation/native'
 import AuthStack from './AuthStack'
 import { useUser } from '../hooks/useUser'
-import { Celeb } from '../services/CelebService'
 import NavigationService from '../services/NavigationService'
 import RootStack from './RootStack'
+import { Celeb } from '../types'
 
 export type VideoNavParam = {
   id:string;

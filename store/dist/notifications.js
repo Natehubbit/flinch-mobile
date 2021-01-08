@@ -68,7 +68,9 @@ var _a;
 exports.__esModule = true;
 exports.notificationsActions = exports.celebsSlice = exports.actions = void 0;
 var toolkit_1 = require("@reduxjs/toolkit");
+var CelebService_1 = require("../services/CelebService");
 var NotificationService_1 = require("../services/NotificationService");
+var UserService_1 = require("../services/UserService");
 var user_1 = require("./user");
 var initState = [];
 exports.actions = (_a = toolkit_1.createSlice({
@@ -88,18 +90,42 @@ exports.actions = (_a = toolkit_1.createSlice({
     }
 }), _a).actions, exports.celebsSlice = __rest(_a, ["actions"]);
 var getDeviceToken = function () { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, token, tkn;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, id, token, _b, isCeleb, celebId, tkn, updatedUser, usr, updatedCeleb;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
-                _a = getState().user, id = _a.id, token = _a.token;
-                if (!!token) return [3 /*break*/, 2];
+                _a = getState().user, id = _a.id, token = _a.token, _b = _a.celebrity, isCeleb = _b.isCeleb, celebId = _b.id;
+                if (!!token) return [3 /*break*/, 4];
                 return [4 /*yield*/, NotificationService_1["default"].getToken()];
             case 1:
-                tkn = _b.sent();
-                dispatch(user_1.userActions.updateProfile({ id: id, token: tkn }));
-                _b.label = 2;
-            case 2: return [2 /*return*/];
+                tkn = _c.sent();
+                return [4 /*yield*/, UserService_1["default"].update({
+                        id: id,
+                        token: tkn
+                    })];
+            case 2:
+                updatedUser = _c.sent();
+                updatedUser && dispatch(user_1.userActions
+                    .updateProfile({
+                    id: id,
+                    token: tkn
+                }));
+                if (!isCeleb) return [3 /*break*/, 4];
+                usr = getState().user;
+                return [4 /*yield*/, CelebService_1["default"]
+                        .updateCeleb({
+                        id: celebId,
+                        token: tkn
+                    })];
+            case 3:
+                updatedCeleb = _c.sent();
+                updatedCeleb && dispatch(user_1.userActions
+                    .updateProfile({
+                    id: id,
+                    celebrity: __assign(__assign({}, usr.celebrity), { data: __assign(__assign({}, usr.celebrity.data), { token: tkn }) })
+                }));
+                _c.label = 4;
+            case 4: return [2 /*return*/];
         }
     });
 }); }; };

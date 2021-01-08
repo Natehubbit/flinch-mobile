@@ -4,9 +4,9 @@ import { Card } from 'react-native-paper'
 import { maxHeight, maxWidth } from '../../common/styledComponents'
 import { LinearGradient } from 'expo-linear-gradient'
 import { theme } from '../../config/theme'
-import { Celeb } from '../../services/CelebService'
 import { useNavigation } from '@react-navigation/native'
 import { Routes } from '../../navigation'
+import { Celeb } from '../../types'
 
 interface CelebImageProps extends Celeb {
     large?:boolean;

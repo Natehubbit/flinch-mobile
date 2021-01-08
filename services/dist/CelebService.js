@@ -46,6 +46,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 exports.__esModule = true;
 var firebase_1 = require("../config/firebase");
 var CelebsRef = firebase_1.db.collection('celebs');
@@ -88,6 +99,31 @@ var CelebService = /** @class */ (function () {
                         e_1 = _a.sent();
                         console.log(e_1.message);
                         return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    CelebService.updateCeleb = function (data) {
+        return __awaiter(this, void 0, Promise, function () {
+            var id, payload, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        id = data.id, payload = __rest(data, ["id"]);
+                        if (!id)
+                            throw new Error('Missing Celeb id');
+                        return [4 /*yield*/, CelebsRef
+                                .doc(id)
+                                .update(__assign({}, payload))];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
+                        return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
             });

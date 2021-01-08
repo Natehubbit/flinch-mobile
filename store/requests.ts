@@ -34,8 +34,13 @@ const getAllRequests = () => async (
   const id = isUser
     ? user.id
     : user.celebrity.id
-  const res = await RequestService.getAllRequests(id)
-  res && dispatch(actions.getRequests(res))
+  if (isUser) {
+    const res = await RequestService.getAllRequests(id)
+    res && dispatch(actions.getRequests(res))
+  } else {
+    const res = await RequestService.getCelebRequests(id)
+    res && dispatch(actions.getRequests(res))
+  }
   dispatch(loaderActions.loaded('requestsLoader'))
 }
 

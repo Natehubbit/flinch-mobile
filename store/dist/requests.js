@@ -80,7 +80,7 @@ exports.actions = (_a = toolkit_1.createSlice({
     }
 }), _a).actions, exports.requestsSlice = __rest(_a, ["actions"]);
 var getAllRequests = function () { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, role, user, isUser, id, res;
+    var _a, role, user, isUser, id, res, res;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -90,10 +90,18 @@ var getAllRequests = function () { return function (dispatch, getState) { return
                 id = isUser
                     ? user.id
                     : user.celebrity.id;
+                if (!isUser) return [3 /*break*/, 2];
                 return [4 /*yield*/, RequestService_1["default"].getAllRequests(id)];
             case 1:
                 res = _b.sent();
                 res && dispatch(exports.actions.getRequests(res));
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, RequestService_1["default"].getCelebRequests(id)];
+            case 3:
+                res = _b.sent();
+                res && dispatch(exports.actions.getRequests(res));
+                _b.label = 4;
+            case 4:
                 dispatch(loader_1.loaderActions.loaded('requestsLoader'));
                 return [2 /*return*/];
         }

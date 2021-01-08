@@ -1,6 +1,8 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { AppState } from '.'
+import CelebService from '../services/CelebService'
 import NotificationService from '../services/NotificationService'
+import UserService from '../services/UserService'
 import { Notification } from '../types'
 import { userActions } from './user'
 
@@ -31,10 +33,37 @@ const getDeviceToken = () => async (
   dispatch: Dispatch,
   getState:()=>AppState
 ) => {
-  const { id, token } = getState().user
+  const { id, token, celebrity: { isCeleb, id: celebId } } = getState().user
   if (!token) {
     const tkn = await NotificationService.getToken()
-    dispatch(userActions.updateProfile({ id, token: tkn }) as any)
+    const updatedUser = await UserService.update({
+      id,
+      token: tkn
+    })
+    updatedUser && dispatch(userActions
+      .updateProfile({
+        id,
+        token: tkn
+      }) as any)
+    if (isCeleb) {
+      const usr = getState().user
+      const updatedCeleb = await CelebService
+        .updateCeleb({
+          id: celebId,
+          token: tkn
+        })
+      updatedCeleb && dispatch(userActions
+        .updateProfile({
+          id,
+          celebrity: {
+            ...usr.celebrity,
+            data: {
+              ...usr.celebrity.data,
+              token: tkn
+            }
+          }
+        }) as any)
+    }
   }
 }
 
