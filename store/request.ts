@@ -12,7 +12,7 @@ export const initState: Request = {
   response: {
     status: 'pending',
     videoUri: '',
-    thmbnailUri: '',
+    thumbnailUri: '',
     duration: 0,
     timestamp: 0
   },

@@ -96,7 +96,7 @@ var RequestService = /** @class */ (function () {
                         res = _a.sent();
                         return [2 /*return*/, res
                                 .docs
-                                .map(function (d) { return d.data(); })];
+                                .map(function (d) { return (__assign({ id: d.id }, d.data())); })];
                     case 2:
                         e_2 = _a.sent();
                         console.log(e_2.message);
@@ -108,45 +108,44 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.approveRequest = function (id, appUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var _a, assetId, duration, video, uri, thumbUri, thumb, thumbUrl, e_3;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var asset, duration, video, uri, thumbUri, thumb, thumbUrl, _a, _b, e_3;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _b.trys.push([0, 11, , 12]);
-                        return [4 /*yield*/, HelperService_1["default"].getMediaInfo(appUri)
-                            // parse video to blob to upload to firebase storage
-                        ];
+                        _c.trys.push([0, 13, , 14]);
+                        return [4 /*yield*/, HelperService_1["default"].getMediaInfo(appUri)];
                     case 1:
-                        _a = _b.sent(), assetId = _a.id, duration = _a.duration;
+                        asset = _c.sent();
+                        duration = (asset ||
+                            { id: '', duration: 0 }).duration;
                         return [4 /*yield*/, HelperService_1["default"].parseToBlob(appUri)
                             // upload video blob to firebase storage
                         ];
                     case 2:
-                        video = _b.sent();
+                        video = _c.sent();
                         return [4 /*yield*/, HelperService_1["default"]
-                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, loading, true)
-                            // generate thumbnail for local uri midway through video
-                        ];
+                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, loading, true)];
                     case 3:
-                        uri = _b.sent();
+                        uri = _c.sent();
+                        console.log('URI:: ', uri);
                         return [4 /*yield*/, VideoThumbnails
                                 .getThumbnailAsync(uri, {
-                                time: duration / 2
+                                time: Math.abs(duration) / 2
                             })
                             // parse thumbnail to blob to upload to storage
                         ];
                     case 4:
-                        thumbUri = (_b.sent()).uri;
+                        thumbUri = (_c.sent()).uri;
                         return [4 /*yield*/, HelperService_1["default"].parseToBlob(thumbUri)
                             // upload thumb to storage
                         ];
                     case 5:
-                        thumb = _b.sent();
+                        thumb = _c.sent();
                         return [4 /*yield*/, HelperService_1["default"]
                                 .generateBlobUrl("" + constants_1.THUMBS_PATH + id, thumb)];
                     case 6:
-                        thumbUrl = _b.sent();
-                        if (!uri) return [3 /*break*/, 9];
+                        thumbUrl = _c.sent();
+                        if (!uri) return [3 /*break*/, 10];
                         return [4 /*yield*/, RequestRef.doc(id)
                                 .update({
                                 'response.videoUri': uri,
@@ -156,10 +155,15 @@ var RequestService = /** @class */ (function () {
                                 'response.thumbnailUri': thumbUrl
                             })];
                     case 7:
-                        _b.sent();
-                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([assetId])];
+                        _c.sent();
+                        _a = asset;
+                        if (!_a) return [3 /*break*/, 9];
+                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([asset])];
                     case 8:
-                        _b.sent();
+                        _a = (_c.sent());
+                        _c.label = 9;
+                    case 9:
+                        _a;
                         return [2 /*return*/, {
                                 status: 'success',
                                 response: {
@@ -170,15 +174,21 @@ var RequestService = /** @class */ (function () {
                                     timestamp: Date.now()
                                 }
                             }];
-                    case 9: return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([assetId])];
                     case 10:
-                        _b.sent();
-                        return [2 /*return*/, null];
+                        _b = asset;
+                        if (!_b) return [3 /*break*/, 12];
+                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([asset])];
                     case 11:
-                        e_3 = _b.sent();
+                        _b = (_c.sent());
+                        _c.label = 12;
+                    case 12:
+                        _b;
+                        return [2 /*return*/, null];
+                    case 13:
+                        e_3 = _c.sent();
                         console.log(e_3.message);
                         return [2 /*return*/, null];
-                    case 12: return [2 /*return*/];
+                    case 14: return [2 /*return*/];
                 }
             });
         });

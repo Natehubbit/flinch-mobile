@@ -108,7 +108,7 @@ var getAllRequests = function () { return function (dispatch, getState) { return
     });
 }); }; };
 var reloadRequests = function (callback) { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, role, user, isUser, id, res;
+    var _a, role, user, isUser, id, res, res;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -117,10 +117,18 @@ var reloadRequests = function (callback) { return function (dispatch, getState) 
                 id = isUser
                     ? user.id
                     : user.celebrity.id;
+                if (!isUser) return [3 /*break*/, 2];
                 return [4 /*yield*/, RequestService_1["default"].getAllRequests(id)];
             case 1:
                 res = _b.sent();
                 res && dispatch(exports.actions.getRequests(res));
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, RequestService_1["default"].getCelebRequests(id)];
+            case 3:
+                res = _b.sent();
+                res && dispatch(exports.actions.getRequests(res));
+                _b.label = 4;
+            case 4:
                 callback && callback();
                 return [2 /*return*/];
         }
@@ -144,41 +152,39 @@ var rejectRequest = function (id, callback) { return function (dispatch, getStat
         }
     });
 }); }; };
-var approveRequest = function (id, uri, callback) {
-    return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, requests, _b, role, userId, loading, approved, data;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
-                case 0:
-                    _a = getState(), requests = _a.requests, _b = _a.user, role = _b.role, userId = _b.celebrity.id;
-                    if (role === 'user')
-                        return [2 /*return*/];
-                    loading = function () { return dispatch(loader_1.loaderActions.loading('responseLoader')); };
-                    return [4 /*yield*/, RequestService_1["default"]
-                            .approveRequest(id, uri, loading)];
-                case 1:
-                    approved = _c.sent();
-                    if (approved) {
-                        data = requests.map(function (d) {
-                            if (d.id === id) {
-                                return __assign(__assign({}, d), approved);
-                            }
-                            return d;
-                        });
-                        dispatch(exports.actions.getRequests(data));
-                        dispatch(response_1.responseActions.reloadApproved(userId));
-                        callback && callback();
-                    }
-                    else {
-                        react_native_1.Alert.alert('Error', 'Failed to upload Video. Please try again.', [
-                            { text: 'Okay', style: 'cancel' }
-                        ]);
-                    }
+var approveRequest = function (id, uri, callback) { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, requests, _b, role, userId, loading, approved, data;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = getState(), requests = _a.requests, _b = _a.user, role = _b.role, userId = _b.celebrity.id;
+                if (role === 'user')
                     return [2 /*return*/];
-            }
-        });
-    }); };
-};
+                loading = function () { return dispatch(loader_1.loaderActions.loading('responseLoader')); };
+                return [4 /*yield*/, RequestService_1["default"]
+                        .approveRequest(id, uri, loading)];
+            case 1:
+                approved = _c.sent();
+                if (approved) {
+                    data = requests.map(function (d) {
+                        if (d.id === id) {
+                            return __assign(__assign({}, d), approved);
+                        }
+                        return d;
+                    });
+                    dispatch(exports.actions.getRequests(data));
+                    dispatch(response_1.responseActions.reloadApproved(userId));
+                    callback && callback();
+                }
+                else {
+                    react_native_1.Alert.alert('Error', 'Failed to upload Video. Please try again.', [
+                        { text: 'Okay', style: 'cancel' }
+                    ]);
+                }
+                return [2 /*return*/];
+        }
+    });
+}); }; };
 exports.requestsActions = __assign(__assign({}, exports.actions), { rejectRequest: rejectRequest,
     getAllRequests: getAllRequests,
     approveRequest: approveRequest,

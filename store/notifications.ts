@@ -36,15 +36,6 @@ const getDeviceToken = () => async (
   const { id, token, celebrity: { isCeleb, id: celebId } } = getState().user
   if (!token) {
     const tkn = await NotificationService.getToken()
-    const updatedUser = await UserService.update({
-      id,
-      token: tkn
-    })
-    updatedUser && dispatch(userActions
-      .updateProfile({
-        id,
-        token: tkn
-      }) as any)
     if (isCeleb) {
       const usr = getState().user
       const updatedCeleb = await CelebService
@@ -62,6 +53,16 @@ const getDeviceToken = () => async (
               token: tkn
             }
           }
+        }) as any)
+    } else {
+      const updatedUser = await UserService.update({
+        id,
+        token: tkn
+      })
+      updatedUser && dispatch(userActions
+        .updateProfile({
+          id,
+          token: tkn
         }) as any)
     }
   }

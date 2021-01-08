@@ -35,7 +35,7 @@ export default class RequestService {
         .get()
       return res
         .docs
-        .map(d => d.data()) as Request[]
+        .map(d => ({ id: d.id, ...d.data() })) as Request[]
     } catch (e) {
       console.log(e.message)
       return null
@@ -49,7 +49,9 @@ export default class RequestService {
   ):Promise<ApproveResponse|null> {
     try {
       // get duration for cached video
-      const { id: assetId, duration } = await HelperService.getMediaInfo(appUri)
+      const asset = await HelperService.getMediaInfo(appUri)
+      const { duration } = asset ||
+        { id: '', duration: 0 }
       // parse video to blob to upload to firebase storage
       const video = await HelperService.parseToBlob(appUri)
       // upload video blob to firebase storage
@@ -60,10 +62,11 @@ export default class RequestService {
           loading,
           true
         )
+      console.log('URI:: ', uri)
       // generate thumbnail for local uri midway through video
       const { uri: thumbUri } = await VideoThumbnails
         .getThumbnailAsync(uri, {
-          time: duration / 2
+          time: Math.abs(duration) / 2
         })
       // parse thumbnail to blob to upload to storage
       const thumb = await HelperService.parseToBlob(thumbUri)
@@ -82,7 +85,7 @@ export default class RequestService {
             status: 'success',
             'response.thumbnailUri': thumbUrl
           })
-        await HelperService.deleteMediaInfo([assetId])
+        asset && await HelperService.deleteMediaInfo([asset])
         return {
           status: 'success',
           response: {
@@ -94,7 +97,7 @@ export default class RequestService {
           }
         }
       }
-      await HelperService.deleteMediaInfo([assetId])
+      asset && await HelperService.deleteMediaInfo([asset])
       return null
     } catch (e) {
       console.log(e.message)

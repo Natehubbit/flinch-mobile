@@ -8,7 +8,6 @@ import RequestCard from '../../components/RequestCard'
 import { theme } from '../../config/theme'
 import { useLoader } from '../../hooks/useLoader'
 import { useRequests } from '../../hooks/useRequests'
-import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
@@ -24,18 +23,17 @@ const Requests: React.FC = () => {
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
   const [refresh, setRefresh] = useState(false)
-  const { id } = useUser()
   const { requestsLoader: loading } = useLoader()
   useEffect(() => {
     fetchData()
   }, [])
   const fetchData = () => {
-    dispatch(requestsActions.getAllRequests(id))
+    dispatch(requestsActions.getAllRequests())
   }
   const onReload = () => {
     setRefresh(true)
     const endRefresh = () => setRefresh(false)
-    dispatch(requestsActions.reloadRequests(id, endRefresh))
+    dispatch(requestsActions.reloadRequests(endRefresh))
   }
   const onOpenRequest = (id:string) => navigate<Routes>(
     'Request', { id }

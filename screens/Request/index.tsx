@@ -39,6 +39,7 @@ const Request: React.FC = () => {
       thumbnailUri
     }
   } = useRequests('id', id)[0] || initStateRequest
+  console.log(id)
   const summarize = instructions.length > 99
   const info = summarize
     ? instructions.substring(0, 99)

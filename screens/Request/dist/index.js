@@ -59,6 +59,7 @@ var Request = function () {
     var params = native_1.useRoute().params;
     var id = params.id;
     var _c = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _c.occasion, status = _c.status, instructions = _c.instructions, recipient = _c.recipient, price = _c.price, _d = _c.celebrity, name = _d.name, imageUrl = _d.imageUrl, _e = _c.response, duration = _e.duration, timestamp = _e.timestamp, uri = _e.videoUri, thumbnailUri = _e.thumbnailUri;
+    console.log(id);
     var summarize = instructions.length > 99;
     var info = summarize
         ? instructions.substring(0, 99)

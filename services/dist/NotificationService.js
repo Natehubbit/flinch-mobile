@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var expo_notifications_1 = require("expo-notifications");
+var firebase_1 = require("../config/firebase");
+var NotificationsRef = firebase_1.db.collection('notifications');
 var NotificationService = /** @class */ (function () {
     function NotificationService() {
     }
@@ -46,6 +48,30 @@ var NotificationService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, expo_notifications_1.getExpoPushTokenAsync()];
                     case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    NotificationService.getNotifications = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var res, e_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, NotificationsRef
+                                .where('recipientId', '==', id)
+                                .get()];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res
+                                .docs
+                                .map(function (d) { return d.data(); })];
+                    case 2:
+                        e_1 = _a.sent();
+                        console.log(e_1.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

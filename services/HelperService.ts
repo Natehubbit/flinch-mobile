@@ -34,10 +34,14 @@ export default class HelperService {
 
   static async uploadVideo (getVideo:(uri:string)=>void) {
     try {
-      const res = await ImagePicker
-        .launchImageLibraryAsync(VID_OPTIONS)
-      if (res.cancelled === false) {
-        getVideo(res.uri)
+      const { granted } = await ImagePicker
+        .requestCameraRollPermissionsAsync()
+      if (granted) {
+        const res = await ImagePicker
+          .launchImageLibraryAsync(VID_OPTIONS)
+        if (res.cancelled === false) {
+          getVideo(res.uri)
+        }
       }
     } catch (error) {
       alert(error.message)

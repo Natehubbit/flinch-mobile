@@ -45,7 +45,6 @@ var native_1 = require("@react-navigation/native");
 var expo_linear_gradient_1 = require("expo-linear-gradient");
 var HelperService_1 = require("../../services/HelperService");
 var useUser_1 = require("../../hooks/useUser");
-var IconBtn_1 = require("../../components/IconBtn");
 var constants_1 = require("../../common/constants");
 var DownloadHookService_1 = require("../../services/DownloadHookService");
 var Video = function () {
@@ -96,7 +95,7 @@ var Video = function () {
             react_1["default"].createElement(VideoPlayer_1["default"], { uri: url }),
             react_1["default"].createElement(expo_linear_gradient_1.LinearGradient, { colors: ['transparent', 'rgba(0,0,0,0.5)'], style: [styles.btnsContainer] },
                 react_1["default"].createElement(react_native_1.View, { style: [styles.btns] }, !saving
-                    ? react_1["default"].createElement(IconBtn_1["default"], { icon: 'cloud-download', onPress: onSaveVideo })
+                    ? react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'cloud-download', onPress: onSaveVideo, label: 'Download', theme: { colors: { accent: 'transparent' } }, uppercase: false })
                     : react_1["default"].createElement(react_native_paper_1.FAB, { icon: null, loading: saving, label: progress + "% Downloading", uppercase: false, small: true, style: { backgroundColor: 'transparent', elevation: 0 } })),
                 react_1["default"].createElement(react_native_1.View, { style: [styles.aside] },
                     react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'send', onPress: onShare, small: true }))))));

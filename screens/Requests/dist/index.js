@@ -10,7 +10,6 @@ var RequestCard_1 = require("../../components/RequestCard");
 var theme_1 = require("../../config/theme");
 var useLoader_1 = require("../../hooks/useLoader");
 var useRequests_1 = require("../../hooks/useRequests");
-var useUser_1 = require("../../hooks/useUser");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
 var Requests = function () {
@@ -24,18 +23,17 @@ var Requests = function () {
     var dispatch = react_redux_1.useDispatch();
     var navigate = native_1.useNavigation().navigate;
     var _a = react_1.useState(false), refresh = _a[0], setRefresh = _a[1];
-    var id = useUser_1.useUser().id;
     var loading = useLoader_1.useLoader().requestsLoader;
     react_1.useEffect(function () {
         fetchData();
     }, []);
     var fetchData = function () {
-        dispatch(requests_1.requestsActions.getAllRequests(id));
+        dispatch(requests_1.requestsActions.getAllRequests());
     };
     var onReload = function () {
         setRefresh(true);
         var endRefresh = function () { return setRefresh(false); };
-        dispatch(requests_1.requestsActions.reloadRequests(id, endRefresh));
+        dispatch(requests_1.requestsActions.reloadRequests(endRefresh));
     };
     var onOpenRequest = function (id) { return navigate('Request', { id: id }); };
     var renderRequests = function () {

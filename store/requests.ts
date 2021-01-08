@@ -53,8 +53,13 @@ const reloadRequests = (callback?:()=>void) => async (
   const id = isUser
     ? user.id
     : user.celebrity.id
-  const res = await RequestService.getAllRequests(id)
-  res && dispatch(actions.getRequests(res))
+  if (isUser) {
+    const res = await RequestService.getAllRequests(id)
+    res && dispatch(actions.getRequests(res))
+  } else {
+    const res = await RequestService.getCelebRequests(id)
+    res && dispatch(actions.getRequests(res))
+  }
   callback && callback()
 }
 
@@ -67,47 +72,53 @@ const rejectRequest = (id:string, callback?:()=>void) => async (dispatch:Dispatc
   callback && callback()
 }
 
-const approveRequest = (id:string, uri:string, callback?:()=>void) =>
-  async (dispatch:Dispatch, getState:()=>AppState) => {
-    const {
-      requests,
-      user: {
-        role,
-        celebrity: {
-          id: userId
-        }
+const approveRequest = (
+  id:string,
+  uri:string,
+  callback?:()=>void
+) => async (
+  dispatch:Dispatch,
+  getState:()=>AppState
+) => {
+  const {
+    requests,
+    user: {
+      role,
+      celebrity: {
+        id: userId
       }
-    } = getState()
-    if (role === 'user') return
-    const loading = () => dispatch(
-      loaderActions.loading('responseLoader')
-    )
-    const approved = await RequestService
-      .approveRequest(
-        id,
-        uri,
-        loading
-      )
-    if (approved) {
-      const data = requests.map(d => {
-        if (d.id === id) {
-          return { ...d, ...approved }
-        }
-        return d
-      })
-      dispatch(actions.getRequests(data))
-      dispatch<any>(responseActions.reloadApproved(userId))
-      callback && callback()
-    } else {
-      Alert.alert(
-        'Error',
-        'Failed to upload Video. Please try again.',
-        [
-          { text: 'Okay', style: 'cancel' }
-        ]
-      )
     }
+  } = getState()
+  if (role === 'user') return
+  const loading = () => dispatch(
+    loaderActions.loading('responseLoader')
+  )
+  const approved = await RequestService
+    .approveRequest(
+      id,
+      uri,
+      loading
+    )
+  if (approved) {
+    const data = requests.map(d => {
+      if (d.id === id) {
+        return { ...d, ...approved }
+      }
+      return d
+    })
+    dispatch(actions.getRequests(data))
+    dispatch<any>(responseActions.reloadApproved(userId))
+    callback && callback()
+  } else {
+    Alert.alert(
+      'Error',
+      'Failed to upload Video. Please try again.',
+      [
+        { text: 'Okay', style: 'cancel' }
+      ]
+    )
   }
+}
 
 export const requestsActions = {
   ...actions,

@@ -82,24 +82,30 @@ var HelperService = /** @class */ (function () {
     };
     HelperService.uploadVideo = function (getVideo) {
         return __awaiter(this, void 0, void 0, function () {
-            var res, error_1;
+            var granted, res, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        _a.trys.push([0, 4, , 5]);
+                        return [4 /*yield*/, ImagePicker
+                                .requestCameraRollPermissionsAsync()];
+                    case 1:
+                        granted = (_a.sent()).granted;
+                        if (!granted) return [3 /*break*/, 3];
                         return [4 /*yield*/, ImagePicker
                                 .launchImageLibraryAsync(VID_OPTIONS)];
-                    case 1:
+                    case 2:
                         res = _a.sent();
                         if (res.cancelled === false) {
                             getVideo(res.uri);
                         }
-                        return [3 /*break*/, 3];
-                    case 2:
+                        _a.label = 3;
+                    case 3: return [3 /*break*/, 5];
+                    case 4:
                         error_1 = _a.sent();
                         alert(error_1.message);
-                        return [3 /*break*/, 3];
-                    case 3: return [2 /*return*/];
+                        return [3 /*break*/, 5];
+                    case 5: return [2 /*return*/];
                 }
             });
         });

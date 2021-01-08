@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import AppDrawer from '../AppDrawer'
-import { Video } from 'expo-av'
 import Notifications from '../../screens/Notifications'
 import Search from '../../screens/Search'
 import WebViewScreen from '../../screens/WebView'
 import { useDispatch } from 'react-redux'
 import { notificationsActions } from '../../store/notifications'
+import Video from '../../screens/Video'
 
 const Stack = createStackNavigator()
 

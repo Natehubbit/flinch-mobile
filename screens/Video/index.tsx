@@ -8,7 +8,6 @@ import { VideoScreenRouteProps } from '../../navigation'
 import { LinearGradient } from 'expo-linear-gradient'
 import HelperService from '../../services/HelperService'
 import { useUser } from '../../hooks/useUser'
-import IconBtn from '../../components/IconBtn'
 import { VIDEO_SAVES } from '../../common/constants'
 import DownloadHookService from '../../services/DownloadHookService'
 
@@ -66,9 +65,12 @@ const Video: React.FC = () => {
         >
           <View style={[styles.btns]}>
             {!saving
-              ? <IconBtn
+              ? <FAB
                 icon='cloud-download'
                 onPress={onSaveVideo}
+                label='Download'
+                theme={{ colors: { accent: 'transparent' } }}
+                uppercase={false}
               />
               : <FAB
                 icon={null}

@@ -2,6 +2,8 @@ import { DownloadResumable } from 'expo-file-system'
 import { ExpoPushToken } from 'expo-notifications'
 import firebase from 'firebase'
 
+export type Currency = 'NGN'|'GHS'|'$'
+
 export type User = {
     id:string;
     displayName:string;
@@ -17,6 +19,17 @@ export type User = {
     role: UserRole;
     token: ExpoPushToken
 } | null;
+
+export interface NotificationMessage {
+    to?: ExpoPushToken | ExpoPushToken[]|string;
+    data?: object;
+    title?: string;
+    subtitle?: string;
+    body?: string;
+    sent:boolean;
+    read:boolean;
+    recipientId:string;
+}
 
 export type UserRole = 'celebrity'|'user';
 
