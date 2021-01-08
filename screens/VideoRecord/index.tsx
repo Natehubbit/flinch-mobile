@@ -153,7 +153,7 @@ const VideoRecord = () => {
                         <View style={styles.recordIndicator}/>
                     </View>
                 </View>}
-                {!showInstructions &&
+                {(!showInstructions || !isPreviewing) &&
                   <FAB
                     icon="eye-outline"
                     style={[styles.showIcon]}

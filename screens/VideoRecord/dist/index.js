@@ -206,7 +206,7 @@ var VideoRecord = function () {
                 react_1["default"].createElement(react_native_1.View, { style: styles.recordingText },
                     react_1["default"].createElement(styledComponents_1.Paragraph, null, "Recording"),
                     react_1["default"].createElement(react_native_1.View, { style: styles.recordIndicator }))),
-            !showInstructions &&
+            (!showInstructions || !isPreviewing) &&
                 react_1["default"].createElement(react_native_paper_1.FAB, { icon: "eye-outline", style: [styles.showIcon], small: true, onPress: onShowInstructions })),
         !isPreviewing &&
             react_1["default"].createElement(react_native_1.View, { style: styles.camera },
