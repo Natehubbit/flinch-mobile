@@ -1,11 +1,17 @@
 import { getExpoPushTokenAsync } from 'expo-notifications'
+import { Alert } from 'react-native'
 import { db } from '../config/firebase'
 import { NotificationMessage } from '../types'
 
 const NotificationsRef = db.collection('notifications')
 export default class NotificationService {
   static async getToken () {
-    return await getExpoPushTokenAsync()
+    try {
+      return await getExpoPushTokenAsync()
+    } catch (e) {
+      Alert.alert('Error', e.message)
+      return null
+    }
   }
 
   static async getNotifications (id:string) {

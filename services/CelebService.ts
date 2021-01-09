@@ -14,7 +14,10 @@ export default class CelebService {
         imageUrl: '',
         alias: '',
         popularity: 0,
-        price: 0,
+        price: {
+          amount: 0,
+          currency: 'GHS'
+        },
         ...doc.data()
       }))
       return celebs
@@ -34,7 +37,10 @@ export default class CelebService {
         craft: '',
         imageUrl: '',
         popularity: 0,
-        price: 0,
+        price: {
+          amount: 0,
+          currency: 'GHS'
+        },
         ...res.data()
       }
     } catch (e) {

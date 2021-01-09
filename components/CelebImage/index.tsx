@@ -7,6 +7,7 @@ import { theme } from '../../config/theme'
 import { useNavigation } from '@react-navigation/native'
 import { Routes } from '../../navigation'
 import { Celeb } from '../../types'
+import HelperService from '../../services/HelperService'
 
 interface CelebImageProps extends Celeb {
     large?:boolean;
@@ -25,7 +26,11 @@ const CelebImage: React.FC<CelebImageProps> = ({
   const {
     navigate
   } = useNavigation()
-  const onPressed = () => navigate<Routes>('Celeb', { data: { ...props, price: (price as any).amount } })
+  const onPressed = () => navigate<Routes>(
+    'Celeb', {
+      data: { ...props }
+    }
+  )
   return <Card
         theme={{ roundness: 10 }}
         onPress={onPressed}
@@ -44,10 +49,14 @@ const CelebImage: React.FC<CelebImageProps> = ({
         >
             <View style={styles.textContainer}>
                 <View style={styles.dets}>
-                    <Text numberOfLines={1} style={styles.celebName}>{alias}</Text>
+                    <Text numberOfLines={1} style={styles.celebName}>
+                      {alias}
+                    </Text>
                     <Text style={styles.role}>{craft}</Text>
                 </View>
-                <Text style={styles.price}>GHs{(price as any).amount}</Text>
+                <Text style={styles.price}>
+                  {HelperService.parseToMoney(price)}
+                  </Text>
             </View>
         </LinearGradient>
     </Card>

@@ -80,6 +80,7 @@ exports.initState = {
         id: '',
         amount: 0,
         payed: false,
+        currency: 'GHS',
         timestamp: Date.now()
     },
     requestor: {
@@ -90,7 +91,10 @@ exports.initState = {
     occasion: '',
     recipient: '',
     status: 'pending',
-    price: 0,
+    price: {
+        amount: 0,
+        currency: 'GHS'
+    },
     timestamp: 0
 };
 exports.actions = (_a = toolkit_1.createSlice({

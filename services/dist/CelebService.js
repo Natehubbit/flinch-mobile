@@ -73,7 +73,10 @@ var CelebService = /** @class */ (function () {
                         return [4 /*yield*/, CelebsRef.get()];
                     case 1:
                         res = _a.sent();
-                        celebs = res.docs.map(function (doc) { return (__assign({ id: doc.id, craft: '', bio: '', imageUrl: '', alias: '', popularity: 0, price: 0 }, doc.data())); });
+                        celebs = res.docs.map(function (doc) { return (__assign({ id: doc.id, craft: '', bio: '', imageUrl: '', alias: '', popularity: 0, price: {
+                                amount: 0,
+                                currency: 'GHS'
+                            } }, doc.data())); });
                         return [2 /*return*/, celebs];
                     case 2:
                         error_1 = _a.sent();
@@ -94,7 +97,10 @@ var CelebService = /** @class */ (function () {
                         return [4 /*yield*/, CelebsRef.doc(id).get()];
                     case 1:
                         res = _a.sent();
-                        return [2 /*return*/, __assign({ id: res.id, alias: '', bio: '', craft: '', imageUrl: '', popularity: 0, price: 0 }, res.data())];
+                        return [2 /*return*/, __assign({ id: res.id, alias: '', bio: '', craft: '', imageUrl: '', popularity: 0, price: {
+                                    amount: 0,
+                                    currency: 'GHS'
+                                } }, res.data())];
                     case 2:
                         e_1 = _a.sent();
                         console.log(e_1.message);

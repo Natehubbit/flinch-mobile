@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var expo_notifications_1 = require("expo-notifications");
+var react_native_1 = require("react-native");
 var firebase_1 = require("../config/firebase");
 var NotificationsRef = firebase_1.db.collection('notifications');
 var NotificationService = /** @class */ (function () {
@@ -44,17 +45,25 @@ var NotificationService = /** @class */ (function () {
     }
     NotificationService.getToken = function () {
         return __awaiter(this, void 0, void 0, function () {
+            var e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, expo_notifications_1.getExpoPushTokenAsync()];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, expo_notifications_1.getExpoPushTokenAsync()];
                     case 1: return [2 /*return*/, _a.sent()];
+                    case 2:
+                        e_1 = _a.sent();
+                        react_native_1.Alert.alert('Error', e_1.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
     };
     NotificationService.getNotifications = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var res, e_1;
+            var res, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -68,8 +77,8 @@ var NotificationService = /** @class */ (function () {
                                 .docs
                                 .map(function (d) { return d.data(); })];
                     case 2:
-                        e_1 = _a.sent();
-                        console.log(e_1.message);
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }

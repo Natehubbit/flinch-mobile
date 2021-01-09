@@ -20,6 +20,7 @@ export const initState: Request = {
     id: '',
     amount: 0,
     payed: false,
+    currency: 'GHS',
     timestamp: Date.now()
   },
   requestor: {
@@ -30,7 +31,10 @@ export const initState: Request = {
   occasion: '',
   recipient: '',
   status: 'pending',
-  price: 0,
+  price: {
+    amount: 0,
+    currency: 'GHS'
+  },
   timestamp: 0
 }
 

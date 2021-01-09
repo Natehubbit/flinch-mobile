@@ -17,7 +17,7 @@ export type User = {
         data?: Celeb
     };
     role: UserRole;
-    token: ExpoPushToken
+    token: ExpoPushToken;
 } | null;
 
 export interface NotificationMessage {
@@ -82,7 +82,7 @@ export interface Request {
     response: RequestResponse;
     payment: RequestPayment;
     status: RequestStatus;
-    price: number;
+    price: Price;
     timestamp: number;
 }
 
@@ -90,6 +90,7 @@ export interface RequestPayment {
     id:string;
     amount:number;
     payed:boolean;
+    currency:Currency;
     timestamp:number;
 }
 
@@ -141,7 +142,7 @@ export interface Trx {
 
 export interface PaymentInitData {
     amount:string; // in pesewas
-    currency:'GHS';
+    currency:Currency;
     label:string;
     metadata:PaymentMetaData;
     email:string;
@@ -196,10 +197,15 @@ export interface Celeb {
     craft:string;
     imageUrl:string;
     popularity:number;
-    price:number;
+    price:Price;
     objectID?:string;
     role?:'celebrity'|'user';
     token?: ExpoPushToken;
 }
+
+export interface Price {
+    amount: number;
+    currency: Currency;
+};
 
 export type Celebs = Celeb[]

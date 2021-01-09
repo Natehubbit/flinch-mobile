@@ -52,8 +52,9 @@ var PaymentMode = function () {
     var dispatch = react_redux_1.useDispatch();
     var request = useRequest_1.useRequest();
     var navigate = native_1.useNavigation().navigate;
-    var cost = request.price.toString();
-    var _a = useUser_1.useUser(), id = _a.id, displayName = _a.displayName, email = _a.email;
+    var cost = request.price.amount.toString();
+    var currency = request.price.currency;
+    var _a = useUser_1.useUser(), id = _a.id, displayName = _a.displayName, email = _a.email, token = _a.token;
     var onSelect = function (type) { return __awaiter(void 0, void 0, void 0, function () {
         var isCreditCard, uri;
         return __generator(this, function (_a) {
@@ -84,23 +85,26 @@ var PaymentMode = function () {
         dispatch(loader_1.loaderActions.loaded('paymentLoader'));
     };
     var makePayment = function (mode, amount) { return __awaiter(void 0, void 0, void 0, function () {
-        var data, url;
+        var payload, data, url;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, PaymentService_1["default"].init({
+                case 0:
+                    payload = {
                         amount: amount,
                         callback_url: constants_1.PAYMENT_CALLBACK,
                         channels: [mode],
-                        currency: 'GHS',
+                        currency: currency,
                         email: email,
                         label: displayName,
                         metadata: {
                             customerName: displayName,
                             requestId: request.id,
                             id: id,
-                            data: request
+                            data: request,
+                            token: token.data
                         }
-                    })];
+                    };
+                    return [4 /*yield*/, PaymentService_1["default"].init(payload)];
                 case 1:
                     data = _a.sent();
                     if (!data)

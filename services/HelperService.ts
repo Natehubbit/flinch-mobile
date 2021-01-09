@@ -7,7 +7,7 @@ import moment from 'moment'
 import * as MediaLibrary from 'expo-media-library'
 import * as VideoThumbnails from 'expo-video-thumbnails'
 import * as FileSystem from 'expo-file-system'
-import { Download } from '../types'
+import { Download, Price } from '../types'
 import * as WebBrowser from 'expo-web-browser'
 import { theme } from '../config/theme'
 
@@ -223,12 +223,17 @@ export default class HelperService {
     }
   }
 
-  static parseToMoney (val:number) {
+  static parseToMoney ({
+    amount,
+    currency
+  }: Price
+  ):string|null {
     try {
-      return `GHs${(val / 100).toFixed(2)}`
+      // TODO: ABS VAL OF AMOUNT/100 FOR PAYSTACK
+      return `${currency}${(amount)}`
     } catch (e) {
       console.log(e.message)
-      return ''
+      return null
     }
   }
 

@@ -10,6 +10,7 @@ import { celebsActions } from './celebs'
 import { requestActions } from './request'
 import { requestsActions } from './requests'
 import CelebService from '../services/CelebService'
+import NotificationService from '../services/NotificationService'
 
 const initState: User = {
   id: '',
@@ -56,17 +57,30 @@ const login = (
 ) => {
   dispatch(loaderActions.loading('authLoader'))
   const user = await AuthService.login(email, password)
+  const token = await NotificationService.getToken()
   const userData = user && await UserService.getUser(user.id)
-  userData && dispatch(actions.getUser({
-    id: '',
-    displayName: '',
-    email: '',
-    imageUrl: '',
-    role: 'user',
-    loggedIn: true,
-    profileUpdated: true,
-    ...userData
-  }))
+  userData && await UserService.update({
+    id: userData.id,
+    token: token || {
+      data: '',
+      type: 'expo'
+    }
+  })
+  userData && dispatch(actions
+    .getUser({
+      id: '',
+      displayName: '',
+      email: '',
+      imageUrl: '',
+      role: 'user',
+      loggedIn: true,
+      profileUpdated: true,
+      ...userData,
+      token: token || {
+        data: '',
+        type: 'expo'
+      }
+    }))
   dispatch(loaderActions.loaded('authLoader'))
 }
 
@@ -78,8 +92,20 @@ const signup = (
 ) => {
   dispatch(loaderActions.loading('authLoader'))
   const user = await AuthService.signUp(email, password)
-  const userData = user && await UserService.addUser(user)
-  userData && dispatch(actions.getUser({ ...userData, loggedIn: true }))
+  const token = await NotificationService.getToken()
+  const userData = user &&
+    await UserService.addUser(user)
+  userData && await UserService
+    .update({
+      id: userData.id,
+      token
+    })
+  userData && dispatch(actions
+    .getUser({
+      ...userData,
+      token,
+      loggedIn: true
+    }))
   dispatch(loaderActions.loaded('authLoader'))
 }
 

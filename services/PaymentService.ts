@@ -6,7 +6,9 @@ const API = 'https://us-central1-shoutouts-3c57c.cloudfunctions.net/'
 const RequestRef = db.collection('requests')
 
 export default class PaymentService {
-    static init = async (data:PaymentInitData):Promise<PaymentInitResponse|null> => {
+    static init = async (
+      data:PaymentInitData
+    ):Promise<PaymentInitResponse|null> => {
       try {
         const result = await Axios.post(
           `${API}initializePayment`,

@@ -4,6 +4,8 @@ import { Image, ImageBackground, StyleSheet, View } from 'react-native'
 import { FAB } from 'react-native-paper'
 import { MainLabel, AltMainLabel, MiniLabel, maxHeight, maxWidth, Paragraph } from '../../common/styledComponents'
 import { CelebScreenRouteProp, Routes } from '../../navigation'
+import HelperService from '../../services/HelperService'
+import { Celeb } from '../../types'
 
 const CelebScreen: React.FC = () => {
   const { navigate } = useNavigation()
@@ -17,9 +19,20 @@ const CelebScreen: React.FC = () => {
     imageUrl,
     price
   } = data
-  const onBook = () => navigate<Routes>('Book', { data: { id, price, alias, imageUrl } })
+  const onBook = () => navigate<Routes>(
+    'Book',
+    {
+      data: {
+        id,
+        price,
+        alias,
+        imageUrl
+      } as Partial<Celeb>
+    }
+  )
+  console.log(price)
   return <View
-        style={styles.container}
+      style={styles.container}
     >
         <ImageBackground
           source={{ uri: imageUrl }}
@@ -50,7 +63,9 @@ const CelebScreen: React.FC = () => {
                 <Paragraph black >{bio}</Paragraph>
             </View>
             <View style={styles.price}>
-                <AltMainLabel style={styles.price}>GHs{price}</AltMainLabel>
+                <AltMainLabel style={styles.price}>
+                  {HelperService.parseToMoney(price)}
+                </AltMainLabel>
             </View>
         </View>
     </View>

@@ -358,13 +358,15 @@ var HelperService = /** @class */ (function () {
             });
         });
     };
-    HelperService.parseToMoney = function (val) {
+    HelperService.parseToMoney = function (_a) {
+        var amount = _a.amount, currency = _a.currency;
         try {
-            return "GHs" + (val / 100).toFixed(2);
+            // TODO: ABS VAL OF AMOUNT/100 FOR PAYSTACK
+            return "" + currency + (amount);
         }
         catch (e) {
             console.log(e.message);
-            return '';
+            return null;
         }
     };
     HelperService.openBrowser = function (uri) {

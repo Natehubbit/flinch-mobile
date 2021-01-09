@@ -65,7 +65,8 @@ var Book = function () {
                 timestamp: Date.now()
             }, payment: {
                 id: '',
-                amount: 0,
+                amount: price.amount,
+                currency: price.currency,
                 payed: false,
                 timestamp: 0
             }, status: 'pending', price: price, timestamp: Date.now() }, values);

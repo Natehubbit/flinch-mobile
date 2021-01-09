@@ -70,6 +70,7 @@ var celebs_1 = require("./celebs");
 var request_1 = require("./request");
 var requests_1 = require("./requests");
 var CelebService_1 = require("../services/CelebService");
+var NotificationService_1 = require("../services/NotificationService");
 var initState = {
     id: '',
     displayName: '',
@@ -102,46 +103,83 @@ exports.actions = (_a = toolkit_1.createSlice({
     }
 }), _a).actions, exports.userSlice = __rest(_a, ["actions"]);
 var login = function (email, password) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, userData, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var user, token, userData, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 dispatch(loader_1.loaderActions.loading('authLoader'));
                 return [4 /*yield*/, AuthService_1["default"].login(email, password)];
             case 1:
-                user = _b.sent();
-                _a = user;
-                if (!_a) return [3 /*break*/, 3];
-                return [4 /*yield*/, UserService_1["default"].getUser(user.id)];
+                user = _c.sent();
+                return [4 /*yield*/, NotificationService_1["default"].getToken()];
             case 2:
-                _a = (_b.sent());
-                _b.label = 3;
+                token = _c.sent();
+                _a = user;
+                if (!_a) return [3 /*break*/, 4];
+                return [4 /*yield*/, UserService_1["default"].getUser(user.id)];
             case 3:
+                _a = (_c.sent());
+                _c.label = 4;
+            case 4:
                 userData = _a;
-                userData && dispatch(exports.actions.getUser(__assign({ id: '', displayName: '', email: '', imageUrl: '', role: 'user', loggedIn: true, profileUpdated: true }, userData)));
+                _b = userData;
+                if (!_b) return [3 /*break*/, 6];
+                return [4 /*yield*/, UserService_1["default"].update({
+                        id: userData.id,
+                        token: token || {
+                            data: '',
+                            type: 'expo'
+                        }
+                    })];
+            case 5:
+                _b = (_c.sent());
+                _c.label = 6;
+            case 6:
+                _b;
+                userData && dispatch(exports.actions
+                    .getUser(__assign(__assign({ id: '', displayName: '', email: '', imageUrl: '', role: 'user', loggedIn: true, profileUpdated: true }, userData), { token: token || {
+                        data: '',
+                        type: 'expo'
+                    } })));
                 dispatch(loader_1.loaderActions.loaded('authLoader'));
                 return [2 /*return*/];
         }
     });
 }); }; };
 var signup = function (email, password) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, userData, _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var user, token, userData, _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 dispatch(loader_1.loaderActions.loading('authLoader'));
                 return [4 /*yield*/, AuthService_1["default"].signUp(email, password)];
             case 1:
-                user = _b.sent();
-                _a = user;
-                if (!_a) return [3 /*break*/, 3];
-                return [4 /*yield*/, UserService_1["default"].addUser(user)];
+                user = _c.sent();
+                return [4 /*yield*/, NotificationService_1["default"].getToken()];
             case 2:
-                _a = (_b.sent());
-                _b.label = 3;
+                token = _c.sent();
+                _a = user;
+                if (!_a) return [3 /*break*/, 4];
+                return [4 /*yield*/, UserService_1["default"].addUser(user)];
             case 3:
+                _a = (_c.sent());
+                _c.label = 4;
+            case 4:
                 userData = _a;
-                userData && dispatch(exports.actions.getUser(__assign(__assign({}, userData), { loggedIn: true })));
+                _b = userData;
+                if (!_b) return [3 /*break*/, 6];
+                return [4 /*yield*/, UserService_1["default"]
+                        .update({
+                        id: userData.id,
+                        token: token
+                    })];
+            case 5:
+                _b = (_c.sent());
+                _c.label = 6;
+            case 6:
+                _b;
+                userData && dispatch(exports.actions
+                    .getUser(__assign(__assign({}, userData), { token: token, loggedIn: true })));
                 dispatch(loader_1.loaderActions.loaded('authLoader'));
                 return [2 /*return*/];
         }

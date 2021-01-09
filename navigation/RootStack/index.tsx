@@ -1,20 +1,14 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import AppDrawer from '../AppDrawer'
 import Notifications from '../../screens/Notifications'
 import Search from '../../screens/Search'
 import WebViewScreen from '../../screens/WebView'
-import { useDispatch } from 'react-redux'
-import { notificationsActions } from '../../store/notifications'
 import Video from '../../screens/Video'
 
 const Stack = createStackNavigator()
 
 const RootStack = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-    dispatch(notificationsActions.getDeviceToken())
-  }, [])
   return (
         <Stack.Navigator
           mode='modal'

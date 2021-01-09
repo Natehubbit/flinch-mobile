@@ -17,11 +17,13 @@ const PaymentMode: React.FC = () => {
   const dispatch = useDispatch()
   const request = useRequest()
   const { navigate } = useNavigation()
-  const cost = request.price.toString()
+  const cost = request.price.amount.toString()
+  const { currency } = request.price
   const {
     id,
     displayName,
-    email
+    email,
+    token
   } = useUser()
   const onSelect = async (type:string) => {
     dispatch(loaderActions.loading('paymentLoader'))
@@ -41,20 +43,22 @@ const PaymentMode: React.FC = () => {
     dispatch(loaderActions.loaded('paymentLoader'))
   }
   const makePayment = async (mode:PaymentType, amount:string) => {
-    const data = await PaymentService.init({
+    const payload = {
       amount,
       callback_url: PAYMENT_CALLBACK,
       channels: [mode],
-      currency: 'GHS',
+      currency,
       email,
       label: displayName,
       metadata: {
         customerName: displayName,
         requestId: request.id,
         id,
-        data: request
+        data: request,
+        token: token.data
       }
-    })
+    }
+    const data = await PaymentService.init(payload)
     if (!data) return null
     const { authorization_url: url } = data
     return url

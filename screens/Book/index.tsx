@@ -58,7 +58,8 @@ const Book: React.FC = () => {
       },
       payment: {
         id: '',
-        amount: 0,
+        amount: price.amount,
+        currency: price.currency,
         payed: false,
         timestamp: 0
       },

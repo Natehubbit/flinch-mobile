@@ -29,12 +29,15 @@ var styledComponents_1 = require("../../common/styledComponents");
 var expo_linear_gradient_1 = require("expo-linear-gradient");
 var theme_1 = require("../../config/theme");
 var native_1 = require("@react-navigation/native");
+var HelperService_1 = require("../../services/HelperService");
 var CelebImage = function (_a) {
     var large = _a.large, props = __rest(_a, ["large"]);
     var alias = props.alias, price = props.price, craft = props.craft, imageUrl = props.imageUrl;
     var size = large ? { width: '47%' } : null;
     var navigate = native_1.useNavigation().navigate;
-    var onPressed = function () { return navigate('Celeb', { data: __assign(__assign({}, props), { price: price.amount }) }); };
+    var onPressed = function () { return navigate('Celeb', {
+        data: __assign({}, props)
+    }); };
     return react_1["default"].createElement(react_native_paper_1.Card, { theme: { roundness: 10 }, onPress: onPressed, style: [styles.container, size] },
         react_1["default"].createElement(react_native_paper_1.Card.Cover, { style: [styles.cover], theme: { roundness: 10 }, source: {
                 uri: imageUrl
@@ -44,9 +47,7 @@ var CelebImage = function (_a) {
                 react_1["default"].createElement(react_native_1.View, { style: styles.dets },
                     react_1["default"].createElement(react_native_1.Text, { numberOfLines: 1, style: styles.celebName }, alias),
                     react_1["default"].createElement(react_native_1.Text, { style: styles.role }, craft)),
-                react_1["default"].createElement(react_native_1.Text, { style: styles.price },
-                    "GHs",
-                    price.amount))));
+                react_1["default"].createElement(react_native_1.Text, { style: styles.price }, HelperService_1["default"].parseToMoney(price)))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
