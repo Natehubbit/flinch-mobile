@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -32,11 +21,18 @@ var native_1 = require("@react-navigation/native");
 var HelperService_1 = require("../../services/HelperService");
 var CelebImage = function (_a) {
     var large = _a.large, props = __rest(_a, ["large"]);
-    var alias = props.alias, price = props.price, craft = props.craft, imageUrl = props.imageUrl;
+    var alias = props.alias, price = props.price, craft = props.craft, imageUrl = props.imageUrl, id = props.id, token = props.token;
     var size = large ? { width: '47%' } : null;
     var navigate = native_1.useNavigation().navigate;
     var onPressed = function () { return navigate('Celeb', {
-        data: __assign({}, props)
+        data: {
+            id: id,
+            alias: alias,
+            craft: craft,
+            imageUrl: imageUrl,
+            token: (token === null || token === void 0 ? void 0 : token.data) || '',
+            price: price
+        }
     }); };
     return react_1["default"].createElement(react_native_paper_1.Card, { theme: { roundness: 10 }, onPress: onPressed, style: [styles.container, size] },
         react_1["default"].createElement(react_native_paper_1.Card.Cover, { style: [styles.cover], theme: { roundness: 10 }, source: {

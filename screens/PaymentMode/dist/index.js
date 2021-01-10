@@ -51,6 +51,7 @@ var native_1 = require("@react-navigation/native");
 var PaymentMode = function () {
     var dispatch = react_redux_1.useDispatch();
     var request = useRequest_1.useRequest();
+    var params = native_1.useRoute().params;
     var navigate = native_1.useNavigation().navigate;
     var cost = request.price.amount.toString();
     var currency = request.price.currency;
@@ -86,8 +87,9 @@ var PaymentMode = function () {
     };
     var makePayment = function (mode, amount) { return __awaiter(void 0, void 0, void 0, function () {
         var payload, data, url;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     payload = {
                         amount: amount,
@@ -101,12 +103,13 @@ var PaymentMode = function () {
                             requestId: request.id,
                             id: id,
                             data: request,
-                            token: token.data
+                            token: token.data,
+                            celebToken: ((_b = (_a = params) === null || _a === void 0 ? void 0 : _a.token) === null || _b === void 0 ? void 0 : _b.data) || ''
                         }
                     };
                     return [4 /*yield*/, PaymentService_1["default"].init(payload)];
                 case 1:
-                    data = _a.sent();
+                    data = _c.sent();
                     if (!data)
                         return [2 /*return*/, null];
                     url = data.authorization_url;

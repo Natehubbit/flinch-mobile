@@ -27,7 +27,13 @@ const Book: React.FC = () => {
   const { navigate } = useNavigation()
   const { params: { data } } = useRoute<BookScreenRouteProps>()
   const { displayName, id: userId } = useUser()
-  const { id, price, alias, imageUrl } = data
+  const {
+    id,
+    price,
+    alias,
+    imageUrl,
+    token
+  } = data
   const { value: occasion } = useSelect()
   useEffect(() => {
     if (!mounted.current) {
@@ -70,7 +76,7 @@ const Book: React.FC = () => {
     }
     dispatch(requestActions.createRequest(data))
     request.id &&
-    navigate<Routes>('Payment')
+    navigate<Routes>('Payment', { data: token })
   }
   const renderForm = () => {
     return (

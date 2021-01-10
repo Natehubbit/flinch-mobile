@@ -20,7 +20,9 @@ const CelebImage: React.FC<CelebImageProps> = ({
     alias,
     price,
     craft,
-    imageUrl
+    imageUrl,
+    id,
+    token
   } = props
   const size = large ? { width: '47%' } : null
   const {
@@ -28,7 +30,14 @@ const CelebImage: React.FC<CelebImageProps> = ({
   } = useNavigation()
   const onPressed = () => navigate<Routes>(
     'Celeb', {
-      data: { ...props }
+      data: {
+        id,
+        alias,
+        craft,
+        imageUrl,
+        token: token?.data || '',
+        price
+      }
     }
   )
   return <Card

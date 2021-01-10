@@ -208,4 +208,12 @@ export interface Price {
     currency: Currency;
 };
 
+export interface BookParam {
+    id: string,
+    price: Price,
+    alia: string,
+    imageUrl: string,
+    token: string,
+}
+
 export type Celebs = Celeb[]

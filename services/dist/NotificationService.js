@@ -39,6 +39,7 @@ exports.__esModule = true;
 var expo_notifications_1 = require("expo-notifications");
 var react_native_1 = require("react-native");
 var firebase_1 = require("../config/firebase");
+var Notifications = require("expo-notifications");
 var NotificationsRef = firebase_1.db.collection('notifications');
 var NotificationService = /** @class */ (function () {
     function NotificationService() {
@@ -84,6 +85,31 @@ var NotificationService = /** @class */ (function () {
                 }
             });
         });
+    };
+    NotificationService.getPermission = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var granted, e_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, Notifications
+                                .requestPermissionsAsync()];
+                    case 1:
+                        granted = (_a.sent()).granted;
+                        return [2 /*return*/, granted];
+                    case 2:
+                        e_3 = _a.sent();
+                        console.log(e_3.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotificationService.responseListener = function () {
+    };
+    NotificationService.receivedListener = function () {
     };
     return NotificationService;
 }());

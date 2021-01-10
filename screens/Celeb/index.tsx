@@ -5,7 +5,6 @@ import { FAB } from 'react-native-paper'
 import { MainLabel, AltMainLabel, MiniLabel, maxHeight, maxWidth, Paragraph } from '../../common/styledComponents'
 import { CelebScreenRouteProp, Routes } from '../../navigation'
 import HelperService from '../../services/HelperService'
-import { Celeb } from '../../types'
 
 const CelebScreen: React.FC = () => {
   const { navigate } = useNavigation()
@@ -17,7 +16,8 @@ const CelebScreen: React.FC = () => {
     bio,
     craft,
     imageUrl,
-    price
+    price,
+    token
   } = data
   const onBook = () => navigate<Routes>(
     'Book',
@@ -26,8 +26,9 @@ const CelebScreen: React.FC = () => {
         id,
         price,
         alias,
-        imageUrl
-      } as Partial<Celeb>
+        imageUrl,
+        token
+      }
     }
   )
   console.log(price)

@@ -37,7 +37,7 @@ var Book = function () {
     var navigate = native_1.useNavigation().navigate;
     var data = native_1.useRoute().params.data;
     var _a = useUser_1.useUser(), displayName = _a.displayName, userId = _a.id;
-    var id = data.id, price = data.price, alias = data.alias, imageUrl = data.imageUrl;
+    var id = data.id, price = data.price, alias = data.alias, imageUrl = data.imageUrl, token = data.token;
     var occasion = selector_1.useSelect().value;
     react_1.useEffect(function () {
         if (!mounted.current) {
@@ -72,7 +72,7 @@ var Book = function () {
             }, status: 'pending', price: price, timestamp: Date.now() }, values);
         dispatch(request_1.requestActions.createRequest(data));
         request.id &&
-            navigate('Payment');
+            navigate('Payment', { data: token });
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {

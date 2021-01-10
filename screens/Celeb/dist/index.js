@@ -10,13 +10,14 @@ var CelebScreen = function () {
     var navigate = native_1.useNavigation().navigate;
     var params = native_1.useRoute().params;
     var data = params.data;
-    var id = data.id, alias = data.alias, bio = data.bio, craft = data.craft, imageUrl = data.imageUrl, price = data.price;
+    var id = data.id, alias = data.alias, bio = data.bio, craft = data.craft, imageUrl = data.imageUrl, price = data.price, token = data.token;
     var onBook = function () { return navigate('Book', {
         data: {
             id: id,
             price: price,
             alias: alias,
-            imageUrl: imageUrl
+            imageUrl: imageUrl,
+            token: token
         }
     }); };
     console.log(price);

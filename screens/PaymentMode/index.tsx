@@ -10,12 +10,13 @@ import { loaderActions } from '../../store/loader'
 import { useDispatch } from 'react-redux'
 import { PaymentType } from '../../types'
 import { useRequest } from '../../hooks/useRequest'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { Routes } from '../../navigation'
 
 const PaymentMode: React.FC = () => {
   const dispatch = useDispatch()
   const request = useRequest()
+  const { params } = useRoute()
   const { navigate } = useNavigation()
   const cost = request.price.amount.toString()
   const { currency } = request.price
@@ -55,7 +56,8 @@ const PaymentMode: React.FC = () => {
         requestId: request.id,
         id,
         data: request,
-        token: token.data
+        token: token.data,
+        celebToken: (params as any)?.token?.data || ''
       }
     }
     const data = await PaymentService.init(payload)

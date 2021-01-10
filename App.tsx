@@ -28,6 +28,7 @@ import { Asset } from 'expo-asset'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { AppLoading } from 'expo'
 import AppOverlay from './components/Overlay'
+import * as Notifications from 'expo-notifications'
 
 function cacheImages (images:Array<string|number>) {
   return images.map(image => {
@@ -39,20 +40,31 @@ function cacheImages (images:Array<string|number>) {
   })
 }
 
-function cacheFonts (fonts:Array<string | { [fontFamily: string]: Font.FontSource; }>) {
+function cacheFonts (
+  fonts:Array<string | { [fontFamily: string]: Font.FontSource; }>
+) {
   return fonts.map(font => Font.loadAsync(font))
 }
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: false,
+    shouldShowAlert: true,
+    shouldSetBadge: true
+  })
+})
 
 const App: () => React.ReactNode = () => {
   const [appReady, setAppReady] = useState(false)
   useEffect(() => {
     LogBox.ignoreLogs(['Setting'])
-    const lockScreen = async () => {
-      await ScreenOrientation
-        .lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
-    }
     lockScreen()
   }, [])
+
+  const lockScreen = async () => {
+    await ScreenOrientation
+      .lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+  }
 
   const loadAssetsAsync = async () => {
     const imageAssets = cacheImages([

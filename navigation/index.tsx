@@ -6,6 +6,7 @@ import { useUser } from '../hooks/useUser'
 import NavigationService from '../services/NavigationService'
 import RootStack from './RootStack'
 import { Celeb } from '../types'
+import { ExpoPushToken } from 'expo-notifications'
 
 export type VideoNavParam = {
   id:string;
@@ -25,8 +26,8 @@ export type RouteParams = {
   Search: undefined;
   Notifications: undefined;
   Celeb: {data:Celeb};
-  Book: {data:Pick<Celeb, 'alias'|'imageUrl'|'id'|'price'>};
-  Payment: undefined;
+  Book: {data:Pick<Celeb, 'alias'|'imageUrl'|'id'|'price'|'token'>};
+  Payment: {data:{token:ExpoPushToken}};
   PaymentCard: undefined;
   PaymentMobile: undefined;
   Request: {id:string};
