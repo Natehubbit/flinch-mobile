@@ -41,7 +41,7 @@ const Book: React.FC = () => {
     } else {
       !booking &&
       request.id &&
-      navigate<Routes>('Payment')
+      navigate<Routes>('Payment', { data: { token } })
     }
   }, [booking])
   const onSubmit = (values:BookForm) => {
@@ -75,8 +75,8 @@ const Book: React.FC = () => {
       ...values
     }
     dispatch(requestActions.createRequest(data))
-    request.id &&
-    navigate<Routes>('Payment', { data: token })
+    // request.id &&
+    // navigate<Routes>('Payment', )
   }
   const renderForm = () => {
     return (

@@ -33,7 +33,14 @@ const getDeviceToken = () => async (
   dispatch: Dispatch,
   getState:()=>AppState
 ) => {
-  const { id, token, celebrity: { isCeleb, id: celebId } } = getState().user
+  const {
+    id,
+    token,
+    celebrity: {
+      isCeleb,
+      id: celebId
+    }
+  } = getState().user
   if (!token) {
     const tkn = await NotificationService.getToken()
     if (isCeleb) {

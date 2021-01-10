@@ -103,23 +103,23 @@ exports.actions = (_a = toolkit_1.createSlice({
     }
 }), _a).actions, exports.userSlice = __rest(_a, ["actions"]);
 var login = function (email, password) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, token, userData, _a, _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var user, token, userData, _a, _b, isCeleb, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 dispatch(loader_1.loaderActions.loading('authLoader'));
                 return [4 /*yield*/, AuthService_1["default"].login(email, password)];
             case 1:
-                user = _c.sent();
+                user = _d.sent();
                 return [4 /*yield*/, NotificationService_1["default"].getToken()];
             case 2:
-                token = _c.sent();
+                token = _d.sent();
                 _a = user;
                 if (!_a) return [3 /*break*/, 4];
                 return [4 /*yield*/, UserService_1["default"].getUser(user.id)];
             case 3:
-                _a = (_c.sent());
-                _c.label = 4;
+                _a = (_d.sent());
+                _d.label = 4;
             case 4:
                 userData = _a;
                 _b = userData;
@@ -132,10 +132,22 @@ var login = function (email, password) { return function (dispatch) { return __a
                         }
                     })];
             case 5:
-                _b = (_c.sent());
-                _c.label = 6;
+                _b = (_d.sent());
+                _d.label = 6;
             case 6:
                 _b;
+                isCeleb = userData.celebrity.isCeleb;
+                _c = isCeleb;
+                if (!_c) return [3 /*break*/, 8];
+                return [4 /*yield*/, CelebService_1["default"].updateCeleb({
+                        id: userData.celebrity.id,
+                        token: userData.token
+                    })];
+            case 7:
+                _c = (_d.sent());
+                _d.label = 8;
+            case 8:
+                _c;
                 userData && dispatch(exports.actions
                     .getUser(__assign(__assign({ id: '', displayName: '', email: '', imageUrl: '', role: 'user', loggedIn: true, profileUpdated: true }, userData), { token: token || {
                         data: '',

@@ -46,7 +46,7 @@ var Book = function () {
         else {
             !booking &&
                 request.id &&
-                navigate('Payment');
+                navigate('Payment', { data: { token: token } });
         }
     }, [booking]);
     var onSubmit = function (values) {
@@ -71,8 +71,8 @@ var Book = function () {
                 timestamp: 0
             }, status: 'pending', price: price, timestamp: Date.now() }, values);
         dispatch(request_1.requestActions.createRequest(data));
-        request.id &&
-            navigate('Payment', { data: token });
+        // request.id &&
+        // navigate<Routes>('Payment', )
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {

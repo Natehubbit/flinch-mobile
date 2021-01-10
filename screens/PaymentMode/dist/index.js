@@ -48,6 +48,7 @@ var loader_1 = require("../../store/loader");
 var react_redux_1 = require("react-redux");
 var useRequest_1 = require("../../hooks/useRequest");
 var native_1 = require("@react-navigation/native");
+var theme_1 = require("../../config/theme");
 var PaymentMode = function () {
     var dispatch = react_redux_1.useDispatch();
     var request = useRequest_1.useRequest();
@@ -104,7 +105,7 @@ var PaymentMode = function () {
                             id: id,
                             data: request,
                             token: token.data,
-                            celebToken: ((_b = (_a = params) === null || _a === void 0 ? void 0 : _a.token) === null || _b === void 0 ? void 0 : _b.data) || ''
+                            celebToken: ((_b = (_a = params) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.token) || ''
                         }
                     };
                     return [4 /*yield*/, PaymentService_1["default"].init(payload)];
@@ -132,11 +133,11 @@ var PaymentMode = function () {
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
-        backgroundColor: 'white',
+        backgroundColor: theme_1.COLORS.white,
         flex: 1
     },
     scroll: {
-    // paddingTop:10,s
+    // paddingTop:10,
     },
     listItem: {
         elevation: 1.5,

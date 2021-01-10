@@ -66,6 +66,14 @@ const login = (
       type: 'expo'
     }
   })
+  const { isCeleb } = userData.celebrity
+
+  isCeleb &&
+  await CelebService.updateCeleb({
+    id: userData.celebrity.id,
+    token: userData.token
+  })
+
   userData && dispatch(actions
     .getUser({
       id: '',

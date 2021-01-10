@@ -12,6 +12,7 @@ import { PaymentType } from '../../types'
 import { useRequest } from '../../hooks/useRequest'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { Routes } from '../../navigation'
+import { COLORS } from '../../config/theme'
 
 const PaymentMode: React.FC = () => {
   const dispatch = useDispatch()
@@ -57,7 +58,7 @@ const PaymentMode: React.FC = () => {
         id,
         data: request,
         token: token.data,
-        celebToken: (params as any)?.token?.data || ''
+        celebToken: (params as any)?.data?.token || ''
       }
     }
     const data = await PaymentService.init(payload)
@@ -86,18 +87,18 @@ const PaymentMode: React.FC = () => {
   return <View style={styles.container}>
       {/* <SectionHeader title='Payment Method' /> */}
       <ScrollView style={styles.scroll}>
-          {renderOptions()}
+        {renderOptions()}
       </ScrollView>
     </View>
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: COLORS.white,
     flex: 1
   },
   scroll: {
-    // paddingTop:10,s
+    // paddingTop:10,
   },
   listItem: {
     elevation: 1.5,
