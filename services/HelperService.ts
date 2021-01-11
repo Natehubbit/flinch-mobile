@@ -1,4 +1,4 @@
-import { Alert, BackHandler, Share } from 'react-native'
+import { Alert, BackHandler, Share, Vibration } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { storage } from '../config/firebase'
 import { RECORD_DURATION } from '../common/constants'
@@ -258,6 +258,12 @@ export default class HelperService {
       console.log(e.message)
       return false
     }
+  }
+
+  static vibrate () {
+    const INTERVAL = 250
+    const PATTERN = [0, INTERVAL, INTERVAL, INTERVAL]
+    Vibration.vibrate(PATTERN)
   }
 
   static parseToDate (val:number) {

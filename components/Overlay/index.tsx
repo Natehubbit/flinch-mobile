@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, BackHandler, Alert } from 'react-native'
-import { ActivityIndicator, Button, ProgressBar, Snackbar } from 'react-native-paper'
+import { ActivityIndicator, Button, ProgressBar } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import { AltMiniLabel, maxWidth, Paragraph } from '../../common/styledComponents'
 import { COLORS, theme } from '../../config/theme'
 import { useSelect } from '../../hooks/selector'
 import { useLoader } from '../../hooks/useLoader'
-import { useToast } from '../../hooks/useToast'
 import UploadHookService from '../../services/UploadHookService'
 import { loaderActions } from '../../store/loader'
 import { toastActions } from '../../store/toast'
 import Selector from '../Selector'
+import Toast from '../Toast'
 interface AppOverlayProps {
   children: any;
 }
@@ -29,23 +29,6 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   const {
     show: showSelector
   } = useSelect()
-  const {
-    onDismiss,
-    onPress,
-    mode,
-    msg,
-    show,
-    label,
-    duration
-  } = useToast()
-  const style =
-    mode === 'danger'
-      ? { backgroundColor: COLORS.red, color: COLORS.dark }
-      : mode === 'info'
-        ? { backgroundColor: theme.colors.primary, color: COLORS.dark }
-        : mode === 'success'
-          ? { backgroundColor: COLORS.success, color: COLORS.dark }
-          : null
   const loading = paymentLoader ||
     responseLoader ||
       authLoader ||
@@ -71,8 +54,7 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
       label: 'Retry',
       msg: 'An Error Occured during upload...',
       show: true,
-      onDismiss: onHideToast,
-      onPress
+      onDismiss: onHideToast
     }))
   }
   const onHideToast = () => {
@@ -167,21 +149,7 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
         <Selector />
       </View>}
       {/* TOASTS */}
-      <Snackbar
-        style={style}
-        visible={show}
-        theme={{ colors: { accent: style && style.color } }}
-        onDismiss={onDismiss}
-        duration={duration}
-        action={{
-          label,
-          onPress
-        }}
-      >
-        <AltMiniLabel>
-          {msg}
-        </AltMiniLabel>
-      </Snackbar>
+      <Toast/>
     </>
   )
 }

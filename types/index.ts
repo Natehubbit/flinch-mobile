@@ -21,6 +21,7 @@ export type User = {
 } | null;
 
 export interface NotificationMessage {
+    id?:string;
     to?: ExpoPushToken | ExpoPushToken[]|string;
     data?: object;
     title?: string;

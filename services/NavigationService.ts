@@ -14,4 +14,12 @@ export default class NavigationService {
       routes: [{ name: route }]
     })
   }
+
+  static navigate (route:Routes, params:object) {
+    setTimeout(() => {
+      this.navRef && this
+        .navRef
+        .navigate<Routes>(route, params)
+    }, 200)
+  }
 }

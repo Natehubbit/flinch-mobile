@@ -66,29 +66,31 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
 };
 var _a;
 exports.__esModule = true;
-exports.notificationsActions = exports.celebsSlice = exports.actions = void 0;
+exports.notificationsActions = exports.notificationsSlice = exports.actions = void 0;
 var toolkit_1 = require("@reduxjs/toolkit");
 var CelebService_1 = require("../services/CelebService");
 var NotificationService_1 = require("../services/NotificationService");
 var UserService_1 = require("../services/UserService");
+var loader_1 = require("./loader");
 var user_1 = require("./user");
 var initState = [];
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'notifications',
     initialState: initState,
     reducers: {
-        getNotifications: function (state) {
-            return state;
+        getNotifications: function (state, _a) {
+            var payload = _a.payload;
+            return payload;
         },
         updateNotifications: function (state, _a) {
             var payload = _a.payload;
             return __spreadArrays(state, [payload]);
         },
         clearNotifications: function () {
-            return [];
+            return initState;
         }
     }
-}), _a).actions, exports.celebsSlice = __rest(_a, ["actions"]);
+}), _a).actions, exports.notificationsSlice = __rest(_a, ["actions"]);
 var getDeviceToken = function () { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, id, token, _b, isCeleb, celebId, tkn, usr, updatedCeleb, updatedUser;
     return __generator(this, function (_c) {
@@ -130,4 +132,32 @@ var getDeviceToken = function () { return function (dispatch, getState) { return
         }
     });
 }); }; };
-exports.notificationsActions = __assign(__assign({}, exports.actions), { getDeviceToken: getDeviceToken });
+var getNotifications = function () { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, userId, role, celebrity, isUser, id, data;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                dispatch(loader_1.loaderActions.loading('requestsLoader'));
+                _a = getState().user, userId = _a.id, role = _a.role, celebrity = _a.celebrity;
+                isUser = role === 'user';
+                id = isUser
+                    ? userId
+                    : celebrity.id;
+                return [4 /*yield*/, NotificationService_1["default"].getNotifications(id)];
+            case 1:
+                data = _b.sent();
+                data && dispatch(exports.actions.getNotifications(data));
+                dispatch(loader_1.loaderActions.loaded('requestsLoader'));
+                return [2 /*return*/];
+        }
+    });
+}); }; };
+var listen = function (data) { return function (dispatch) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        dispatch(exports.actions.getNotifications(data));
+        return [2 /*return*/];
+    });
+}); }; };
+exports.notificationsActions = __assign(__assign({}, exports.actions), { getDeviceToken: getDeviceToken,
+    getNotifications: getNotifications,
+    listen: listen });

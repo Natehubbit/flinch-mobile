@@ -17,7 +17,8 @@
     "android":{
       "package": "com.flinch",
       "googleServicesFile": "./google-services.json",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true
     },
     "ios": {
       "bundleIdentifier": "com.shoutouts.flinch",

@@ -14,14 +14,15 @@ import { useRequests } from '../../hooks/useRequests'
 import { initStateRequest } from '../../common/constants'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
+import Navbar from '../../components/Navbar'
 
 const Request: React.FC = () => {
   const dispatch = useDispatch()
   const [rejecting, setRejecting] = useState(false)
   const { role } = useUser()
   const { navigate, goBack } = useNavigation()
-  const { params } = useRoute<RequestScreenRouteProps>()
-  const { id } = params
+  const { params, name: route } = useRoute<RequestScreenRouteProps>()
+  const { id, data } = params
   const {
     occasion,
     status,
@@ -38,7 +39,12 @@ const Request: React.FC = () => {
       videoUri: uri,
       thumbnailUri
     }
-  } = useRequests('id', id)[0] || initStateRequest
+  } = (
+    id
+      ? useRequests('id', id)[0]
+      : data
+  ) || initStateRequest
+
   const summarize = instructions.length > 99
   const info = summarize
     ? instructions.substring(0, 99)
@@ -68,6 +74,7 @@ const Request: React.FC = () => {
     setRejecting(false)
   }
   return <>
+    <Navbar hideBell title={route} />
         <ScrollView style={styles.container}>
             <View style={styles.panelContainer}>
                 <View style={styles.panel}>

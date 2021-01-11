@@ -7,8 +7,8 @@ const initState: Toast = {
   label: '',
   mode: 'default',
   duration: 7000,
-  onDismiss: () => {},
-  onPress: () => {}
+  onDismiss: undefined,
+  onPress: undefined
 }
 
 export const { actions, ...toastSlice } = createSlice({

@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -43,6 +54,18 @@ var Notifications = require("expo-notifications");
 var NotificationsRef = firebase_1.db.collection('notifications');
 var NotificationService = /** @class */ (function () {
     function NotificationService() {
+        var _this = this;
+        Notifications.setNotificationHandler({
+            handleNotification: function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/, ({
+                            shouldPlaySound: true,
+                            shouldShowAlert: true,
+                            shouldSetBadge: true
+                        })];
+                });
+            }); }
+        });
     }
     NotificationService.getToken = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -62,9 +85,31 @@ var NotificationService = /** @class */ (function () {
             });
         });
     };
-    NotificationService.getNotifications = function (id) {
+    NotificationService.updateNotification = function (id, data) {
         return __awaiter(this, void 0, void 0, function () {
-            var res, e_2;
+            var e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, NotificationsRef
+                                .doc(id)
+                                .update(__assign({}, data))];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/, true];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
+                        return [2 /*return*/, false];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    NotificationService.getNotifications = function (id) {
+        return __awaiter(this, void 0, Promise, function () {
+            var res, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -76,19 +121,33 @@ var NotificationService = /** @class */ (function () {
                         res = _a.sent();
                         return [2 /*return*/, res
                                 .docs
-                                .map(function (d) { return d.data(); })];
+                                .map(function (d) { return (__assign({ id: d.id }, d.data())); })];
                     case 2:
-                        e_2 = _a.sent();
-                        console.log(e_2.message);
+                        e_3 = _a.sent();
+                        console.log(e_3.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
+    NotificationService.listener = function (id, callback) {
+        try {
+            return NotificationsRef
+                .where('recipientId', '==', id)
+                .onSnapshot(function (snapshot) {
+                var data = snapshot.docs.map(function (doc) { return (__assign({ id: doc.id }, doc.data())); });
+                callback && callback(data);
+            });
+        }
+        catch (e) {
+            console.log(e.message);
+            return null;
+        }
+    };
     NotificationService.getPermission = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var granted, e_3;
+            var granted, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -99,17 +158,31 @@ var NotificationService = /** @class */ (function () {
                         granted = (_a.sent()).granted;
                         return [2 /*return*/, granted];
                     case 2:
-                        e_3 = _a.sent();
-                        console.log(e_3.message);
+                        e_4 = _a.sent();
+                        console.log(e_4.message);
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
-    NotificationService.responseListener = function () {
+    NotificationService.responseListener = function (callback) {
+        var granted = this.getPermission();
+        granted &&
+            Notifications
+                .addNotificationResponseReceivedListener(function (response) {
+                callback && callback(response);
+            });
     };
-    NotificationService.receivedListener = function () {
+    NotificationService.receivedListener = function (callback) {
+        var granted = this.getPermission();
+        granted &&
+            Notifications.addNotificationReceivedListener(function (e) {
+                callback && callback(e);
+            });
+    };
+    NotificationService.removeListeners = function () {
+        Notifications.removeAllNotificationListeners();
     };
     return NotificationService;
 }());

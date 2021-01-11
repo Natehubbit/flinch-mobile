@@ -31,8 +31,8 @@ var initState = {
     label: '',
     mode: 'default',
     duration: 7000,
-    onDismiss: function () { },
-    onPress: function () { }
+    onDismiss: undefined,
+    onPress: undefined
 };
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'toast',

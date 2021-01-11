@@ -77,14 +77,29 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.getRequest = function (id) {
         return __awaiter(this, void 0, void 0, function () {
+            var res, e_2;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, RequestRef
+                                .doc(id)
+                                .get()];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, __assign({ id: res.id }, res.data())];
+                    case 2:
+                        e_2 = _a.sent();
+                        console.log(e_2.message);
+                        return [2 /*return*/, null];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };
     RequestService.getCelebRequests = function (id) {
         return __awaiter(this, void 0, Promise, function () {
-            var res, e_2;
+            var res, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -98,8 +113,8 @@ var RequestService = /** @class */ (function () {
                                 .docs
                                 .map(function (d) { return (__assign({ id: d.id }, d.data())); })];
                     case 2:
-                        e_2 = _a.sent();
-                        console.log(e_2.message);
+                        e_3 = _a.sent();
+                        console.log(e_3.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }
@@ -108,7 +123,7 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.approveRequest = function (id, appUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var asset, duration, video, uri, thumbUri, thumb, thumbUrl, _a, _b, e_3;
+            var asset, duration, video, uri, thumbUri, thumb, thumbUrl, _a, _b, e_4;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -185,8 +200,8 @@ var RequestService = /** @class */ (function () {
                         _b;
                         return [2 /*return*/, null];
                     case 13:
-                        e_3 = _c.sent();
-                        console.log(e_3.message);
+                        e_4 = _c.sent();
+                        console.log(e_4.message);
                         return [2 /*return*/, null];
                     case 14: return [2 /*return*/];
                 }
@@ -195,7 +210,7 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.rejectRequest = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var e_4;
+            var e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -210,8 +225,8 @@ var RequestService = /** @class */ (function () {
                         _a.sent();
                         return [2 /*return*/, true];
                     case 2:
-                        e_4 = _a.sent();
-                        alert(e_4.message);
+                        e_5 = _a.sent();
+                        alert(e_5.message);
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
@@ -224,7 +239,7 @@ var RequestService = /** @class */ (function () {
        */
     RequestService.getAllRequests = function (id) {
         return __awaiter(this, void 0, Promise, function () {
-            var res, e_5;
+            var res, e_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -237,8 +252,8 @@ var RequestService = /** @class */ (function () {
                         res = _a.sent();
                         return [2 /*return*/, res.docs.map(function (d) { return (__assign(__assign(__assign({}, constants_1.initStateRequest), d.data()), { id: d.id })); })];
                     case 2:
-                        e_5 = _a.sent();
-                        console.log(e_5.message);
+                        e_6 = _a.sent();
+                        console.log(e_6.message);
                         return [2 /*return*/, null];
                     case 3: return [2 /*return*/];
                 }

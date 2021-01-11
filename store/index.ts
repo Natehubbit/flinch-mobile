@@ -15,6 +15,7 @@ import { toastSlice } from './toast'
 import { responseSlice } from './response'
 import { downloadsSlice } from './downloads'
 import { selectorSlice } from './selector'
+import { notificationsSlice } from './notifications'
 
 const rootReducer = combineReducers({
   [userSlice.name]: userSlice.reducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
   [toastSlice.name]: toastSlice.reducer,
   [responseSlice.name]: responseSlice.reducer,
   [downloadsSlice.name]: downloadsSlice.reducer,
-  [selectorSlice.name]: selectorSlice.reducer
+  [selectorSlice.name]: selectorSlice.reducer,
+  [notificationsSlice.name]: notificationsSlice.reducer
 })
 
 const persistConfig:PersistConfig<unknown, any, any, any> = {

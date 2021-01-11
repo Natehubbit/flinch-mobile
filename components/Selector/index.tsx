@@ -40,9 +40,14 @@ const Selector: React.FC<SelectorProps> = ({
   return show && (
       <View style={[styles.container]}>
         <SubHeading>{title}</SubHeading>
-          <ScrollView contentContainerStyle={[styles.scroll]}>
+          <ScrollView
+            keyboardShouldPersistTaps='handled'
+            contentContainerStyle={[styles.scroll]}>
             {options.map((option, i) =>
-            <TouchableRipple onPress={() => onPress(option)} key={i} style={[styles.option]}>
+            <TouchableRipple
+              onPress={() => onPress(option)}
+              key={i}
+              style={[styles.option]}>
               <>
                 <RadioButton
                   color={theme.colors.primary}

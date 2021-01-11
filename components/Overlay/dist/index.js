@@ -19,25 +19,17 @@ var styledComponents_1 = require("../../common/styledComponents");
 var theme_1 = require("../../config/theme");
 var selector_1 = require("../../hooks/selector");
 var useLoader_1 = require("../../hooks/useLoader");
-var useToast_1 = require("../../hooks/useToast");
 var UploadHookService_1 = require("../../services/UploadHookService");
 var loader_1 = require("../../store/loader");
 var toast_1 = require("../../store/toast");
 var Selector_1 = require("../Selector");
+var Toast_1 = require("../Toast");
 var AppOverlay = function (_a) {
     var children = _a.children, props = __rest(_a, ["children"]);
     var dispatch = react_redux_1.useDispatch();
     var _b = react_1.useState(0), progress = _b[0], setProgress = _b[1];
     var _c = useLoader_1.useLoader(), paymentLoader = _c.paymentLoader, responseLoader = _c.responseLoader, authLoader = _c.authLoader;
     var showSelector = selector_1.useSelect().show;
-    var _d = useToast_1.useToast(), onDismiss = _d.onDismiss, onPress = _d.onPress, mode = _d.mode, msg = _d.msg, show = _d.show, label = _d.label, duration = _d.duration;
-    var style = mode === 'danger'
-        ? { backgroundColor: theme_1.COLORS.red, color: theme_1.COLORS.dark }
-        : mode === 'info'
-            ? { backgroundColor: theme_1.theme.colors.primary, color: theme_1.COLORS.dark }
-            : mode === 'success'
-                ? { backgroundColor: theme_1.COLORS.success, color: theme_1.COLORS.dark }
-                : null;
     var loading = paymentLoader ||
         responseLoader ||
         authLoader ||
@@ -59,8 +51,7 @@ var AppOverlay = function (_a) {
             label: 'Retry',
             msg: 'An Error Occured during upload...',
             show: true,
-            onDismiss: onHideToast,
-            onPress: onPress
+            onDismiss: onHideToast
         }));
     };
     var onHideToast = function () {
@@ -119,11 +110,7 @@ var AppOverlay = function (_a) {
             responseLoader && renderUploading(),
             authLoader && renderSubmitting(),
             react_1["default"].createElement(Selector_1["default"], null)),
-        react_1["default"].createElement(react_native_paper_1.Snackbar, { style: style, visible: show, theme: { colors: { accent: style && style.color } }, onDismiss: onDismiss, duration: duration, action: {
-                label: label,
-                onPress: onPress
-            } },
-            react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, msg))));
+        react_1["default"].createElement(Toast_1["default"], null)));
 };
 exports["default"] = AppOverlay;
 var styles = react_native_1.StyleSheet.create({

@@ -3,21 +3,24 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { RouteParams } from '../../navigation'
-import { useDispatch } from 'react-redux'
-import { toastActions } from '../../store/toast'
 import { theme } from '../../config/theme'
 import Navbar from '../../components/Navbar'
 import { ProgressBar } from 'react-native-paper'
 import { WebViewNavigation, WebViewProgressEvent } from 'react-native-webview/lib/WebViewTypes'
 import { PAYMENT_CALLBACK } from '../../common/constants'
+import { StackHeaderProps } from '@react-navigation/stack'
 
-interface WebViewScreenProps {}
+interface WebViewScreenProps extends StackHeaderProps {
+}
 
-const WebViewScreen:React.FC<WebViewScreenProps> = () => {
-  const dispatch = useDispatch()
+const WebViewScreen:React.FC<WebViewScreenProps> = ({
+  navigation
+}) => {
   const { params } = useRoute<RouteProp<RouteParams, 'WebView'>>()
   const [progress, setProgress] = useState(0)
-  const { goBack, reset } = useNavigation()
+  const {
+    goBack
+  } = useNavigation()
   const { uri } = params
   const showProgress = progress === 1
   if (!uri) {
@@ -29,19 +32,7 @@ const WebViewScreen:React.FC<WebViewScreenProps> = () => {
     setProgress(nativeEvent.progress)
   }
   const onComplete = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Home', key: null }]
-    })
-    dispatch(toastActions.setToast({
-      label: 'Okay',
-      msg: 'Your Request is being processed',
-      show: true,
-      duration: 10000,
-      mode: 'info',
-      onDismiss: () => dispatch(toastActions.resetToast()),
-      onPress: () => dispatch(toastActions.resetToast())
-    }))
+    navigation.popToTop()
   }
 
   const onCallbackUrl = (e:WebViewNavigation) => {

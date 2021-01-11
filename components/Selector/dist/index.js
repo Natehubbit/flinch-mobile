@@ -31,7 +31,7 @@ var Selector = function (_a) {
     };
     return show && (react_1["default"].createElement(react_native_1.View, { style: [styles.container] },
         react_1["default"].createElement(styledComponents_1.SubHeading, null, title),
-        react_1["default"].createElement(react_native_1.ScrollView, { contentContainerStyle: [styles.scroll] }, options.map(function (option, i) {
+        react_1["default"].createElement(react_native_1.ScrollView, { keyboardShouldPersistTaps: 'handled', contentContainerStyle: [styles.scroll] }, options.map(function (option, i) {
             return react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: function () { return onPress(option); }, key: i, style: [styles.option] },
                 react_1["default"].createElement(react_1["default"].Fragment, null,
                     react_1["default"].createElement(react_native_paper_1.RadioButton, { color: theme_1.theme.colors.primary, key: i, value: option, status: checked(option), onPress: function () { return onPress(option); } }),

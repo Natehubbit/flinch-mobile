@@ -2,7 +2,6 @@ import { createStackNavigator, StackHeaderProps } from '@react-navigation/stack'
 import React from 'react'
 import { SLIDE_ANIMATION } from '../../common/constants'
 import Navbar from '../../components/Navbar'
-import Request from '../../screens/Request'
 import VideoRecord from '../../screens/VideoRecord'
 import VideoUpload from '../../screens/VideoUpload'
 import RequestsTabs from '../RequestsTabs'
@@ -26,7 +25,6 @@ const RequestStack: React.FC = () => {
         }}
     >
       <Stack.Screen name='Requests' component={RequestsTabs} />
-      <Stack.Screen name='Request' component={Request} />
       <Stack.Screen name='VideoUpload' component={VideoUpload} />
       <Stack.Screen name='RecordVideo' component={VideoRecord} />
     </Stack.Navigator>

@@ -7,19 +7,15 @@ var styledComponents_1 = require("../../common/styledComponents");
 var theme_1 = require("../../config/theme");
 var useUser_1 = require("../../hooks/useUser");
 var NotificationCard = function (_a) {
-    var viewed = _a.viewed, type = _a.type;
+    var read = _a.read, msg = _a.msg, type = _a.type;
     var imageUrl = useUser_1.useUser().imageUrl;
-    var opacity = viewed ? 0.4 : 1;
+    var opacity = read ? 0.4 : 1;
     return (react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: function () { return console.log('d'); }, style: [styles.container, { opacity: opacity }] },
         react_1["default"].createElement(react_native_1.View, { style: [styles.info] },
             react_1["default"].createElement(react_native_1.View, null,
                 react_1["default"].createElement(react_native_1.Image, { source: { uri: imageUrl }, style: [styles.img] })),
             react_1["default"].createElement(react_native_1.View, { style: [styles.content] },
-                react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, numberOfLines: 2, style: [styles.msg] },
-                    react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.name] },
-                        "Shatta Wale",
-                        '\t'),
-                    "has met your Request you are ama who will not enter my heart to destroy shit"),
+                react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, numberOfLines: 2, style: [styles.msg] }, msg),
                 react_1["default"].createElement(styledComponents_1.Paragraph, { black: true, style: [styles.time] }, "20 minutes ago")))));
 };
 exports["default"] = NotificationCard;

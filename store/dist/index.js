@@ -16,6 +16,7 @@ var toast_1 = require("./toast");
 var response_1 = require("./response");
 var downloads_1 = require("./downloads");
 var selector_1 = require("./selector");
+var notifications_1 = require("./notifications");
 var rootReducer = toolkit_1.combineReducers((_a = {},
     _a[user_1.userSlice.name] = user_1.userSlice.reducer,
     _a[loader_1.loaderSlice.name] = loader_1.loaderSlice.reducer,
@@ -26,6 +27,7 @@ var rootReducer = toolkit_1.combineReducers((_a = {},
     _a[response_1.responseSlice.name] = response_1.responseSlice.reducer,
     _a[downloads_1.downloadsSlice.name] = downloads_1.downloadsSlice.reducer,
     _a[selector_1.selectorSlice.name] = selector_1.selectorSlice.reducer,
+    _a[notifications_1.notificationsSlice.name] = notifications_1.notificationsSlice.reducer,
     _a));
 var persistConfig = {
     key: 'root',

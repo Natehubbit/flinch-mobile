@@ -407,6 +407,11 @@ var HelperService = /** @class */ (function () {
             });
         });
     };
+    HelperService.vibrate = function () {
+        var INTERVAL = 250;
+        var PATTERN = [0, INTERVAL, INTERVAL, INTERVAL];
+        react_native_1.Vibration.vibrate(PATTERN);
+    };
     HelperService.parseToDate = function (val) {
         var diffDays = moment_1["default"]().diff(val, 'day');
         var date = diffDays < 3

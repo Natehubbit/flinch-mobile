@@ -3,28 +3,30 @@ import { AppState } from '.'
 import CelebService from '../services/CelebService'
 import NotificationService from '../services/NotificationService'
 import UserService from '../services/UserService'
-import { Notification } from '../types'
+import { NotificationMessage } from '../types'
+import { loaderActions } from './loader'
 import { userActions } from './user'
 
-const initState: Notification[] = []
+const initState: NotificationMessage[] = []
 
-export const { actions, ...celebsSlice } = createSlice({
+export const { actions, ...notificationsSlice } = createSlice({
   name: 'notifications',
   initialState: initState,
   reducers: {
     getNotifications (
-      state
-    ): Notification[] {
-      return state
-    },
-    updateNotifications (
       state,
-      { payload }: PayloadAction<Notification>
-    ): Notification[] {
+      { payload }: PayloadAction<NotificationMessage[]>
+    ): NotificationMessage[] {
+      return payload
+    },
+    update (
+      state,
+      { payload }: PayloadAction<NotificationMessage>
+    ): NotificationMessage[] {
       return [...state, payload]
     },
-    clearNotifications ():Notification[] {
-      return []
+    clearNotifications ():NotificationMessage[] {
+      return initState
     }
   }
 })
@@ -75,7 +77,44 @@ const getDeviceToken = () => async (
   }
 }
 
+const getNotifications = () => async (
+  dispatch:Dispatch,
+  getState:()=>AppState
+) => {
+  dispatch(loaderActions.loading('requestsLoader'))
+  const {
+    id: userId,
+    role,
+    celebrity
+  } = getState().user
+  const isUser = role === 'user'
+  const id = isUser
+    ? userId
+    : celebrity.id
+  const data = await NotificationService.getNotifications(id)
+  data && dispatch(actions.getNotifications(data))
+  dispatch(loaderActions.loaded('requestsLoader'))
+}
+
+const listen = (
+  data: NotificationMessage[]
+) => async (
+  dispatch:Dispatch
+) => {
+  dispatch(actions.getNotifications(data))
+}
+
+const update = (
+  id: string
+) => async (
+  dispatch:Dispatch
+) => {
+  // const updated = await NotificationService.
+}
+
 export const notificationsActions = {
   ...actions,
-  getDeviceToken
+  getDeviceToken,
+  getNotifications,
+  listen
 }

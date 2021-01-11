@@ -23,7 +23,18 @@ export default class RequestService {
   }
 
   static async getRequest (id:string) {
-
+    try {
+      const res = await RequestRef
+        .doc(id)
+        .get()
+      return {
+        id: res.id,
+        ...res.data()
+      } as Request
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
   }
 
   static async getCelebRequests (

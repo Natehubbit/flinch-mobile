@@ -6,14 +6,13 @@ var react_native_1 = require("react-native");
 var react_native_gesture_handler_1 = require("react-native-gesture-handler");
 var Navbar_1 = require("../../components/Navbar");
 var NotificationCard_1 = require("../../components/NotificationCard");
+var useNotifications_1 = require("../../hooks/useNotifications");
 var Notifications = function () {
     var name = native_1.useRoute().name;
+    var list = useNotifications_1["default"]().notificationList;
     return (react_1["default"].createElement(react_native_1.SafeAreaView, { style: [styles.container] },
         react_1["default"].createElement(Navbar_1["default"], { title: name, hideBell: true, left: 'back-arrow' }),
-        react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, null,
-            react_1["default"].createElement(NotificationCard_1["default"], null),
-            react_1["default"].createElement(NotificationCard_1["default"], null),
-            react_1["default"].createElement(NotificationCard_1["default"], { viewed: true }))));
+        react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, null, list.map(function (notification) { return (react_1["default"].createElement(NotificationCard_1["default"], { msg: notification.body, key: notification.id })); }))));
 };
 exports["default"] = Notifications;
 var styles = react_native_1.StyleSheet.create({

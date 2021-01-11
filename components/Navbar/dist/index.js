@@ -8,9 +8,11 @@ var vector_icons_1 = require("@expo/vector-icons");
 var theme_1 = require("../../config/theme");
 var menu_svg_1 = require("../../assets/images/menu.svg");
 var menuWhite_svg_1 = require("../../assets/images/menuWhite.svg");
+var useNotifications_1 = require("../../hooks/useNotifications");
 var Navbar = function (_a) {
     var title = _a.title, isHome = _a.isHome, hideMenu = _a.hideMenu, hideBell = _a.hideBell, edit = _a.edit, showCancel = _a.showCancel, invert = _a.invert, onCancel = _a.onCancel, onEdit = _a.onEdit;
     var _b = native_1.useNavigation(), navigate = _b.navigate, canGoBack = _b.canGoBack, dispatch = _b.dispatch, goBack = _b.goBack;
+    var showBadge = useNotifications_1["default"]().showBadge;
     var iconColor = invert
         ? theme_1.COLORS.white
         : theme_1.COLORS.iconGrey;
@@ -26,7 +28,7 @@ var Navbar = function (_a) {
     };
     var renderIcon = function (icon, badge) { return (react_1["default"].createElement(react_native_1.View, { style: styles.iconContainer },
         react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { color: iconColor, name: icon, style: [styles.icon], size: 24 }),
-        badge && react_1["default"].createElement(react_native_paper_1.Badge, { size: 9, style: styles.badge, visible: true }))); };
+        badge && showBadge && react_1["default"].createElement(react_native_paper_1.Badge, { size: 9, style: styles.badge, visible: true }))); };
     var openNotifs = function () {
         return navigate('Notifications');
     };

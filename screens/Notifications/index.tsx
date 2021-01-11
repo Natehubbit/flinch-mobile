@@ -4,9 +4,11 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import Navbar from '../../components/Navbar'
 import NotificationCard from '../../components/NotificationCard'
+import useNotifications from '../../hooks/useNotifications'
 
 const Notifications = () => {
   const { name } = useRoute()
+  const { notificationList: list } = useNotifications()
   return (
     <SafeAreaView style={[styles.container]}>
       <Navbar
@@ -15,9 +17,12 @@ const Notifications = () => {
         left='back-arrow'
       />
       <ScrollView>
-        <NotificationCard/>
-        <NotificationCard/>
-        <NotificationCard viewed/>
+        {list.map(notification => (
+          <NotificationCard
+            msg={notification.body}
+            key={notification.id}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   )

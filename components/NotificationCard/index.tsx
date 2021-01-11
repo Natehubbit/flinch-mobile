@@ -6,16 +6,18 @@ import { COLORS } from '../../config/theme'
 import { useUser } from '../../hooks/useUser'
 
 interface NotificationCardProps {
-  viewed?:boolean;
+  msg: string;
+  read?:boolean;
   type?:'success'|'failed'|'default'
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({
-  viewed,
+  read,
+  msg,
   type
 }) => {
   const { imageUrl } = useUser()
-  const opacity = viewed ? 0.4 : 1
+  const opacity = read ? 0.4 : 1
   return (
     <TouchableRipple
       onPress={() => console.log('d')}
@@ -32,11 +34,10 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
         </View>
         <View style={[styles.content]}>
           <Paragraph black numberOfLines={2} style={[styles.msg]}>
-            <Paragraph black style={[styles.name]}>
+            {/* <Paragraph black style={[styles.name]}>
               Shatta Wale{'\t'}
-            </Paragraph>
-            has met your Request you are ama who will not
-            enter my heart to destroy shit
+            </Paragraph> */}
+            {msg}
           </Paragraph>
           <Paragraph black style={[styles.time]}>
             20 minutes ago

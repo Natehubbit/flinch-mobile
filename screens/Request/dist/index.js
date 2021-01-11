@@ -51,14 +51,17 @@ var useRequests_1 = require("../../hooks/useRequests");
 var constants_1 = require("../../common/constants");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
+var Navbar_1 = require("../../components/Navbar");
 var Request = function () {
     var dispatch = react_redux_1.useDispatch();
     var _a = react_1.useState(false), rejecting = _a[0], setRejecting = _a[1];
     var role = useUser_1.useUser().role;
     var _b = native_1.useNavigation(), navigate = _b.navigate, goBack = _b.goBack;
-    var params = native_1.useRoute().params;
-    var id = params.id;
-    var _c = useRequests_1.useRequests('id', id)[0] || constants_1.initStateRequest, occasion = _c.occasion, status = _c.status, instructions = _c.instructions, recipient = _c.recipient, price = _c.price, _d = _c.celebrity, name = _d.name, imageUrl = _d.imageUrl, _e = _c.response, duration = _e.duration, timestamp = _e.timestamp, uri = _e.videoUri, thumbnailUri = _e.thumbnailUri;
+    var _c = native_1.useRoute(), params = _c.params, route = _c.name;
+    var id = params.id, data = params.data;
+    var _d = (id
+        ? useRequests_1.useRequests('id', id)[0]
+        : data) || constants_1.initStateRequest, occasion = _d.occasion, status = _d.status, instructions = _d.instructions, recipient = _d.recipient, price = _d.price, _e = _d.celebrity, name = _e.name, imageUrl = _e.imageUrl, _f = _d.response, duration = _f.duration, timestamp = _f.timestamp, uri = _f.videoUri, thumbnailUri = _f.thumbnailUri;
     var summarize = instructions.length > 99;
     var info = summarize
         ? instructions.substring(0, 99)
@@ -91,6 +94,7 @@ var Request = function () {
         setRejecting(false);
     };
     return react_1["default"].createElement(react_1["default"].Fragment, null,
+        react_1["default"].createElement(Navbar_1["default"], { hideBell: true, title: route }),
         react_1["default"].createElement(react_native_1.ScrollView, { style: styles.container },
             react_1["default"].createElement(react_native_1.View, { style: styles.panelContainer },
                 react_1["default"].createElement(react_native_1.View, { style: styles.panel },

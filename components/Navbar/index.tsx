@@ -8,6 +8,7 @@ import { COLORS, theme } from '../../config/theme'
 import MenuIcon from '../../assets/images/menu.svg'
 import { Routes } from '../../navigation'
 import MenuIconAlt from '../../assets/images/menuWhite.svg'
+import useNotifications from '../../hooks/useNotifications'
 
 interface NavProps {
     title?:string;
@@ -42,6 +43,7 @@ const Navbar: React.FC<NavProps> = ({
     dispatch,
     goBack
   } = useNavigation()
+  const { showBadge } = useNotifications()
   const iconColor = invert
     ? COLORS.white
     : COLORS.iconGrey
@@ -61,7 +63,7 @@ const Navbar: React.FC<NavProps> = ({
               style={[styles.icon]}
               size={24}
             />
-            {badge && <Badge
+            {badge && showBadge && <Badge
               size={9}
               style={styles.badge}
               visible
