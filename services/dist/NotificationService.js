@@ -75,7 +75,7 @@ var NotificationService = /** @class */ (function () {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, expo_notifications_1.getExpoPushTokenAsync()];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 1: return [2 /*return*/, (_a.sent()).data];
                     case 2:
                         e_1 = _a.sent();
                         react_native_1.Alert.alert('Error', e_1.message);

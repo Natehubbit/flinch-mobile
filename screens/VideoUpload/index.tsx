@@ -13,22 +13,25 @@ import { requestsActions } from '../../store/requests'
 import { toastActions } from '../../store/toast'
 import * as MediaLibrary from 'expo-media-library'
 import Navbar from '../../components/Navbar'
+import { StackHeaderProps } from '@react-navigation/stack'
 
-const VideoUpload = () => {
+interface VideoUploadProps extends StackHeaderProps {
+
+}
+
+const VideoUpload:React.FC<VideoUploadProps> = ({
+  navigation
+}) => {
   const dispatch = useDispatch()
   const toast = useToast()
   const [videoUri, setVideoUri] = useState('')
   const { params: { id } } = useRoute<UploadVideoScreenRouteProps>()
-  const { navigate, reset } = useNavigation()
+  const { navigate } = useNavigation()
   useEffect(() => {
-    videoUri && onSend()
+    !!videoUri && onSend()
   }, [videoUri])
   const onReset = () => {
-    reset({
-      index: 0,
-      routes: [{ name: 'Requests', key: null }]
-    })
-    setVideoUri('')
+    navigation.popToTop()
   }
   const onUploadVideo = async () => {
     await HelperService.uploadVideo(setVideoUri)
@@ -38,11 +41,11 @@ const VideoUpload = () => {
     allowed && navigate<Routes>('RecordVideo', { id })
   }
   const onSend = async () => {
-    dispatch(toastActions.setToast({
-      ...toast,
-      show: false,
-      onPress: send
-    }))
+    // dispatch(toastActions.setToast({
+    //   ...toast,
+    //   show: false,
+    //   onPress: send
+    // }))
     send()
   }
   const send = () => {

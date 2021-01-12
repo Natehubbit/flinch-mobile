@@ -48,12 +48,18 @@ var PaymentService = /** @class */ (function () {
    * @param id request id
    */
     PaymentService.onPayed = function (id, callBack) {
-        RequestRef.doc(id).onSnapshot(function (snap) {
-            var req = snap.data();
-            req.payment.payed &&
-                callBack &&
-                callBack();
-        });
+        try {
+            return RequestRef.doc(id).onSnapshot(function (snap) {
+                var req = snap.data();
+                req.payment.payed &&
+                    callBack &&
+                    callBack();
+            });
+        }
+        catch (e) {
+            alert(e.message);
+            return null;
+        }
     };
     PaymentService.init = function (data) { return __awaiter(void 0, void 0, Promise, function () {
         var result, res, error_1;

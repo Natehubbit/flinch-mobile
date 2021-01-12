@@ -61,10 +61,7 @@ const login = (
   const userData = user && await UserService.getUser(user.id)
   userData && await UserService.update({
     id: userData.id,
-    token: token || {
-      data: '',
-      type: 'expo'
-    }
+    token: token || ''
   })
   const { isCeleb } = userData?.celebrity || {
     isCeleb: false,
@@ -73,10 +70,7 @@ const login = (
   isCeleb &&
   await CelebService.updateCeleb({
     id: userData.celebrity.id,
-    token: token || {
-      data: '',
-      type: 'expo'
-    }
+    token: token || ''
   })
 
   userData && dispatch(actions
@@ -110,10 +104,7 @@ const signup = (
     await UserService.addUser(user)
   userData && await UserService.update({
     id: userData.id,
-    token: token || {
-      data: '',
-      type: 'expo'
-    }
+    token: token || ''
   })
   userData && dispatch(actions
     .getUser({

@@ -27,11 +27,16 @@ export default class PaymentService {
    * @param id request id
    */
     static onPayed (id:string, callBack?:()=>void) {
-      RequestRef.doc(id).onSnapshot(snap => {
-        const req = snap.data()
-        req.payment.payed &&
-        callBack &&
-        callBack()
-      })
+      try {
+        return RequestRef.doc(id).onSnapshot(snap => {
+          const req = snap.data()
+          req.payment.payed &&
+          callBack &&
+          callBack()
+        })
+      } catch (e) {
+        alert(e.message)
+        return null
+      }
     }
 }

@@ -43,6 +43,8 @@ export default class RequestService {
     try {
       const res = await RequestRef
         .where('celebrity.id', '==', id)
+        .where('payment.payed', '==', true)
+        .orderBy('response.timestamp', 'desc')
         .get()
       return res
         .docs
@@ -94,7 +96,8 @@ export default class RequestService {
             'response.status': 'approved',
             'response.duration': duration,
             status: 'success',
-            'response.thumbnailUri': thumbUrl
+            'response.thumbnailUri': thumbUrl,
+            'response.timestamp': Date.now()
           })
         asset && await HelperService.deleteMediaInfo([asset])
         return {
@@ -139,6 +142,7 @@ export default class RequestService {
     try {
       const res = await RequestRef
         .where('requestor.id', '==', id)
+        .where('payment.payed', '==', true)
         .orderBy('timestamp', 'desc')
         .get()
       return res.docs.map(d => ({
@@ -167,6 +171,7 @@ export default class RequestService {
       return RequestRef
         .where(userRefId, '==', id)
         .where('status', '==', 'pending')
+        .where('payment.payed', '==', true)
         .orderBy('timestamp', 'desc')
         .onSnapshot(snap => {
           callback && callback(snap

@@ -63,7 +63,8 @@ var HelperService = /** @class */ (function () {
             var granted, res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, ImagePicker.requestCameraRollPermissionsAsync()];
+                    case 0: return [4 /*yield*/, ImagePicker
+                            .requestCameraRollPermissionsAsync()];
                     case 1:
                         granted = (_a.sent()).granted;
                         if (!granted)

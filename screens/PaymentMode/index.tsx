@@ -27,6 +27,7 @@ const PaymentMode: React.FC = () => {
     email,
     token
   } = useUser()
+  console.log(token)
   const onSelect = async (type:string) => {
     dispatch(loaderActions.loading('paymentLoader'))
     const isCreditCard = type === 'Credit Card'
@@ -57,7 +58,7 @@ const PaymentMode: React.FC = () => {
         requestId: request.id,
         id,
         data: request,
-        token: token.data,
+        token,
         celebToken: (params as any)?.data?.token || ''
       }
     }

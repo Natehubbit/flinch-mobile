@@ -57,6 +57,7 @@ var PaymentMode = function () {
     var cost = request.price.amount.toString();
     var currency = request.price.currency;
     var _a = useUser_1.useUser(), id = _a.id, displayName = _a.displayName, email = _a.email, token = _a.token;
+    console.log(token);
     var onSelect = function (type) { return __awaiter(void 0, void 0, void 0, function () {
         var isCreditCard, uri;
         return __generator(this, function (_a) {
@@ -104,7 +105,7 @@ var PaymentMode = function () {
                             requestId: request.id,
                             id: id,
                             data: request,
-                            token: token.data,
+                            token: token,
                             celebToken: ((_b = (_a = params) === null || _a === void 0 ? void 0 : _a.data) === null || _b === void 0 ? void 0 : _b.token) || ''
                         }
                     };

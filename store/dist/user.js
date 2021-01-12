@@ -126,10 +126,7 @@ var login = function (email, password) { return function (dispatch) { return __a
                 if (!_b) return [3 /*break*/, 6];
                 return [4 /*yield*/, UserService_1["default"].update({
                         id: userData.id,
-                        token: token || {
-                            data: '',
-                            type: 'expo'
-                        }
+                        token: token || ''
                     })];
             case 5:
                 _b = (_d.sent());
@@ -144,10 +141,7 @@ var login = function (email, password) { return function (dispatch) { return __a
                 if (!_c) return [3 /*break*/, 8];
                 return [4 /*yield*/, CelebService_1["default"].updateCeleb({
                         id: userData.celebrity.id,
-                        token: token || {
-                            data: '',
-                            type: 'expo'
-                        }
+                        token: token || ''
                     })];
             case 7:
                 _c = (_d.sent());
@@ -188,10 +182,7 @@ var signup = function (email, password) { return function (dispatch) { return __
                 if (!_b) return [3 /*break*/, 6];
                 return [4 /*yield*/, UserService_1["default"].update({
                         id: userData.id,
-                        token: token || {
-                            data: '',
-                            type: 'expo'
-                        }
+                        token: token || ''
                     })];
             case 5:
                 _b = (_c.sent());

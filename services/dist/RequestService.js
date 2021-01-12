@@ -106,6 +106,8 @@ var RequestService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, RequestRef
                                 .where('celebrity.id', '==', id)
+                                .where('payment.payed', '==', true)
+                                .orderBy('response.timestamp', 'desc')
                                 .get()];
                     case 1:
                         res = _a.sent();
@@ -167,7 +169,8 @@ var RequestService = /** @class */ (function () {
                                 'response.status': 'approved',
                                 'response.duration': duration,
                                 status: 'success',
-                                'response.thumbnailUri': thumbUrl
+                                'response.thumbnailUri': thumbUrl,
+                                'response.timestamp': Date.now()
                             })];
                     case 7:
                         _c.sent();
@@ -246,6 +249,7 @@ var RequestService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, RequestRef
                                 .where('requestor.id', '==', id)
+                                .where('payment.payed', '==', true)
                                 .orderBy('timestamp', 'desc')
                                 .get()];
                     case 1:
@@ -272,6 +276,7 @@ var RequestService = /** @class */ (function () {
                     return [2 /*return*/, RequestRef
                             .where(userRefId, '==', id)
                             .where('status', '==', 'pending')
+                            .where('payment.payed', '==', true)
                             .orderBy('timestamp', 'desc')
                             .onSnapshot(function (snap) {
                             callback && callback(snap

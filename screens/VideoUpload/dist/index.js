@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -58,24 +47,20 @@ var ButtonAction_1 = require("../../components/ButtonAction");
 var useToast_1 = require("../../hooks/useToast");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
-var toast_1 = require("../../store/toast");
 var MediaLibrary = require("expo-media-library");
 var Navbar_1 = require("../../components/Navbar");
-var VideoUpload = function () {
+var VideoUpload = function (_a) {
+    var navigation = _a.navigation;
     var dispatch = react_redux_1.useDispatch();
     var toast = useToast_1.useToast();
-    var _a = react_1.useState(''), videoUri = _a[0], setVideoUri = _a[1];
+    var _b = react_1.useState(''), videoUri = _b[0], setVideoUri = _b[1];
     var id = native_1.useRoute().params.id;
-    var _b = native_1.useNavigation(), navigate = _b.navigate, reset = _b.reset;
+    var navigate = native_1.useNavigation().navigate;
     react_1.useEffect(function () {
-        videoUri && onSend();
+        !!videoUri && onSend();
     }, [videoUri]);
     var onReset = function () {
-        reset({
-            index: 0,
-            routes: [{ name: 'Requests', key: null }]
-        });
-        setVideoUri('');
+        navigation.popToTop();
     };
     var onUploadVideo = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -101,7 +86,11 @@ var VideoUpload = function () {
     }); };
     var onSend = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            dispatch(toast_1.toastActions.setToast(__assign(__assign({}, toast), { show: false, onPress: send })));
+            // dispatch(toastActions.setToast({
+            //   ...toast,
+            //   show: false,
+            //   onPress: send
+            // }))
             send();
             return [2 /*return*/];
         });

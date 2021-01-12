@@ -23,7 +23,8 @@ const VID_OPTIONS:ImagePicker.ImagePickerOptions = {
 
 export default class HelperService {
   static async uploadPhoto (getImg:(uri:string)=>void) {
-    const { granted } = await ImagePicker.requestCameraRollPermissionsAsync()
+    const { granted } = await ImagePicker
+      .requestCameraRollPermissionsAsync()
     if (!granted) return Alert.alert('Permission Failed', 'Allow permission to access images')
     const res = await ImagePicker
       .launchImageLibraryAsync(IMG_OPTIONS)

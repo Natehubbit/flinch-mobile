@@ -18,7 +18,7 @@ export default class NotificationService {
 
   static async getToken () {
     try {
-      return await getExpoPushTokenAsync()
+      return (await getExpoPushTokenAsync()).data
     } catch (e) {
       Alert.alert('Error', e.message)
       return null

@@ -36,8 +36,8 @@ var Book = function () {
     var booking = useLoader_1.useLoader().bookingLoader;
     var navigate = native_1.useNavigation().navigate;
     var data = native_1.useRoute().params.data;
-    var _a = useUser_1.useUser(), displayName = _a.displayName, userId = _a.id;
-    var id = data.id, price = data.price, alias = data.alias, imageUrl = data.imageUrl, token = data.token;
+    var _a = useUser_1.useUser(), displayName = _a.displayName, userId = _a.id, userToken = _a.token;
+    var id = data.id, price = data.price, alias = data.alias, imageUrl = data.imageUrl, celebToken = data.token;
     var occasion = selector_1.useSelect().value;
     react_1.useEffect(function () {
         if (!mounted.current) {
@@ -46,23 +46,25 @@ var Book = function () {
         else {
             !booking &&
                 request.id &&
-                navigate('Payment', { data: { token: token } });
+                navigate('Payment', { data: { token: celebToken || '' } });
         }
     }, [booking]);
     var onSubmit = function (values) {
         var data = __assign({ celebrity: {
                 id: id,
                 name: alias,
-                imageUrl: imageUrl
+                imageUrl: imageUrl,
+                token: celebToken || ''
             }, requestor: {
                 id: userId,
-                name: displayName
+                name: displayName,
+                token: userToken || ''
             }, response: {
                 status: 'pending',
                 videoUri: '',
                 duration: 0,
                 thumbnailUri: '',
-                timestamp: Date.now()
+                timestamp: 0
             }, payment: {
                 id: '',
                 amount: price.amount,
@@ -71,8 +73,6 @@ var Book = function () {
                 timestamp: 0
             }, status: 'pending', price: price, timestamp: Date.now() }, values);
         dispatch(request_1.requestActions.createRequest(data));
-        // request.id &&
-        // navigate<Routes>('Payment', )
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {

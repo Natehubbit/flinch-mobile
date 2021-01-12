@@ -6,7 +6,6 @@ import { useUser } from '../hooks/useUser'
 import NavigationService from '../services/NavigationService'
 import RootStack from './RootStack'
 import { Celeb, Request } from '../types'
-import { ExpoPushToken } from 'expo-notifications'
 
 export type VideoNavParam = {
   id:string;
@@ -27,17 +26,27 @@ export type RouteParams = {
   Notifications: undefined;
   Celeb: {data:Celeb};
   Book: {data:Pick<Celeb, 'alias'|'imageUrl'|'id'|'price'|'token'>};
-  Payment: {data:{token:ExpoPushToken}};
+  Payment: {
+    data:{
+      token:string
+    }
+  };
   PaymentCard: undefined;
   PaymentMobile: undefined;
-  Request: {id:string, data?:Request};
+  Request: {
+    id:string,
+    data?:Request
+  };
   Requests: undefined;
   Profile: undefined;
   Videos: undefined;
   Video: VideoNavParam;
   VideoUpload: {id:string;};
   RecordVideo: {id:string};
-  WebView: {uri:string;onStopLoading?:()=>void}
+  WebView: {
+    uri:string;
+    onStopLoading?:()=>void
+  }
 }
 
 export type CelebScreenRouteProp =

@@ -1,5 +1,4 @@
 import { DownloadResumable } from 'expo-file-system'
-import { ExpoPushToken } from 'expo-notifications'
 import firebase from 'firebase'
 
 export type Currency = 'NGN'|'GHS'|'$'
@@ -17,12 +16,12 @@ export type User = {
         data?: Celeb
     };
     role: UserRole;
-    token: ExpoPushToken;
+    token: string;
 } | null;
 
 export interface NotificationMessage {
     id?:string;
-    to?: ExpoPushToken | ExpoPushToken[]|string;
+    to?: string|string[];
     data?: object;
     title?: string;
     subtitle?: string;
@@ -203,7 +202,7 @@ export interface Celeb {
     price:Price;
     objectID?:string;
     role?:'celebrity'|'user';
-    token?: ExpoPushToken;
+    token?: string;
 }
 
 export interface Price {

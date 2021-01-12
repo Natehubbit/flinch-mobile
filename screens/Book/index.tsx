@@ -26,13 +26,13 @@ const Book: React.FC = () => {
   const { bookingLoader: booking } = useLoader()
   const { navigate } = useNavigation()
   const { params: { data } } = useRoute<BookScreenRouteProps>()
-  const { displayName, id: userId } = useUser()
+  const { displayName, id: userId, token: userToken } = useUser()
   const {
     id,
     price,
     alias,
     imageUrl,
-    token
+    token: celebToken
   } = data
   const { value: occasion } = useSelect()
   useEffect(() => {
@@ -41,7 +41,7 @@ const Book: React.FC = () => {
     } else {
       !booking &&
       request.id &&
-      navigate<Routes>('Payment', { data: { token } })
+      navigate<Routes>('Payment', { data: { token: celebToken || '' } })
     }
   }, [booking])
   const onSubmit = (values:BookForm) => {
@@ -49,18 +49,20 @@ const Book: React.FC = () => {
       celebrity: {
         id,
         name: alias,
-        imageUrl
+        imageUrl,
+        token: celebToken || ''
       },
       requestor: {
         id: userId,
-        name: displayName
+        name: displayName,
+        token: userToken || ''
       },
       response: {
         status: 'pending',
         videoUri: '',
         duration: 0,
         thumbnailUri: '',
-        timestamp: Date.now()
+        timestamp: 0
       },
       payment: {
         id: '',
@@ -75,8 +77,6 @@ const Book: React.FC = () => {
       ...values
     }
     dispatch(requestActions.createRequest(data))
-    // request.id &&
-    // navigate<Routes>('Payment', )
   }
   const renderForm = () => {
     return (
@@ -117,13 +117,6 @@ const Book: React.FC = () => {
                           onChange={setFieldValue}
                           options={OCCASIONS}
                         />
-                        {/* <Input
-                          label='Occasion'
-                          left='calendar'
-                          disabled={booking}
-                          value={occasion}
-                          onChangeText={handleChange('occasion')}
-                        /> */}
                         {errors.occasion && touched.occasion && (
                           <HelperText type='error'>{errors.occasion}</HelperText>
                         )}

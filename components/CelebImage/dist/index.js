@@ -30,7 +30,7 @@ var CelebImage = function (_a) {
             alias: alias,
             craft: craft,
             imageUrl: imageUrl,
-            token: (token === null || token === void 0 ? void 0 : token.data) || '',
+            token: token || '',
             price: price
         }
     }); };

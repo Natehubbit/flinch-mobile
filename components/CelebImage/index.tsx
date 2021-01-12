@@ -35,7 +35,7 @@ const CelebImage: React.FC<CelebImageProps> = ({
         alias,
         craft,
         imageUrl,
-        token: token?.data || '',
+        token: token || '',
         price
       }
     }
