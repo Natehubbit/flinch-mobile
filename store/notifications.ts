@@ -105,16 +105,31 @@ const listen = (
 }
 
 const update = (
-  id: string
+  id: string,
+  data: Partial<NotificationMessage>
 ) => async (
-  dispatch:Dispatch
+  dispatch:Dispatch,
+  getState:()=>AppState
 ) => {
-  // const updated = await NotificationService.
+  const { notifications } = getState()
+  const updated = await NotificationService
+    .updateNotification(id, data)
+  if (updated) {
+    const updatedList = notifications
+      .map(d => {
+        if (d.id === id) {
+          return { ...d, ...data }
+        }
+        return d
+      })
+    dispatch(actions.getNotifications(updatedList))
+  }
 }
 
 export const notificationsActions = {
   ...actions,
   getDeviceToken,
   getNotifications,
-  listen
+  listen,
+  update
 }

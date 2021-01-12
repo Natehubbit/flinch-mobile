@@ -1,31 +1,55 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Divider, Paragraph, TouchableRipple } from 'react-native-paper'
 import Urgent from '../../assets/images/urgent.svg'
 import { AltMiniLabel } from '../../common/styledComponents'
+import { Routes } from '../../navigation'
+import { Request } from '../../types'
 
-const CelebRequestCard = () => {
+interface CelebRequestCardProps {
+  ocassion:string;
+  recipient:string;
+  price:string;
+  data:Request;
+  time:string;
+}
+
+const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
+  ocassion,
+  recipient,
+  price,
+  data,
+  time
+}) => {
+  const { navigate } = useNavigation()
+  const onPress = () => {
+    navigate<Routes>('Request', { id: '', data })
+  }
   return (
     <>
-    <TouchableRipple style={[styles.container]}>
+    <TouchableRipple
+      style={[styles.container]}
+      onPress={onPress}
+      >
       <>
         <View style={[styles.icon]}>
           <Urgent height={40} width={40} />
         </View>
         <View style={[styles.info]}>
           <AltMiniLabel style={[styles.event]}>
-            Advice
+            {ocassion}
           </AltMiniLabel>
           <Paragraph>
-            Jennifer
+            {recipient}
           </Paragraph>
         </View>
         <View style={[styles.extra]}>
           <Paragraph numberOfLines={1} style={[styles.time]}>
-            3 days to go
+            {time}
           </Paragraph>
           <AltMiniLabel>
-            GHs50.00
+            {price}
           </AltMiniLabel>
         </View>
       </>

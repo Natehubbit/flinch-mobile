@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, View } from 'react-native'
-// import { FlatList } from 'react-native-gesture-handler'
-import { ActivityIndicator } from 'react-native-paper'
+import { RefreshControl, StyleSheet, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { AppContainer, maxHeight } from '../../common/styledComponents'
 import CelebImage from '../../components/CelebImage'
 import SectionHeader from '../../components/SectionHeader'
+import { theme } from '../../config/theme'
 import { useCelebs } from '../../hooks/useCelebs'
 import { useLoader } from '../../hooks/useLoader'
-// import { Celeb } from '../../services/CelebService'
 import { celebsActions } from '../../store/celebs'
 
 const Home: React.FC = () => {
@@ -20,19 +18,9 @@ const Home: React.FC = () => {
     dispatch(celebsActions.getCelebs())
   }, [])
 
-  if (celebsLoader) {
-    return <ActivityIndicator
-      animating
-    />
+  const onRefresh = () => {
+    dispatch(celebsActions.getCelebs())
   }
-
-  // const featured = celebs && celebs.slice(0, 4)
-
-  // const renderFeatured = ({ item }:{item:Celeb}) => {
-  //   return <CelebImage
-  //       {...item}
-  //     />
-  // }
 
   const renderAll = () => {
     return celebs && celebs.map(celeb => (
@@ -43,22 +31,6 @@ const Home: React.FC = () => {
       />
     ))
   }
-
-  // const featureView = () => {
-  //   return (
-  //     <>
-  //       <SectionHeader title='Featured' />
-  //       <FlatList
-  //         data={featured}
-  //         horizontal
-  //         showsHorizontalScrollIndicator={false}
-  //         renderItem={renderFeatured}
-  //         contentContainerStyle={styles.section}
-  //         keyExtractor={(item) => item.id}
-  //       />
-  //     </>
-  //   )
-  // }
 
   const allView = () => {
     return (
@@ -77,7 +49,11 @@ const Home: React.FC = () => {
 
   return <View>
     <AppContainer
-      // data={[featureView(), allView()]}
+      refreshControl={<RefreshControl
+        refreshing={celebsLoader}
+        onRefresh={onRefresh}
+        colors={[theme.colors.primary]}
+      />}
       data={[allView()]}
       renderItem={renderViews}
       keyExtractor={(item, index) => index.toString()}

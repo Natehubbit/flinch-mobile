@@ -15,8 +15,8 @@ var stack_1 = require("@react-navigation/stack");
 var react_1 = require("react");
 var constants_1 = require("../../common/constants");
 var Navbar_1 = require("../../components/Navbar");
-var VideoRecord_1 = require("../../screens/VideoRecord");
-var VideoUpload_1 = require("../../screens/VideoUpload");
+// import VideoRecord from '../../screens/VideoRecord'
+// import VideoUpload from '../../screens/VideoUpload'
 var RequestsTabs_1 = require("../RequestsTabs");
 var Stack = stack_1.createStackNavigator();
 var RequestStack = function () {
@@ -29,8 +29,6 @@ var RequestStack = function () {
         return !show ? react_1["default"].createElement(Navbar_1["default"], { title: heading, hideBell: true }) : null;
     };
     return react_1["default"].createElement(Stack.Navigator, { screenOptions: __assign({ header: function (props) { return renderHeader(props); } }, constants_1.SLIDE_ANIMATION) },
-        react_1["default"].createElement(Stack.Screen, { name: 'Requests', component: RequestsTabs_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'VideoUpload', component: VideoUpload_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'RecordVideo', component: VideoRecord_1["default"] }));
+        react_1["default"].createElement(Stack.Screen, { name: 'Requests', component: RequestsTabs_1["default"] }));
 };
 exports["default"] = RequestStack;

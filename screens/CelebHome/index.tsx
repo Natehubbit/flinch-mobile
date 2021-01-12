@@ -1,15 +1,20 @@
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import React, { useEffect, useState } from 'react'
+import { Image, RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
+import moment from 'moment'
 import { AltMainLabel, MainLabel, maxHeight, Paragraph } from '../../common/styledComponents'
 import CelebRequestCard from '../../components/CelebRequestCard'
 import Navbar from '../../components/Navbar'
 import SectionHeader from '../../components/SectionHeader'
 import { COLORS, theme } from '../../config/theme'
+import { useLoader } from '../../hooks/useLoader'
 import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
+import HelperService from '../../services/HelperService'
+import { requestsActions } from '../../store/requests'
+import RequestService from '../../services/RequestService'
 
 const STATS = [
   {
@@ -30,17 +35,60 @@ const STATS = [
 ]
 
 const CelebHome = () => {
-  const { imageUrl: uri } = useUser()
+  const dispatch = useDispatch()
+  const [requests, setRequests] = useState([])
+  const [unsubscribe, setUnsubscribe] = useState(null)
+  const [responseCount, setResponseCount] = useState(0)
+  const noData = requests.length < 1
+  const {
+    celebrity: {
+      id,
+      data: {
+        imageUrl: uri,
+        alias
+      }
+    }
+  } = useUser() || {
+    celebrity: {
+      data: {
+        alias: '',
+        imageUrl: ''
+      }
+    }
+  }
+  const { requestsLoader: loading } = useLoader()
+  useEffect(() => {
+    dispatch(requestsActions
+      .listenForPending(
+        setRequests,
+        setUnsubscribe
+      )
+    )
+    RequestService
+      .getCelebResponseCount(
+        id,
+        setResponseCount
+      )
+    return () => unsubscribe &&
+      unsubscribe()
+  }, [])
   const { navigate } = useNavigation()
   const onSeeAll = () => {
     navigate<Routes>('Requests')
   }
   const renderStats = () => {
     return STATS.map((d, i) => {
-      const isCash = d.type === 'cash'
+      const isCash = d.label === 'Earnings'
+      const isPending = d.label === 'Pending'
+      const isResponses = d.label === 'Responses'
       return <View style={[styles.stat]} key={i}>
         <AltMainLabel style={[styles.welcome]}>
-          {isCash && 'GHs'}{d.value}
+          {isCash && 'GHs'}{isPending
+            ? requests.length
+            : isResponses
+              ? responseCount
+              : d.value
+          }
         </AltMainLabel>
         <AltMainLabel style={[styles.welcome, styles.mini]}>
           {d.label}
@@ -49,10 +97,25 @@ const CelebHome = () => {
     })
   }
 
+  const renderNoData = () => {
+    return (
+      <View style={[styles.noData]}>
+        <Paragraph black>
+          You have no pending requests.
+        </Paragraph>
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={[styles.container]}>
       <Navbar invert />
-      <ScrollView>
+      <ScrollView
+        refreshControl={<RefreshControl
+          refreshing={loading}
+          colors={[theme.colors.primary]}
+        />}
+      >
         <View
           style={[styles.top]}
         >
@@ -62,7 +125,7 @@ const CelebHome = () => {
                 Welcome,
               </AltMainLabel>
               <MainLabel style={[styles.name]}>
-                Shatta Wale
+                {alias}
               </MainLabel>
             </View>
             <View>
@@ -91,16 +154,17 @@ const CelebHome = () => {
             </View>
             <Divider/>
             <View style={[styles.cards]}>
-              <CelebRequestCard/>
-              {/* <CelebRequestCard/>
-              <CelebRequestCard/>
-              <CelebRequestCard/>
-              <CelebRequestCard/>
-              <CelebRequestCard/>
-              <CelebRequestCard/>
-              <CelebRequestCard/> */}
+              {requests.map(req => (<CelebRequestCard
+                ocassion={req.occasion}
+                price={HelperService.parseToMoney(req.price)}
+                recipient={req.recipient}
+                key={req.id}
+                time={moment(req.timestamp).fromNow()}
+                data={req}
+              />))}
             </View>
           </View>
+          {noData && renderNoData()}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -175,5 +239,10 @@ const styles = StyleSheet.create({
   },
   cards: {
     // bottom: 200
+  },
+  noData: {
+    height: maxHeight * 0.2,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

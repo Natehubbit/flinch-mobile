@@ -52,13 +52,7 @@ var Video = function () {
     var _b = react_1.useState(0), progress = _b[0], setProgress = _b[1];
     var displayName = useUser_1.useUser().displayName;
     var goBack = native_1.useNavigation().goBack;
-    var _c = native_1.useRoute().params, 
-    // id,
-    // duration,
-    name = _c.name, 
-    // recipient,
-    // date,
-    url = _c.uri;
+    var _c = native_1.useRoute().params, name = _c.name, url = _c.uri;
     var onShare = function () {
         HelperService_1["default"].shareMedia(displayName + " sent you a FLINCH from " + name + " at " + url);
     };
@@ -95,10 +89,10 @@ var Video = function () {
             react_1["default"].createElement(VideoPlayer_1["default"], { uri: url }),
             react_1["default"].createElement(expo_linear_gradient_1.LinearGradient, { colors: ['transparent', 'rgba(0,0,0,0.5)'], style: [styles.btnsContainer] },
                 react_1["default"].createElement(react_native_1.View, { style: [styles.btns] }, !saving
-                    ? react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'cloud-download', onPress: onSaveVideo, label: 'Download', theme: { colors: { accent: 'transparent' } }, uppercase: false })
-                    : react_1["default"].createElement(react_native_paper_1.FAB, { icon: null, loading: saving, label: progress + "% Downloading", uppercase: false, small: true, style: { backgroundColor: 'transparent', elevation: 0 } })),
+                    ? react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'cloud-download', onPress: onSaveVideo, label: 'Download', theme: { colors: { accent: 'transparent' } }, uppercase: false, style: [styles.download] })
+                    : react_1["default"].createElement(react_native_paper_1.FAB, { icon: null, loading: saving, label: progress + "% Downloading", uppercase: false, small: true, style: [styles.download] })),
                 react_1["default"].createElement(react_native_1.View, { style: [styles.aside] },
-                    react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'send', onPress: onShare, small: true }))))));
+                    react_1["default"].createElement(react_native_paper_1.FAB, { icon: 'send', onPress: onShare, small: true, style: [styles.send] }))))));
 };
 exports["default"] = Video;
 var styles = react_native_1.StyleSheet.create({
@@ -186,5 +180,13 @@ var styles = react_native_1.StyleSheet.create({
     extra: {
         flexDirection: 'row',
         marginRight: 10
+    },
+    send: {
+        bottom: 15
+    },
+    download: {
+        backgroundColor: 'transparent',
+        elevation: 0,
+        bottom: 10
     }
 });

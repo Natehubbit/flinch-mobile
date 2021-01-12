@@ -12,6 +12,7 @@ import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
 import { toastActions } from '../../store/toast'
 import * as MediaLibrary from 'expo-media-library'
+import Navbar from '../../components/Navbar'
 
 const VideoUpload = () => {
   const dispatch = useDispatch()
@@ -65,6 +66,8 @@ const VideoUpload = () => {
     )
   }
   return (
+    <>
+      <Navbar title='Upload Video' hideBell/>
         <View style={styles.container}>
             <VideoBack/>
             <View style={styles.content}>
@@ -80,6 +83,7 @@ const VideoUpload = () => {
                 />
             </View>
         </View>
+      </>
   )
 }
 

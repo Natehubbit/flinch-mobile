@@ -45,12 +45,12 @@ var theme_1 = require("../../config/theme");
 var native_1 = require("@react-navigation/native");
 var user_1 = require("../../store/user");
 var react_redux_1 = require("react-redux");
-var ModalLoader_1 = require("../../components/ModalLoader");
-var useLoader_1 = require("../../hooks/useLoader");
+// import ModalLoader from '../../components/ModalLoader'
+// import { useLoader } from '../../hooks/useLoader'
 var Login = function () {
     var dispatch = react_redux_1.useDispatch();
     var navigate = native_1.useNavigation().navigate;
-    var authLoader = useLoader_1.useLoader().authLoader;
+    // const { authLoader } = useLoader()
     var _a = react_1.useState(false), showPass = _a[0], setShowPass = _a[1];
     var _b = react_1.useState(''), email = _b[0], setEmail = _b[1];
     var _c = react_1.useState(''), pass = _c[0], setPass = _c[1];
@@ -86,8 +86,7 @@ var Login = function () {
                         react_1["default"].createElement(react_native_paper_1.IconButton, { rippleColor: theme_1.theme.colors.primary, icon: 'facebook', color: 'blue', style: styles.iconBack })),
                     react_1["default"].createElement(styledComponents_1.FlexContainer, { direction: 'row', justify: 'center', align: 'center' },
                         react_1["default"].createElement(styledComponents_1.Paragraph, null, "Don't have an account?"),
-                        react_1["default"].createElement(react_native_paper_1.Button, { labelStyle: styles.btnLabel, onPress: onSignup, uppercase: false }, "SignUp"))))),
-        react_1["default"].createElement(ModalLoader_1["default"], { show: authLoader })));
+                        react_1["default"].createElement(react_native_paper_1.Button, { labelStyle: styles.btnLabel, onPress: onSignup, uppercase: false }, "SignUp")))))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {

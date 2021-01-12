@@ -43,7 +43,7 @@ const WebViewScreen:React.FC<WebViewScreenProps> = ({
 
   return (
     <>
-      <Navbar title='Make Payment'/>
+      <Navbar title='Make Payment' hideBell/>
       <WebView
         onLoadEnd={params?.onStopLoading}
         incognito

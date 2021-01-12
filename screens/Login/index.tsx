@@ -7,13 +7,13 @@ import { theme } from '../../config/theme'
 import { useNavigation } from '@react-navigation/native'
 import { userActions } from '../../store/user'
 import { useDispatch } from 'react-redux'
-import ModalLoader from '../../components/ModalLoader'
-import { useLoader } from '../../hooks/useLoader'
+// import ModalLoader from '../../components/ModalLoader'
+// import { useLoader } from '../../hooks/useLoader'
 
 const Login: React.FC = () => {
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
-  const { authLoader } = useLoader()
+  // const { authLoader } = useLoader()
   const [showPass, setShowPass] = useState(false)
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
         </FlexContainer>
         </FormContainer>
       </AuthContainer>
-      <ModalLoader show={authLoader}/>
+      {/* <ModalLoader show={authLoader}/> */}
     </SafeAreaView>
   )
 }

@@ -59,7 +59,7 @@ var Request = function () {
     var _b = native_1.useNavigation(), navigate = _b.navigate, goBack = _b.goBack;
     var _c = native_1.useRoute(), params = _c.params, route = _c.name;
     var id = params.id, data = params.data;
-    var _d = (id
+    var _d = (!!id
         ? useRequests_1.useRequests('id', id)[0]
         : data) || constants_1.initStateRequest, occasion = _d.occasion, status = _d.status, instructions = _d.instructions, recipient = _d.recipient, price = _d.price, _e = _d.celebrity, name = _e.name, imageUrl = _e.imageUrl, _f = _d.response, duration = _f.duration, timestamp = _f.timestamp, uri = _f.videoUri, thumbnailUri = _f.thumbnailUri;
     var summarize = instructions.length > 99;
@@ -73,9 +73,9 @@ var Request = function () {
     var isSuccess = status === 'success';
     var isPending = status === 'pending';
     var showButtons = !isUser && isPending;
-    var onAccept = function () { return navigate('VideoUpload', { id: id }); };
+    var onAccept = function () { return navigate('VideoUpload', { id: id || (data === null || data === void 0 ? void 0 : data.id) }); };
     var onOpenVideo = function () { return navigate('Video', {
-        id: id,
+        id: id || (data === null || data === void 0 ? void 0 : data.id),
         duration: duration,
         recipient: recipient,
         date: HelperService_1["default"].parseToDate(timestamp),
@@ -85,7 +85,7 @@ var Request = function () {
     var onReject = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             setRejecting(true);
-            dispatch(requests_1.requestsActions.rejectRequest(id, rejectCallback));
+            dispatch(requests_1.requestsActions.rejectRequest(id || (data === null || data === void 0 ? void 0 : data.id), rejectCallback));
             return [2 /*return*/];
         });
     }); };

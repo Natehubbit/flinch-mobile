@@ -61,7 +61,7 @@ export default class CelebService {
         })
       return true
     } catch (e) {
-      console.log(e.message)
+      alert(e.message)
       return false
     }
   }

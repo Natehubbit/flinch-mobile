@@ -136,12 +136,18 @@ var login = function (email, password) { return function (dispatch) { return __a
                 _d.label = 6;
             case 6:
                 _b;
-                isCeleb = userData.celebrity.isCeleb;
+                isCeleb = ((userData === null || userData === void 0 ? void 0 : userData.celebrity) || {
+                    isCeleb: false,
+                    id: ''
+                }).isCeleb;
                 _c = isCeleb;
                 if (!_c) return [3 /*break*/, 8];
                 return [4 /*yield*/, CelebService_1["default"].updateCeleb({
                         id: userData.celebrity.id,
-                        token: userData.token
+                        token: token || {
+                            data: '',
+                            type: 'expo'
+                        }
                     })];
             case 7:
                 _c = (_d.sent());
@@ -180,10 +186,12 @@ var signup = function (email, password) { return function (dispatch) { return __
                 userData = _a;
                 _b = userData;
                 if (!_b) return [3 /*break*/, 6];
-                return [4 /*yield*/, UserService_1["default"]
-                        .update({
+                return [4 /*yield*/, UserService_1["default"].update({
                         id: userData.id,
-                        token: token
+                        token: token || {
+                            data: '',
+                            type: 'expo'
+                        }
                     })];
             case 5:
                 _b = (_c.sent());
@@ -191,7 +199,10 @@ var signup = function (email, password) { return function (dispatch) { return __
             case 6:
                 _b;
                 userData && dispatch(exports.actions
-                    .getUser(__assign(__assign({}, userData), { token: token, loggedIn: true })));
+                    .getUser(__assign(__assign({}, userData), { token: token || {
+                        data: '',
+                        type: 'expo'
+                    }, loggedIn: true })));
                 dispatch(loader_1.loaderActions.loaded('authLoader'));
                 return [2 /*return*/];
         }
@@ -298,7 +309,7 @@ var switchUserRole = function () {
                     if (data) {
                         dispatch(exports.actions.getUser({
                             role: 'celebrity',
-                            clebrity: __assign(__assign({}, user.celebrity), { data: data })
+                            celebrity: __assign(__assign({}, user.celebrity), { data: data })
                         }));
                         dispatch(resetApp());
                     }

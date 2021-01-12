@@ -260,6 +260,50 @@ var RequestService = /** @class */ (function () {
             });
         });
     };
+    RequestService.pendingListener = function (id, isUser, callback, loading, loaded) {
+        return __awaiter(this, void 0, void 0, function () {
+            var userRefId;
+            return __generator(this, function (_a) {
+                try {
+                    loading && loading();
+                    userRefId = isUser
+                        ? 'requestor.id'
+                        : 'celebrity.id';
+                    return [2 /*return*/, RequestRef
+                            .where(userRefId, '==', id)
+                            .where('status', '==', 'pending')
+                            .orderBy('timestamp', 'desc')
+                            .onSnapshot(function (snap) {
+                            callback && callback(snap
+                                .docs
+                                .map(function (s) { return (__assign({ id: s.id }, s.data())); }));
+                            loaded && loaded();
+                        })];
+                }
+                catch (e) {
+                    console.log(e.message);
+                    return [2 /*return*/, null];
+                }
+                return [2 /*return*/];
+            });
+        });
+    };
+    RequestService.getCelebResponseCount = function (id, callback) {
+        try {
+            return RequestRef
+                .where('status', '==', 'success')
+                .where('celebrity.id', '==', id)
+                .where('response.status', '==', 'approved')
+                .onSnapshot(function (snap) {
+                callback &&
+                    callback(snap.size);
+            });
+        }
+        catch (e) {
+            alert(e.message);
+            return null;
+        }
+    };
     return RequestService;
 }());
 exports["default"] = RequestService;

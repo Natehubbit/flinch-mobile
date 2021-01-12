@@ -32,7 +32,7 @@ var WebViewScreen = function (_a) {
         isCallback && onComplete();
     };
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
-        react_1["default"].createElement(Navbar_1["default"], { title: 'Make Payment' }),
+        react_1["default"].createElement(Navbar_1["default"], { title: 'Make Payment', hideBell: true }),
         react_1["default"].createElement(react_native_webview_1.WebView, { onLoadEnd: params === null || params === void 0 ? void 0 : params.onStopLoading, incognito: true, pullToRefreshEnabled: true, urlPrefixesForDefaultIntent: [], style: styles.container, onLoadProgress: onProgress, source: { uri: uri }, onError: params === null || params === void 0 ? void 0 : params.onStopLoading, onNavigationStateChange: onCallbackUrl }),
         !showProgress && react_1["default"].createElement(react_native_paper_1.ProgressBar, { progress: progress })));
 };

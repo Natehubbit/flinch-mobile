@@ -185,7 +185,26 @@ var approveRequest = function (id, uri, callback) { return function (dispatch, g
         }
     });
 }); }; };
+var listenForPending = function (dataCallback, callback) { return function (dispatch, getState) {
+    var _a = getState().user, role = _a.role, userId = _a.id, celebId = _a.celebrity.id;
+    var isUser = role === 'user';
+    var id = isUser
+        ? userId
+        : celebId;
+    var loading = function () {
+        return dispatch(loader_1.loaderActions
+            .loading('requestsLoader'));
+    };
+    var loaded = function () {
+        return dispatch(loader_1.loaderActions
+            .loaded('requestsLoader'));
+    };
+    var unsub = RequestService_1["default"]
+        .pendingListener(id, isUser, dataCallback, loading, loaded);
+    callback && callback(unsub);
+}; };
 exports.requestsActions = __assign(__assign({}, exports.actions), { rejectRequest: rejectRequest,
     getAllRequests: getAllRequests,
     approveRequest: approveRequest,
-    reloadRequests: reloadRequests });
+    reloadRequests: reloadRequests,
+    listenForPending: listenForPending });

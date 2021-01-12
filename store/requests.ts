@@ -63,7 +63,13 @@ const reloadRequests = (callback?:()=>void) => async (
   callback && callback()
 }
 
-const rejectRequest = (id:string, callback?:()=>void) => async (dispatch:Dispatch, getState:()=>AppState) => {
+const rejectRequest = (
+  id:string,
+  callback?:()=>void
+) => async (
+  dispatch:Dispatch,
+  getState:()=>AppState
+) => {
   const { requests, user: { role } } = getState()
   if (role === 'user') return
   const rejected = await RequestService.rejectRequest(id)
@@ -120,10 +126,46 @@ const approveRequest = (
   }
 }
 
+const listenForPending = (
+  dataCallback:(val:Request[])=>void,
+  callback:any
+) => (
+  dispatch:Dispatch,
+  getState:()=>AppState
+) => {
+  const {
+    role,
+    id: userId,
+    celebrity: {
+      id: celebId
+    }
+  } = getState().user
+  const isUser = role === 'user'
+  const id = isUser
+    ? userId
+    : celebId
+  const loading = () =>
+    dispatch(loaderActions
+      .loading('requestsLoader'))
+  const loaded = () =>
+    dispatch(loaderActions
+      .loaded('requestsLoader'))
+  const unsub = RequestService
+    .pendingListener(
+      id,
+      isUser,
+      dataCallback,
+      loading,
+      loaded
+    )
+  callback && callback(unsub)
+}
+
 export const requestsActions = {
   ...actions,
   rejectRequest,
   getAllRequests,
   approveRequest,
-  reloadRequests
+  reloadRequests,
+  listenForPending
 }

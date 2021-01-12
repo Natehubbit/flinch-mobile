@@ -13,15 +13,13 @@ var __assign = (this && this.__assign) || function () {
 exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
-// import { FlatList } from 'react-native-gesture-handler'
-var react_native_paper_1 = require("react-native-paper");
 var react_redux_1 = require("react-redux");
 var styledComponents_1 = require("../../common/styledComponents");
 var CelebImage_1 = require("../../components/CelebImage");
 var SectionHeader_1 = require("../../components/SectionHeader");
+var theme_1 = require("../../config/theme");
 var useCelebs_1 = require("../../hooks/useCelebs");
 var useLoader_1 = require("../../hooks/useLoader");
-// import { Celeb } from '../../services/CelebService'
 var celebs_1 = require("../../store/celebs");
 var Home = function () {
     var dispatch = react_redux_1.useDispatch();
@@ -31,33 +29,12 @@ var Home = function () {
         (celebs.length < 1) &&
             dispatch(celebs_1.celebsActions.getCelebs());
     }, []);
-    if (celebsLoader) {
-        return react_1["default"].createElement(react_native_paper_1.ActivityIndicator, { animating: true });
-    }
-    // const featured = celebs && celebs.slice(0, 4)
-    // const renderFeatured = ({ item }:{item:Celeb}) => {
-    //   return <CelebImage
-    //       {...item}
-    //     />
-    // }
+    var onRefresh = function () {
+        dispatch(celebs_1.celebsActions.getCelebs());
+    };
     var renderAll = function () {
         return celebs && celebs.map(function (celeb) { return (react_1["default"].createElement(CelebImage_1["default"], __assign({ key: celeb.id }, celeb, { large: true }))); });
     };
-    // const featureView = () => {
-    //   return (
-    //     <>
-    //       <SectionHeader title='Featured' />
-    //       <FlatList
-    //         data={featured}
-    //         horizontal
-    //         showsHorizontalScrollIndicator={false}
-    //         renderItem={renderFeatured}
-    //         contentContainerStyle={styles.section}
-    //         keyExtractor={(item) => item.id}
-    //       />
-    //     </>
-    //   )
-    // }
     var allView = function () {
         return (react_1["default"].createElement(react_1["default"].Fragment, null,
             react_1["default"].createElement(SectionHeader_1["default"], { title: 'Celebrities' }),
@@ -68,11 +45,7 @@ var Home = function () {
         return item;
     };
     return react_1["default"].createElement(react_native_1.View, null,
-        react_1["default"].createElement(styledComponents_1.AppContainer
-        // data={[featureView(), allView()]}
-        , { 
-            // data={[featureView(), allView()]}
-            data: [allView()], renderItem: renderViews, keyExtractor: function (item, index) { return index.toString(); } }));
+        react_1["default"].createElement(styledComponents_1.AppContainer, { refreshControl: react_1["default"].createElement(react_native_1.RefreshControl, { refreshing: celebsLoader, onRefresh: onRefresh, colors: [theme_1.theme.colors.primary] }), data: [allView()], renderItem: renderViews, keyExtractor: function (item, index) { return index.toString(); } }));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {},

@@ -116,6 +116,7 @@ var NotificationService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, NotificationsRef
                                 .where('recipientId', '==', id)
+                                .orderBy('createdAt', 'desc')
                                 .get()];
                     case 1:
                         res = _a.sent();
@@ -135,13 +136,14 @@ var NotificationService = /** @class */ (function () {
         try {
             return NotificationsRef
                 .where('recipientId', '==', id)
+                .orderBy('createdAt', 'desc')
                 .onSnapshot(function (snapshot) {
                 var data = snapshot.docs.map(function (doc) { return (__assign({ id: doc.id }, doc.data())); });
                 callback && callback(data);
             });
         }
         catch (e) {
-            console.log(e.message);
+            alert(e.message);
             return null;
         }
     };

@@ -60,6 +60,7 @@ var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
 var toast_1 = require("../../store/toast");
 var MediaLibrary = require("expo-media-library");
+var Navbar_1 = require("../../components/Navbar");
 var VideoUpload = function () {
     var dispatch = react_redux_1.useDispatch();
     var toast = useToast_1.useToast();
@@ -128,11 +129,13 @@ var VideoUpload = function () {
             }
         });
     }); };
-    return (react_1["default"].createElement(react_native_1.View, { style: styles.container },
-        react_1["default"].createElement(videoBack_svg_1["default"], null),
-        react_1["default"].createElement(react_native_1.View, { style: styles.content },
-            react_1["default"].createElement(ButtonAction_1["default"], { icon: 'video-plus', label: 'Record Video', onPress: onRecordVideo }),
-            react_1["default"].createElement(ButtonAction_1["default"], { onPress: onUploadVideo, icon: 'cloud-upload', label: 'Upload Video' }))));
+    return (react_1["default"].createElement(react_1["default"].Fragment, null,
+        react_1["default"].createElement(Navbar_1["default"], { title: 'Upload Video', hideBell: true }),
+        react_1["default"].createElement(react_native_1.View, { style: styles.container },
+            react_1["default"].createElement(videoBack_svg_1["default"], null),
+            react_1["default"].createElement(react_native_1.View, { style: styles.content },
+                react_1["default"].createElement(ButtonAction_1["default"], { icon: 'video-plus', label: 'Record Video', onPress: onRecordVideo }),
+                react_1["default"].createElement(ButtonAction_1["default"], { onPress: onUploadVideo, icon: 'cloud-upload', label: 'Upload Video' })))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import CelebService from '../services/CelebService'
 import { Celebs } from '../types'
 import { loaderActions } from './loader'
@@ -21,7 +21,7 @@ export const { actions, ...celebsSlice } = createSlice({
   }
 })
 
-const getCelebs = () => async (dispatch:any) => {
+const getCelebs = () => async (dispatch:Dispatch) => {
   dispatch(loaderActions.loading('celebsLoader'))
   const celebs = await CelebService.getCelebs()
   dispatch(actions.getCelebs(celebs))

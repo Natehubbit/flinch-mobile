@@ -66,12 +66,17 @@ const login = (
       type: 'expo'
     }
   })
-  const { isCeleb } = userData.celebrity
-
+  const { isCeleb } = userData?.celebrity || {
+    isCeleb: false,
+    id: ''
+  }
   isCeleb &&
   await CelebService.updateCeleb({
     id: userData.celebrity.id,
-    token: userData.token
+    token: token || {
+      data: '',
+      type: 'expo'
+    }
   })
 
   userData && dispatch(actions
@@ -103,15 +108,20 @@ const signup = (
   const token = await NotificationService.getToken()
   const userData = user &&
     await UserService.addUser(user)
-  userData && await UserService
-    .update({
-      id: userData.id,
-      token
-    })
+  userData && await UserService.update({
+    id: userData.id,
+    token: token || {
+      data: '',
+      type: 'expo'
+    }
+  })
   userData && dispatch(actions
     .getUser({
       ...userData,
-      token,
+      token: token || {
+        data: '',
+        type: 'expo'
+      },
       loggedIn: true
     }))
   dispatch(loaderActions.loaded('authLoader'))
@@ -189,7 +199,7 @@ const switchUserRole = () =>
       if (data) {
         dispatch(actions.getUser({
           role: 'celebrity',
-          clebrity: {
+          celebrity: {
             ...user.celebrity,
             data
           }

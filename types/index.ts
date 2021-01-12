@@ -30,6 +30,7 @@ export interface NotificationMessage {
     sent:boolean;
     read:boolean;
     recipientId:string;
+    createdAt:number;
 }
 
 export type UserRole = 'celebrity'|'user';
@@ -99,6 +100,7 @@ export interface UserMeta {
     id:string;
     name:string;
     imageUrl?:string;
+    token?:string;
 }
 
 export interface RequestResponse {

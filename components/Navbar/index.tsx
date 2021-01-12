@@ -1,4 +1,4 @@
-import { DrawerActions, useNavigation } from '@react-navigation/native'
+import { DrawerActions, useNavigation, useRoute } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Appbar, Badge, TouchableRipple, withTheme } from 'react-native-paper'
@@ -44,6 +44,8 @@ const Navbar: React.FC<NavProps> = ({
     goBack
   } = useNavigation()
   const { showBadge } = useNotifications()
+  const { name } = useRoute()
+  const showBack = name !== 'Home'
   const iconColor = invert
     ? COLORS.white
     : COLORS.iconGrey
@@ -76,7 +78,7 @@ const Navbar: React.FC<NavProps> = ({
   return <Appbar
         theme={{ colors: { primary: COLORS.white } }}
         style={[styles.container, barStyle && barStyle]}>
-        {backable
+        {(backable && showBack)
           ? <Appbar.BackAction color={iconColor} onPress={goBack}/>
           : !hideMenu &&
             <TouchableRipple onPress={onToggleDrawer}>

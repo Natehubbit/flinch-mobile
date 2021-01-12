@@ -82,7 +82,7 @@ exports.actions = (_a = toolkit_1.createSlice({
             var payload = _a.payload;
             return payload;
         },
-        updateNotifications: function (state, _a) {
+        update: function (state, _a) {
             var payload = _a.payload;
             return __spreadArrays(state, [payload]);
         },
@@ -158,6 +158,31 @@ var listen = function (data) { return function (dispatch) { return __awaiter(voi
         return [2 /*return*/];
     });
 }); }; };
+var update = function (id, data) { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
+    var notifications, updated, updatedList;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                notifications = getState().notifications;
+                return [4 /*yield*/, NotificationService_1["default"]
+                        .updateNotification(id, data)];
+            case 1:
+                updated = _a.sent();
+                if (updated) {
+                    updatedList = notifications
+                        .map(function (d) {
+                        if (d.id === id) {
+                            return __assign(__assign({}, d), data);
+                        }
+                        return d;
+                    });
+                    dispatch(exports.actions.getNotifications(updatedList));
+                }
+                return [2 /*return*/];
+        }
+    });
+}); }; };
 exports.notificationsActions = __assign(__assign({}, exports.actions), { getDeviceToken: getDeviceToken,
     getNotifications: getNotifications,
-    listen: listen });
+    listen: listen,
+    update: update });

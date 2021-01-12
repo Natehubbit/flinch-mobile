@@ -1,12 +1,19 @@
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
+import { useDispatch } from 'react-redux'
 import { Paragraph } from '../../common/styledComponents'
 import { COLORS } from '../../config/theme'
 import { useUser } from '../../hooks/useUser'
+import { Routes } from '../../navigation'
+import { notificationsActions } from '../../store/notifications'
 
 interface NotificationCardProps {
+  id: string;
   msg: string;
+  time: string;
+  data?: Request;
   read?:boolean;
   type?:'success'|'failed'|'default'
 }
@@ -14,13 +21,25 @@ interface NotificationCardProps {
 const NotificationCard: React.FC<NotificationCardProps> = ({
   read,
   msg,
+  id,
+  data,
+  time,
   type
 }) => {
+  const dispatch = useDispatch()
   const { imageUrl } = useUser()
+  const { navigate } = useNavigation()
   const opacity = read ? 0.4 : 1
+  const onPress = () => {
+    id && dispatch(
+      notificationsActions
+        .update(id, { read: true })
+    )
+    navigate<Routes>('Request', { data })
+  }
   return (
     <TouchableRipple
-      onPress={() => console.log('d')}
+      onPress={onPress}
       style={[styles.container, { opacity }]}
       >
       <View
@@ -40,7 +59,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
             {msg}
           </Paragraph>
           <Paragraph black style={[styles.time]}>
-            20 minutes ago
+            {time}
           </Paragraph>
         </View>
       </View>
@@ -82,7 +101,7 @@ const styles = StyleSheet.create({
     paddingRight: 55
   },
   msg: {
-    fontSize: 12
+    fontSize: 13
   },
   name: {
     fontWeight: 'bold'

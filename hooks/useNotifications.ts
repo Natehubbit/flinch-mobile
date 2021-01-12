@@ -21,14 +21,17 @@ const useNotifications = () => {
   const [showBadge, setShowBadge] = useState(false)
   const list = useSelector((state:AppState) => state.notifications)
   useEffect(() => {
-    NotificationService
+    const unsub = NotificationService
       .listener(id, updateList)
     NotificationService
       .receivedListener(receivedCallback)
     NotificationService
       .responseListener(responseCallback)
-    return () => NotificationService
-      .removeListeners()
+    return () => {
+      NotificationService
+        .removeListeners()
+      unsub && unsub()
+    }
   }, [])
   useEffect(() => {
     if (!!notification) {

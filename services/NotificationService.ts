@@ -48,6 +48,7 @@ export default class NotificationService {
     try {
       const res = await NotificationsRef
         .where('recipientId', '==', id)
+        .orderBy('createdAt', 'desc')
         .get()
       return res
         .docs
@@ -68,6 +69,7 @@ export default class NotificationService {
     try {
       return NotificationsRef
         .where('recipientId', '==', id)
+        .orderBy('createdAt', 'desc')
         .onSnapshot(snapshot => {
           const data = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -76,7 +78,7 @@ export default class NotificationService {
           callback && callback(data)
         })
     } catch (e) {
-      console.log(e.message)
+      alert(e.message)
       return null
     }
   }

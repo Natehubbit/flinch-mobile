@@ -153,7 +153,7 @@ const VideoRecord = () => {
                         <View style={styles.recordIndicator}/>
                     </View>
                 </View>}
-                {(!showInstructions || !isPreviewing) &&
+                {(!showInstructions && !isPreviewing && !isRecording) &&
                   <FAB
                     icon="eye-outline"
                     style={[styles.showIcon]}
@@ -238,6 +238,12 @@ const VideoRecord = () => {
                   />
                 </View>}
                 {isRecording && <View style={styles.recordBtns}>
+                  {!showInstructions && <FAB
+                    icon="eye-outline"
+                    style={[styles.showIconBottom]}
+                    small
+                    onPress={onShowInstructions}
+                  />}
                     <View style={styles.stopBtn}>
                         <TouchableRipple
                             style={styles.stopBtn}
@@ -355,6 +361,10 @@ const styles = StyleSheet.create({
   },
   showIcon: {
     right: 12
+  },
+  showIconBottom: {
+    // position: 'absolute',
+    // left: 15
   },
   stopBtn: {
     backgroundColor: '#fff',

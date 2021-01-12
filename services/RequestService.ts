@@ -151,4 +151,55 @@ export default class RequestService {
       return null
     }
   }
+
+  static async pendingListener (
+    id:string,
+    isUser:boolean,
+    callback?:(val:Request[])=>void,
+    loading?:()=>void,
+    loaded?:()=>void
+  ) {
+    try {
+      loading && loading()
+      const userRefId = isUser
+        ? 'requestor.id'
+        : 'celebrity.id'
+      return RequestRef
+        .where(userRefId, '==', id)
+        .where('status', '==', 'pending')
+        .orderBy('timestamp', 'desc')
+        .onSnapshot(snap => {
+          callback && callback(snap
+            .docs
+            .map(s => ({
+              id: s.id,
+              ...s.data()
+            }) as Request)
+          )
+          loaded && loaded()
+        })
+    } catch (e) {
+      console.log(e.message)
+      return null
+    }
+  }
+
+  static getCelebResponseCount = (
+    id:string,
+    callback:(val:number)=>void
+  ) => {
+    try {
+      return RequestRef
+        .where('status', '==', 'success')
+        .where('celebrity.id', '==', id)
+        .where('response.status', '==', 'approved')
+        .onSnapshot(snap => {
+          callback &&
+          callback(snap.size)
+        })
+    } catch (e) {
+      alert(e.message)
+      return null
+    }
+  }
 }

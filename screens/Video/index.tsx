@@ -18,11 +18,7 @@ const Video: React.FC = () => {
   const { goBack } = useNavigation()
   const {
     params: {
-      // id,
-      // duration,
       name,
-      // recipient,
-      // date,
       uri: url
     }
   } = useRoute<VideoScreenRouteProps>()
@@ -71,6 +67,7 @@ const Video: React.FC = () => {
                 label='Download'
                 theme={{ colors: { accent: 'transparent' } }}
                 uppercase={false}
+                style={[styles.download]}
               />
               : <FAB
                 icon={null}
@@ -78,7 +75,7 @@ const Video: React.FC = () => {
                 label={`${progress}% Downloading`}
                 uppercase={false}
                 small
-                style={{ backgroundColor: 'transparent', elevation: 0 }}
+                style={[styles.download]}
               />
             }
             {/* <IconBtn
@@ -95,6 +92,7 @@ const Video: React.FC = () => {
               icon='send'
               onPress={onShare}
               small
+              style={[styles.send]}
             />
           </View>
         </LinearGradient>
@@ -190,5 +188,13 @@ const styles = StyleSheet.create({
   extra: {
     flexDirection: 'row',
     marginRight: 10
+  },
+  send: {
+    bottom: 15
+  },
+  download: {
+    backgroundColor: 'transparent',
+    elevation: 0,
+    bottom: 10
   }
 })

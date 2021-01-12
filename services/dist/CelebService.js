@@ -128,7 +128,7 @@ var CelebService = /** @class */ (function () {
                         return [2 /*return*/, true];
                     case 2:
                         e_2 = _a.sent();
-                        console.log(e_2.message);
+                        alert(e_2.message);
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }

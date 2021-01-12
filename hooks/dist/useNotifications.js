@@ -19,14 +19,17 @@ var useNotifications = function () {
     var _b = react_1.useState(false), showBadge = _b[0], setShowBadge = _b[1];
     var list = react_redux_1.useSelector(function (state) { return state.notifications; });
     react_1.useEffect(function () {
-        NotificationService_1["default"]
+        var unsub = NotificationService_1["default"]
             .listener(id, updateList);
         NotificationService_1["default"]
             .receivedListener(receivedCallback);
         NotificationService_1["default"]
             .responseListener(responseCallback);
-        return function () { return NotificationService_1["default"]
-            .removeListeners(); };
+        return function () {
+            NotificationService_1["default"]
+                .removeListeners();
+            unsub && unsub();
+        };
     }, []);
     react_1.useEffect(function () {
         if (!!notification) {

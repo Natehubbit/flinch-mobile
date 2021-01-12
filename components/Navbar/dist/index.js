@@ -13,6 +13,8 @@ var Navbar = function (_a) {
     var title = _a.title, isHome = _a.isHome, hideMenu = _a.hideMenu, hideBell = _a.hideBell, edit = _a.edit, showCancel = _a.showCancel, invert = _a.invert, onCancel = _a.onCancel, onEdit = _a.onEdit;
     var _b = native_1.useNavigation(), navigate = _b.navigate, canGoBack = _b.canGoBack, dispatch = _b.dispatch, goBack = _b.goBack;
     var showBadge = useNotifications_1["default"]().showBadge;
+    var name = native_1.useRoute().name;
+    var showBack = name !== 'Home';
     var iconColor = invert
         ? theme_1.COLORS.white
         : theme_1.COLORS.iconGrey;
@@ -33,7 +35,7 @@ var Navbar = function (_a) {
         return navigate('Notifications');
     };
     return react_1["default"].createElement(react_native_paper_1.Appbar, { theme: { colors: { primary: theme_1.COLORS.white } }, style: [styles.container, barStyle && barStyle] },
-        backable
+        (backable && showBack)
             ? react_1["default"].createElement(react_native_paper_1.Appbar.BackAction, { color: iconColor, onPress: goBack })
             : !hideMenu &&
                 react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onToggleDrawer }, !invert

@@ -40,7 +40,7 @@ const Request: React.FC = () => {
       thumbnailUri
     }
   } = (
-    id
+    !!id
       ? useRequests('id', id)[0]
       : data
   ) || initStateRequest
@@ -56,9 +56,9 @@ const Request: React.FC = () => {
   const isSuccess = status === 'success'
   const isPending = status === 'pending'
   const showButtons = !isUser && isPending
-  const onAccept = () => navigate<Routes>('VideoUpload', { id })
+  const onAccept = () => navigate<Routes>('VideoUpload', { id: id || data?.id })
   const onOpenVideo = () => navigate<Routes>('Video', {
-    id,
+    id: id || data?.id,
     duration,
     recipient,
     date: HelperService.parseToDate(timestamp),
@@ -67,7 +67,7 @@ const Request: React.FC = () => {
   })
   const onReject = async () => {
     setRejecting(true)
-    dispatch(requestsActions.rejectRequest(id, rejectCallback))
+    dispatch(requestsActions.rejectRequest(id || data?.id, rejectCallback))
   }
   const rejectCallback = () => {
     goBack()
