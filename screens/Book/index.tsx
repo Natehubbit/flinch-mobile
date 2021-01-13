@@ -23,7 +23,11 @@ const Book: React.FC = () => {
   const dispatch = useDispatch()
   const request = useRequest()
   const mounted = useRef(false)
-  const { bookingLoader: booking } = useLoader()
+  const {
+    bookingLoader: {
+      isLoading: booking
+    }
+  } = useLoader()
   const { navigate } = useNavigation()
   const { params: { data } } = useRoute<BookScreenRouteProps>()
   const { displayName, id: userId, token: userToken } = useUser()
@@ -76,7 +80,8 @@ const Book: React.FC = () => {
       timestamp: Date.now(),
       ...values
     }
-    dispatch(requestActions.createRequest(data))
+    dispatch(requestActions
+      .createRequest(data))
   }
   const renderForm = () => {
     return (

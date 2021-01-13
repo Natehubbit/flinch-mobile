@@ -24,7 +24,7 @@ var celebs_1 = require("../../store/celebs");
 var Home = function () {
     var dispatch = react_redux_1.useDispatch();
     var celebs = useCelebs_1.useCelebs();
-    var celebsLoader = useLoader_1.useLoader().celebsLoader;
+    var celebsLoader = useLoader_1.useLoader().celebsLoader.isLoading;
     react_1.useEffect(function () {
         (celebs.length < 1) &&
             dispatch(celebs_1.celebsActions.getCelebs());

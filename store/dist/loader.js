@@ -26,12 +26,52 @@ exports.__esModule = true;
 exports.loaderActions = exports.loaderSlice = exports.actions = void 0;
 var toolkit_1 = require("@reduxjs/toolkit");
 var initState = {
-    authLoader: false,
-    celebsLoader: false,
-    bookingLoader: false,
-    paymentLoader: false,
-    requestsLoader: false,
-    responseLoader: false
+    authLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    },
+    celebsLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    },
+    bookingLoader: {
+        isLoading: false,
+        body: null
+    },
+    paymentLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    },
+    requestsLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    },
+    responseLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    },
+    videosResponseLoader: {
+        isLoading: false,
+        body: null,
+        label: '',
+        showBtns: false,
+        type: 'loader'
+    }
 };
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'loader',
@@ -40,12 +80,18 @@ exports.actions = (_a = toolkit_1.createSlice({
         loading: function (state, _a) {
             var _b;
             var payload = _a.payload;
-            return __assign(__assign({}, state), (_b = {}, _b[payload] = true, _b));
+            return __assign(__assign({}, state), (_b = {}, _b[payload] = __assign(__assign({}, state[payload]), { isLoading: true }), _b));
         },
         loaded: function (state, _a) {
             var _b;
             var payload = _a.payload;
-            return __assign(__assign({}, state), (_b = {}, _b[payload] = false, _b));
+            return __assign(__assign({}, state), (_b = {}, _b[payload] = __assign(__assign({}, state[payload]), { isLoading: false }), _b));
+        },
+        update: function (state, _a) {
+            var _b;
+            var payload = _a.payload;
+            var key = payload.key, data = payload.data;
+            return __assign(__assign({}, state), (_b = {}, _b[key] = __assign(__assign({}, state[key]), data), _b));
         },
         resetLoaders: function () {
             return initState;

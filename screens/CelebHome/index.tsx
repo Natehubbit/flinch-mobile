@@ -56,7 +56,11 @@ const CelebHome = () => {
       }
     }
   }
-  const { requestsLoader: loading } = useLoader()
+  const {
+    requestsLoader: {
+      isLoading: loading
+    }
+  } = useLoader()
   useEffect(() => {
     dispatch(requestsActions
       .listenForPending(

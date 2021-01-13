@@ -24,7 +24,7 @@ const Notifications = () => {
             msg={notification.body}
             key={notification.id}
             read={notification.read}
-            data={notification.data as any}
+            data={notification.data}
             time={moment(notification.createdAt).fromNow()}
           />
         ))}

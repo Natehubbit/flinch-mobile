@@ -48,13 +48,17 @@ exports.initStateRequest = {
         name: ''
     },
     status: 'pending',
-    price: 0,
+    price: {
+        amount: 0,
+        currency: 'GHS'
+    },
     timestamp: 0,
     payment: {
         id: '',
         amount: 0,
         payed: false,
-        timestamp: 0
+        timestamp: 0,
+        currency: 'GHS'
     }
 };
 // PATHS

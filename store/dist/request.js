@@ -115,12 +115,16 @@ var createRequest = function (data) { return function (dispatch) { return __awai
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                dispatch(loader_1.loaderActions.loading('bookingLoader'));
-                return [4 /*yield*/, RequestService_1["default"].createRequest(data)];
+                dispatch(loader_1.loaderActions
+                    .loading('bookingLoader'));
+                return [4 /*yield*/, RequestService_1["default"]
+                        .createRequest(data)];
             case 1:
                 res = _a.sent();
-                res && dispatch(exports.actions.getRequest(res));
-                dispatch(loader_1.loaderActions.loaded('bookingLoader'));
+                res && dispatch(exports.actions
+                    .getRequest(res));
+                dispatch(loader_1.loaderActions
+                    .loaded('bookingLoader'));
                 return [2 /*return*/];
         }
     });

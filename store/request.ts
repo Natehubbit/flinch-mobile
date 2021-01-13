@@ -55,10 +55,14 @@ export const { actions, ...requestSlice } = createSlice({
 })
 
 const createRequest = (data:Request) => async (dispatch:Dispatch) => {
-  dispatch(loaderActions.loading('bookingLoader'))
-  const res = await RequestService.createRequest(data)
-  res && dispatch(actions.getRequest(res))
-  dispatch(loaderActions.loaded('bookingLoader'))
+  dispatch(loaderActions
+    .loading('bookingLoader'))
+  const res = await RequestService
+    .createRequest(data)
+  res && dispatch(actions
+    .getRequest(res))
+  dispatch(loaderActions
+    .loaded('bookingLoader'))
 }
 
 export const requestActions = {

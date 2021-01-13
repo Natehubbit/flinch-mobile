@@ -63,13 +63,14 @@ export default class HelperService {
   static async generateBlobUrl (
     path:string,
     blob:Blob,
-    loading?:()=>void,
-    showHook?:boolean
+    showHook?:boolean,
+    loading?:()=>void
   ):Promise<null|string> {
     try {
       const bucket = storage.ref().child(path)
       const promise = bucket.put(blob)
-      showHook && UploadHookService.setHook(promise)
+      showHook && UploadHookService
+        .setHook(promise)
       loading && loading()
       await promise
       return bucket.getDownloadURL()

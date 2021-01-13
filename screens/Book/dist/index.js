@@ -33,7 +33,7 @@ var Book = function () {
     var dispatch = react_redux_1.useDispatch();
     var request = useRequest_1.useRequest();
     var mounted = react_1.useRef(false);
-    var booking = useLoader_1.useLoader().bookingLoader;
+    var booking = useLoader_1.useLoader().bookingLoader.isLoading;
     var navigate = native_1.useNavigation().navigate;
     var data = native_1.useRoute().params.data;
     var _a = useUser_1.useUser(), displayName = _a.displayName, userId = _a.id, userToken = _a.token;
@@ -72,7 +72,8 @@ var Book = function () {
                 payed: false,
                 timestamp: 0
             }, status: 'pending', price: price, timestamp: Date.now() }, values);
-        dispatch(request_1.requestActions.createRequest(data));
+        dispatch(request_1.requestActions
+            .createRequest(data));
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {

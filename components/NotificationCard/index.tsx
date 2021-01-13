@@ -8,6 +8,7 @@ import { COLORS } from '../../config/theme'
 import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
 import { notificationsActions } from '../../store/notifications'
+import { Request } from '../../types'
 
 interface NotificationCardProps {
   id: string;
@@ -35,7 +36,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       notificationsActions
         .update(id, { read: true })
     )
-    navigate<Routes>('Request', { data })
+    navigate<Routes>('Request', { id: data.id })
   }
   return (
     <TouchableRipple

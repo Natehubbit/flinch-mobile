@@ -125,26 +125,74 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.approveRequest = function (id, appUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var asset, duration, video, uri, thumbUri, thumb, thumbUrl, _a, _b, e_4;
+            var asset, duration, video, reload, uri, thumbUri, thumb, thumbUrl, _a, _b, e_4;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 13, , 14]);
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Fetching Video Details',
+                                showBtns: false
+                            }
+                        });
                         return [4 /*yield*/, HelperService_1["default"].getMediaInfo(appUri)];
                     case 1:
                         asset = _c.sent();
                         duration = (asset ||
                             { id: '', duration: 0 }).duration;
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Parsing video...'
+                            }
+                        });
                         return [4 /*yield*/, HelperService_1["default"].parseToBlob(appUri)
                             // upload video blob to firebase storage
                         ];
                     case 2:
                         video = _c.sent();
+                        // upload video blob to firebase storage
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Uploading video to server...',
+                                showBtns: true,
+                                type: 'progress'
+                            }
+                        });
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: false
+                            }
+                        });
+                        reload = function () {
+                            loading && loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: true
+                                }
+                            });
+                        };
                         return [4 /*yield*/, HelperService_1["default"]
-                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, loading, true)];
+                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, true, reload)];
                     case 3:
                         uri = _c.sent();
                         console.log('URI:: ', uri);
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Generating thumbnail...',
+                                showBtns: false,
+                                type: 'loader'
+                            }
+                        });
                         return [4 /*yield*/, VideoThumbnails
                                 .getThumbnailAsync(uri, {
                                 time: Math.abs(duration) / 2
@@ -153,6 +201,16 @@ var RequestService = /** @class */ (function () {
                         ];
                     case 4:
                         thumbUri = (_c.sent()).uri;
+                        // parse thumbnail to blob to upload to storage
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Uploading video thumbnail',
+                                showBtns: false,
+                                type: 'loader'
+                            }
+                        });
                         return [4 /*yield*/, HelperService_1["default"].parseToBlob(thumbUri)
                             // upload thumb to storage
                         ];
@@ -162,6 +220,14 @@ var RequestService = /** @class */ (function () {
                                 .generateBlobUrl("" + constants_1.THUMBS_PATH + id, thumb)];
                     case 6:
                         thumbUrl = _c.sent();
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Approving request...',
+                                showBtns: false
+                            }
+                        });
                         if (!uri) return [3 /*break*/, 10];
                         return [4 /*yield*/, RequestRef.doc(id)
                                 .update({
@@ -182,6 +248,20 @@ var RequestService = /** @class */ (function () {
                         _c.label = 9;
                     case 9:
                         _a;
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: true,
+                                label: 'Request approved.',
+                                showBtns: false
+                            }
+                        });
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: false
+                            }
+                        });
                         return [2 /*return*/, {
                                 status: 'success',
                                 response: {
@@ -204,7 +284,13 @@ var RequestService = /** @class */ (function () {
                         return [2 /*return*/, null];
                     case 13:
                         e_4 = _c.sent();
-                        console.log(e_4.message);
+                        loading && loading({
+                            key: 'responseLoader',
+                            data: {
+                                isLoading: false
+                            }
+                        });
+                        alert(e_4.message);
                         return [2 /*return*/, null];
                     case 14: return [2 /*return*/];
                 }

@@ -47,7 +47,7 @@ var CelebHome = function () {
             }
         }
     }).celebrity, id = _d.id, _e = _d.data, uri = _e.imageUrl, alias = _e.alias;
-    var loading = useLoader_1.useLoader().requestsLoader;
+    var loading = useLoader_1.useLoader().requestsLoader.isLoading;
     react_1.useEffect(function () {
         dispatch(requests_1.requestsActions
             .listenForPending(setRequests, setUnsubscribe));

@@ -40,7 +40,7 @@ const persistConfig:PersistConfig<unknown, any, any, any> = {
     'celebs',
     'notifications',
     'request',
-    'requests',
+    // 'requests',
     'response'
   ],
   storage: AsyncStorage,

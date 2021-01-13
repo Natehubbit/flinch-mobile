@@ -18,7 +18,7 @@ var NotificationCard = function (_a) {
     var onPress = function () {
         id && dispatch(notifications_1.notificationsActions
             .update(id, { read: true }));
-        navigate('Request', { data: data });
+        navigate('Request', { id: data.id });
     };
     return (react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onPress, style: [styles.container, { opacity: opacity }] },
         react_1["default"].createElement(react_native_1.View, { style: [styles.info] },

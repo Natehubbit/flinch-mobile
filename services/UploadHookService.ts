@@ -13,7 +13,7 @@ export default class UploadHookService {
   ) {
     const reset = () => {
       setProgress(0)
-      this.setHook(null)
+      // this.setHook(null)
     }
     return this.uploadHookRef.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
@@ -27,8 +27,9 @@ export default class UploadHookService {
     return this.uploadHookRef.pause()
   }
 
-  static cancel () {
-    return this.uploadHookRef.cancel()
+  static cancel (callback?:()=>void) {
+    this.uploadHookRef.cancel()
+    // callback && callback()
   }
 
   static next (snapshot:firebase.storage.UploadTaskSnapshot, setProgress:(val:number)=>void) {
@@ -37,9 +38,13 @@ export default class UploadHookService {
   }
 
   static error (error:Error, reset:()=>void, onError?:()=>void) {
+    const cancelled = (error as any).code === 'storage/canceled'
+    console.log(cancelled)
+    if (!cancelled) {
+      onError && onError()
+      console.log(error.message)
+    }
     reset()
-    onError && onError()
-    console.log(error.message)
   }
 
   static complete (onComplete?:()=>void) {

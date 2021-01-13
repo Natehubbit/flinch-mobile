@@ -44,15 +44,15 @@ var react_native_1 = require("react-native");
 var react_redux_1 = require("react-redux");
 var videoBack_svg_1 = require("../../assets/images/videoBack.svg");
 var ButtonAction_1 = require("../../components/ButtonAction");
-var useToast_1 = require("../../hooks/useToast");
 var HelperService_1 = require("../../services/HelperService");
 var requests_1 = require("../../store/requests");
+// import { toastActions } from '../../store/toast'
 var MediaLibrary = require("expo-media-library");
 var Navbar_1 = require("../../components/Navbar");
 var VideoUpload = function (_a) {
     var navigation = _a.navigation;
     var dispatch = react_redux_1.useDispatch();
-    var toast = useToast_1.useToast();
+    // const toast = useToast()
     var _b = react_1.useState(''), videoUri = _b[0], setVideoUri = _b[1];
     var id = native_1.useRoute().params.id;
     var navigate = native_1.useNavigation().navigate;

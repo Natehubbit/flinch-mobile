@@ -43,6 +43,7 @@ const useNotifications = () => {
       }))
       HelperService.vibrate()
     }
+    console.log(notification)
   }, [notification])
   useEffect(() => {
     const unread = list.filter(l => !l.read).length > 0

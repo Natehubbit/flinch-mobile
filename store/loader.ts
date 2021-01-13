@@ -1,14 +1,53 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppLoader, LoaderString } from '../types'
+import { AppLoader, Loader, LoaderString } from '../types'
 
 const initState: AppLoader = {
-  authLoader: false,
-  celebsLoader: false,
-  bookingLoader: false,
-  paymentLoader: false,
-  requestsLoader: false,
-  responseLoader: false,
-  videosResponseLoader: false
+  authLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  },
+  celebsLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  },
+  bookingLoader: {
+    isLoading: false,
+    body: null
+  },
+  paymentLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  },
+  requestsLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  },
+  responseLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  },
+  videosResponseLoader: {
+    isLoading: false,
+    body: null,
+    label: '',
+    showBtns: false,
+    type: 'loader'
+  }
 }
 
 export const { actions, ...loaderSlice } = createSlice({
@@ -19,13 +58,41 @@ export const { actions, ...loaderSlice } = createSlice({
       state,
       { payload }: PayloadAction<LoaderString>
     ): AppLoader {
-      return { ...state, [payload]: true }
+      return {
+        ...state,
+        [payload]: {
+          ...state[payload],
+          isLoading: true
+        }
+      }
     },
     loaded (
       state,
       { payload }: PayloadAction<LoaderString>
     ): AppLoader {
-      return { ...state, [payload]: false }
+      return {
+        ...state,
+        [payload]: {
+          ...state[payload],
+          isLoading: false
+        }
+      }
+    },
+    update (
+      state,
+      { payload }: PayloadAction<{key:LoaderString, data:Loader}>
+    ): AppLoader {
+      const {
+        key,
+        data
+      } = payload
+      return {
+        ...state,
+        [key]: {
+          ...state[key],
+          ...data
+        }
+      }
     },
     resetLoaders (): AppLoader {
       return initState

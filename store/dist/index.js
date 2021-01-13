@@ -39,7 +39,7 @@ var persistConfig = {
         'celebs',
         'notifications',
         'request',
-        'requests',
+        // 'requests',
         'response'
     ],
     storage: async_storage_1["default"],

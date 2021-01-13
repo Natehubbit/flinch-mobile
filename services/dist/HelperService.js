@@ -132,7 +132,7 @@ var HelperService = /** @class */ (function () {
             });
         });
     };
-    HelperService.generateBlobUrl = function (path, blob, loading, showHook) {
+    HelperService.generateBlobUrl = function (path, blob, showHook, loading) {
         return __awaiter(this, void 0, Promise, function () {
             var bucket, promise, error_3, isCancelled;
             return __generator(this, function (_a) {
@@ -141,7 +141,8 @@ var HelperService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         bucket = firebase_1.storage.ref().child(path);
                         promise = bucket.put(blob);
-                        showHook && UploadHookService_1["default"].setHook(promise);
+                        showHook && UploadHookService_1["default"]
+                            .setHook(promise);
                         loading && loading();
                         return [4 /*yield*/, promise];
                     case 1:

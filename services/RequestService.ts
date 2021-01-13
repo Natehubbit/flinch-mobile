@@ -1,5 +1,5 @@
 import { db } from '../config/firebase'
-import { Request, RequestResponse, RequestStatus } from '../types'
+import { Loader, LoaderString, Request, RequestResponse, RequestStatus } from '../types'
 import { initStateRequest, REQUEST_VIDEO_PATH, THUMBS_PATH } from '../common/constants'
 import HelperService from './HelperService'
 import * as VideoThumbnails from 'expo-video-thumbnails'
@@ -48,7 +48,10 @@ export default class RequestService {
         .get()
       return res
         .docs
-        .map(d => ({ id: d.id, ...d.data() })) as Request[]
+        .map(d => ({
+          id: d.id,
+          ...d.data()
+        })) as Request[]
     } catch (e) {
       console.log(e.message)
       return null
@@ -58,30 +61,89 @@ export default class RequestService {
   static async approveRequest (
     id:string,
     appUri:string,
-    loading?:()=>void
+    loading?:(data:{key:LoaderString, data:Loader})=>void
   ):Promise<ApproveResponse|null> {
     try {
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Fetching Video Details',
+          showBtns: false
+        }
+      })
       // get duration for cached video
       const asset = await HelperService.getMediaInfo(appUri)
       const { duration } = asset ||
         { id: '', duration: 0 }
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Parsing video...'
+        }
+      })
       // parse video to blob to upload to firebase storage
       const video = await HelperService.parseToBlob(appUri)
       // upload video blob to firebase storage
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Uploading video to server...',
+          showBtns: true,
+          type: 'progress'
+        }
+      })
+
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: false
+        }
+      })
+
+      const reload = () => {
+        loading && loading({
+          key: 'responseLoader',
+          data: {
+            isLoading: true
+          }
+        })
+      }
+
       const uri = await HelperService
         .generateBlobUrl(
           `${REQUEST_VIDEO_PATH}${id}`,
           video,
-          loading,
-          true
+          true,
+          reload
         )
       console.log('URI:: ', uri)
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Generating thumbnail...',
+          showBtns: false,
+          type: 'loader'
+        }
+      })
       // generate thumbnail for local uri midway through video
       const { uri: thumbUri } = await VideoThumbnails
         .getThumbnailAsync(uri, {
           time: Math.abs(duration) / 2
         })
       // parse thumbnail to blob to upload to storage
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Uploading video thumbnail',
+          showBtns: false,
+          type: 'loader'
+        }
+      })
       const thumb = await HelperService.parseToBlob(thumbUri)
       // upload thumb to storage
       const thumbUrl = await HelperService
@@ -89,6 +151,14 @@ export default class RequestService {
           `${THUMBS_PATH}${id}`,
           thumb
         )
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: true,
+          label: 'Approving request...',
+          showBtns: false
+        }
+      })
       if (uri) {
         await RequestRef.doc(id)
           .update({
@@ -100,6 +170,20 @@ export default class RequestService {
             'response.timestamp': Date.now()
           })
         asset && await HelperService.deleteMediaInfo([asset])
+        loading && loading({
+          key: 'responseLoader',
+          data: {
+            isLoading: true,
+            label: 'Request approved.',
+            showBtns: false
+          }
+        })
+        loading && loading({
+          key: 'responseLoader',
+          data: {
+            isLoading: false
+          }
+        })
         return {
           status: 'success',
           response: {
@@ -114,7 +198,13 @@ export default class RequestService {
       asset && await HelperService.deleteMediaInfo([asset])
       return null
     } catch (e) {
-      console.log(e.message)
+      loading && loading({
+        key: 'responseLoader',
+        data: {
+          isLoading: false
+        }
+      })
+      alert(e.message)
       return null
     }
   }

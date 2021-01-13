@@ -12,7 +12,11 @@ import { celebsActions } from '../../store/celebs'
 const Home: React.FC = () => {
   const dispatch = useDispatch()
   const celebs = useCelebs()
-  const { celebsLoader } = useLoader()
+  const {
+    celebsLoader: {
+      isLoading: celebsLoader
+    }
+  } = useLoader()
   useEffect(() => {
     (celebs.length < 1) &&
     dispatch(celebsActions.getCelebs())

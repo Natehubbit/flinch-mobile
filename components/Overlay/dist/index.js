@@ -14,63 +14,35 @@ exports.__esModule = true;
 var react_1 = require("react");
 var react_native_1 = require("react-native");
 var react_native_paper_1 = require("react-native-paper");
-var react_redux_1 = require("react-redux");
+// import { useDispatch } from 'react-redux'
 var styledComponents_1 = require("../../common/styledComponents");
 var theme_1 = require("../../config/theme");
 var selector_1 = require("../../hooks/selector");
 var useLoader_1 = require("../../hooks/useLoader");
-var UploadHookService_1 = require("../../services/UploadHookService");
-var loader_1 = require("../../store/loader");
-var toast_1 = require("../../store/toast");
+// import UploadHookService from '../../services/UploadHookService'
+// import { loaderActions } from '../../store/loader'
+// import { toastActions } from '../../store/toast'
 var Selector_1 = require("../Selector");
 var Toast_1 = require("../Toast");
+var UploadModal_1 = require("../UploadModal");
 var AppOverlay = function (_a) {
     var children = _a.children, props = __rest(_a, ["children"]);
-    var dispatch = react_redux_1.useDispatch();
-    var _b = react_1.useState(0), progress = _b[0], setProgress = _b[1];
-    var _c = useLoader_1.useLoader(), paymentLoader = _c.paymentLoader, responseLoader = _c.responseLoader, authLoader = _c.authLoader;
+    // const dispatch = useDispatch()
+    var _b = useLoader_1.useLoader(), paymentLoader = _b.paymentLoader.isLoading, responseLoader = _b.responseLoader.isLoading, authLoader = _b.authLoader.isLoading;
     var showSelector = selector_1.useSelect().show;
     var loading = paymentLoader ||
         responseLoader ||
         authLoader ||
         showSelector;
     react_1.useEffect(function () {
-        var unsubscribe = UploadHookService_1["default"].uploadHookRef &&
-            UploadHookService_1["default"].listen(setProgress, onUploadError, onUploadComplete);
-        return function () { return unsubscribe && unsubscribe(); };
-    }, [UploadHookService_1["default"].uploadHookRef]);
-    react_1.useEffect(function () {
         loading
-            ? react_native_1.BackHandler.addEventListener('hardwareBackPress', onExit)
-            : react_native_1.BackHandler.removeEventListener('hardwareBackPress', onExit);
+            ? react_native_1.BackHandler
+                .addEventListener('hardwareBackPress', onExit)
+            : react_native_1.BackHandler
+                .removeEventListener('hardwareBackPress', onExit);
         return function () { return react_native_1.BackHandler
             .removeEventListener('hardwareBackPress', onExit); };
     }, [loading]);
-    var onUploadError = function () {
-        dispatch(toast_1.toastActions.setToast({
-            label: 'Retry',
-            msg: 'An Error Occured during upload...',
-            show: true,
-            onDismiss: onHideToast
-        }));
-    };
-    var onHideToast = function () {
-        dispatch(toast_1.toastActions.resetToast());
-    };
-    var onHideUpload = function () {
-        dispatch(loader_1.loaderActions.loaded('responseLoader'));
-    };
-    var onUploadComplete = function () {
-        dispatch(toast_1.toastActions.setToast({
-            show: true,
-            label: 'Okay',
-            msg: 'Upload completed',
-            mode: 'success',
-            onDismiss: onHideToast,
-            onPress: onHideToast
-        }));
-        onHideUpload();
-    };
     var onExit = function () {
         if (loading) {
             react_native_1.Alert.alert('Exit?', 'Are you sure you want to exit Flinch?', [
@@ -92,14 +64,6 @@ var AppOverlay = function (_a) {
                 react_1["default"].createElement(react_native_paper_1.ActivityIndicator, { color: theme_1.theme.colors.primary, style: [styles.submitLoader] }),
                 react_1["default"].createElement(styledComponents_1.Paragraph, { black: true }, "Submitting ")));
     };
-    var renderUploading = function () {
-        return react_1["default"].createElement(react_native_1.View, { style: [styles.progressContainer] },
-            react_1["default"].createElement(styledComponents_1.AltMiniLabel, null, "Uploading"),
-            react_1["default"].createElement(react_native_paper_1.ProgressBar, { progress: progress, style: [styles.progressBar], color: theme_1.theme.colors.primary }),
-            react_1["default"].createElement(react_native_1.View, { style: [styles.btns] },
-                react_1["default"].createElement(react_native_paper_1.Button, { color: theme_1.theme.colors.primary, onPress: onHideUpload }, "Hide"),
-                react_1["default"].createElement(react_native_paper_1.Button, { onPress: function () { return UploadHookService_1["default"].cancel(); }, color: theme_1.COLORS.red }, "Cancel")));
-    };
     var renderLoader = function () {
         return react_1["default"].createElement(react_native_paper_1.ActivityIndicator, { animating: true, size: "large", color: theme_1.theme.colors.primary });
     };
@@ -107,7 +71,8 @@ var AppOverlay = function (_a) {
         children,
         loading && react_1["default"].createElement(react_native_1.View, { style: styles.container },
             paymentLoader && renderLoader(),
-            responseLoader && renderUploading(),
+            responseLoader &&
+                react_1["default"].createElement(UploadModal_1["default"], null),
             authLoader && renderSubmitting(),
             react_1["default"].createElement(Selector_1["default"], null)),
         react_1["default"].createElement(Toast_1["default"], null)));
@@ -136,21 +101,5 @@ var styles = react_native_1.StyleSheet.create({
     submittingContent: {
         flexDirection: 'row',
         alignItems: 'center'
-    },
-    progressBar: {
-        width: styledComponents_1.maxWidth * 0.5,
-        height: 5
-    },
-    progressContainer: {
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        backgroundColor: theme_1.COLORS.white,
-        height: '30%',
-        width: '80%',
-        borderRadius: 5
-    },
-    btns: {
-        flexDirection: 'row'
     }
 });

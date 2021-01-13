@@ -11,6 +11,7 @@ import { useRequests } from '../../hooks/useRequests'
 import { Routes } from '../../navigation'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
+import { Request } from '../../types'
 
 const Requests: React.FC = () => {
   const { name } = useRoute()
@@ -23,7 +24,11 @@ const Requests: React.FC = () => {
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
   const [refresh, setRefresh] = useState(false)
-  const { requestsLoader: loading } = useLoader()
+  const {
+    requestsLoader: {
+      isLoading: loading
+    }
+  } = useLoader()
   useEffect(() => {
     fetchData()
   }, [])
@@ -35,8 +40,8 @@ const Requests: React.FC = () => {
     const endRefresh = () => setRefresh(false)
     dispatch(requestsActions.reloadRequests(endRefresh))
   }
-  const onOpenRequest = (id:string) => navigate<Routes>(
-    'Request', { id }
+  const onOpenRequest = (id:string, data?:Request) => navigate<Routes>(
+    'Request', { id, data }
   )
   const renderRequests = () => {
     const requestEmpty = requests.length < 1
@@ -64,7 +69,7 @@ const Requests: React.FC = () => {
                 price={HelperService.parseToMoney(item.price)}
                 tag={item.status}
                 recipient={item.recipient}
-                onPress={() => onOpenRequest(item.id)}
+                onPress={() => onOpenRequest(item.id, item)}
             />}
             refreshControl={<RefreshControl
               refreshing={refresh}

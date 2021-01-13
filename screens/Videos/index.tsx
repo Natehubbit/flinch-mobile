@@ -16,7 +16,11 @@ export default function Videos () {
   const data = useResponse('approved')
   const dataExists = data.length > 0
   const { id } = useUser()
-  const { videosResponseLoader: loader } = useLoader()
+  const {
+    videosResponseLoader: {
+      isLoading: loader
+    }
+  } = useLoader()
   useEffect(() => {
     dataExists
       ? onReload()

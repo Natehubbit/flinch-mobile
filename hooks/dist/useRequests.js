@@ -6,7 +6,8 @@ exports.useRequests = function (key, val) {
     return store_1.useSelector(function (_a) {
         var requests = _a.requests;
         if (key && val) {
-            var data = requests.filter(function (d) { return d[key] === val; });
+            var data = requests
+                .filter(function (d) { return d[key] === val; });
             return data;
         }
         return requests;

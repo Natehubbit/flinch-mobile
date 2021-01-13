@@ -6,11 +6,11 @@ import { View, StyleSheet } from 'react-native'
 import { useDispatch } from 'react-redux'
 import VideoBack from '../../assets/images/videoBack.svg'
 import ButtonAction from '../../components/ButtonAction'
-import { useToast } from '../../hooks/useToast'
+// import { useToast } from '../../hooks/useToast'
 import { Routes, UploadVideoScreenRouteProps } from '../../navigation'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
-import { toastActions } from '../../store/toast'
+// import { toastActions } from '../../store/toast'
 import * as MediaLibrary from 'expo-media-library'
 import Navbar from '../../components/Navbar'
 import { StackHeaderProps } from '@react-navigation/stack'
@@ -23,7 +23,7 @@ const VideoUpload:React.FC<VideoUploadProps> = ({
   navigation
 }) => {
   const dispatch = useDispatch()
-  const toast = useToast()
+  // const toast = useToast()
   const [videoUri, setVideoUri] = useState('')
   const { params: { id } } = useRoute<UploadVideoScreenRouteProps>()
   const { navigate } = useNavigation()

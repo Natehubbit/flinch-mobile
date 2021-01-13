@@ -2,7 +2,7 @@ import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { Alert } from 'react-native'
 import { AppState } from '.'
 import RequestService from '../services/RequestService'
-import { Request } from '../types'
+import { Loader, LoaderString, Request } from '../types'
 import { loaderActions } from './loader'
 import { responseActions } from './response'
 
@@ -96,14 +96,21 @@ const approveRequest = (
     }
   } = getState()
   if (role === 'user') return
-  const loading = () => dispatch(
-    loaderActions.loading('responseLoader')
+  dispatch(
+    loaderActions
+      .loading('responseLoader')
   )
+  const updateLoader = (
+    data:{key:LoaderString, data:Loader}
+  ) => {
+    dispatch(loaderActions
+      .update(data))
+  }
   const approved = await RequestService
     .approveRequest(
       id,
       uri,
-      loading
+      updateLoader
     )
   if (approved) {
     const data = requests.map(d => {

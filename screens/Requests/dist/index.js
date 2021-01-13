@@ -23,7 +23,7 @@ var Requests = function () {
     var dispatch = react_redux_1.useDispatch();
     var navigate = native_1.useNavigation().navigate;
     var _a = react_1.useState(false), refresh = _a[0], setRefresh = _a[1];
-    var loading = useLoader_1.useLoader().requestsLoader;
+    var loading = useLoader_1.useLoader().requestsLoader.isLoading;
     react_1.useEffect(function () {
         fetchData();
     }, []);
@@ -35,7 +35,7 @@ var Requests = function () {
         var endRefresh = function () { return setRefresh(false); };
         dispatch(requests_1.requestsActions.reloadRequests(endRefresh));
     };
-    var onOpenRequest = function (id) { return navigate('Request', { id: id }); };
+    var onOpenRequest = function (id, data) { return navigate('Request', { id: id, data: data }); };
     var renderRequests = function () {
         var requestEmpty = requests.length < 1;
         return requestEmpty
@@ -46,7 +46,7 @@ var Requests = function () {
                     " requests....pull down to refresh."))
             : react_1["default"].createElement(react_native_1.FlatList, { data: requests, contentContainerStyle: [styles.listContainer], renderItem: function (_a) {
                     var item = _a.item;
-                    return react_1["default"].createElement(RequestCard_1["default"], { celeb: item.celebrity.name, date: HelperService_1["default"].parseToDate(item.timestamp), occasion: item.occasion, imageUrl: item.celebrity.imageUrl, price: HelperService_1["default"].parseToMoney(item.price), tag: item.status, recipient: item.recipient, onPress: function () { return onOpenRequest(item.id); } });
+                    return react_1["default"].createElement(RequestCard_1["default"], { celeb: item.celebrity.name, date: HelperService_1["default"].parseToDate(item.timestamp), occasion: item.occasion, imageUrl: item.celebrity.imageUrl, price: HelperService_1["default"].parseToMoney(item.price), tag: item.status, recipient: item.recipient, onPress: function () { return onOpenRequest(item.id, item); } });
                 }, refreshControl: react_1["default"].createElement(react_native_1.RefreshControl, { refreshing: refresh, onRefresh: onReload, colors: [theme_1.theme.colors.primary] }), 
                 // initialNumToRender={7}
                 keyExtractor: function (item, i) { return item.id || i.toString(); } });

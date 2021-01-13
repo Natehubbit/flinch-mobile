@@ -153,16 +153,21 @@ var rejectRequest = function (id, callback) { return function (dispatch, getStat
     });
 }); }; };
 var approveRequest = function (id, uri, callback) { return function (dispatch, getState) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, requests, _b, role, userId, loading, approved, data;
+    var _a, requests, _b, role, userId, updateLoader, approved, data;
     return __generator(this, function (_c) {
         switch (_c.label) {
             case 0:
                 _a = getState(), requests = _a.requests, _b = _a.user, role = _b.role, userId = _b.celebrity.id;
                 if (role === 'user')
                     return [2 /*return*/];
-                loading = function () { return dispatch(loader_1.loaderActions.loading('responseLoader')); };
+                dispatch(loader_1.loaderActions
+                    .loading('responseLoader'));
+                updateLoader = function (data) {
+                    dispatch(loader_1.loaderActions
+                        .update(data));
+                };
                 return [4 /*yield*/, RequestService_1["default"]
-                        .approveRequest(id, uri, loading)];
+                        .approveRequest(id, uri, updateLoader)];
             case 1:
                 approved = _c.sent();
                 if (approved) {

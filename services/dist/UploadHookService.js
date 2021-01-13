@@ -11,24 +11,29 @@ var UploadHookService = /** @class */ (function () {
         var _this = this;
         var reset = function () {
             setProgress(0);
-            _this.setHook(null);
+            // this.setHook(null)
         };
         return this.uploadHookRef.on(firebase_1["default"].storage.TaskEvent.STATE_CHANGED, function (snap) { return _this.next(snap, setProgress); }, function (e) { return _this.error(e, onError, reset); }, function () { return _this.complete(onComplete); });
     };
     UploadHookService.pause = function () {
         return this.uploadHookRef.pause();
     };
-    UploadHookService.cancel = function () {
-        return this.uploadHookRef.cancel();
+    UploadHookService.cancel = function (callback) {
+        this.uploadHookRef.cancel();
+        // callback && callback()
     };
     UploadHookService.next = function (snapshot, setProgress) {
         var progress = snapshot.bytesTransferred / snapshot.totalBytes;
         setProgress(progress);
     };
     UploadHookService.error = function (error, reset, onError) {
+        var cancelled = error.code === 'storage/canceled';
+        console.log(cancelled);
+        if (!cancelled) {
+            onError && onError();
+            console.log(error.message);
+        }
         reset();
-        onError && onError();
-        console.log(error.message);
     };
     UploadHookService.complete = function (onComplete) {
         onComplete && onComplete();

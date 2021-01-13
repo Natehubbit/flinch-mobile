@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Image, ImageBackground, ScrollView, StyleSheet, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Image, ImageBackground, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { Divider, TouchableRipple } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import { MiniLabel, SubHeading, Paragraph } from '../../common/styledComponents'
@@ -10,17 +10,21 @@ import Tag from '../../components/Tag'
 import Button from '../../components/Button'
 import { Routes, RequestScreenRouteProps } from '../../navigation'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { useRequests } from '../../hooks/useRequests'
-import { initStateRequest } from '../../common/constants'
+// import { useRequests } from '../../hooks/useRequests'
+// import { initStateRequest } from '../../common/constants'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
 import Navbar from '../../components/Navbar'
+import RequestService from '../../services/RequestService'
+import { initStateRequest } from '../../common/constants'
 
 const Request: React.FC = () => {
   const dispatch = useDispatch()
   const [rejecting, setRejecting] = useState(false)
   const { role } = useUser()
+  const [loading, setLoading] = useState(false)
   const { navigate, goBack } = useNavigation()
+  const [request, setRequest] = useState(null)
   const { params, name: route } = useRoute<RequestScreenRouteProps>()
   const { id, data } = params
   const {
@@ -39,11 +43,9 @@ const Request: React.FC = () => {
       videoUri: uri,
       thumbnailUri
     }
-  } = (
-    !!id
-      ? useRequests('id', id)[0]
-      : data
-  ) || initStateRequest
+  } = request ||
+  data ||
+  initStateRequest
 
   const summarize = instructions.length > 99
   const info = summarize
@@ -56,6 +58,19 @@ const Request: React.FC = () => {
   const isSuccess = status === 'success'
   const isPending = status === 'pending'
   const showButtons = !isUser && isPending
+  useEffect(() => {
+    const init = async () => {
+      await fetchData()
+    }
+    init()
+  }, [])
+  const fetchData = async () => {
+    setLoading(true)
+    const request = await RequestService
+      .getRequest(id)
+    setRequest(request)
+    setLoading(false)
+  }
   const onAccept = () => navigate<Routes>('VideoUpload', { id: id || data?.id })
   const onOpenVideo = () => navigate<Routes>('Video', {
     id: id || data?.id,
@@ -75,8 +90,13 @@ const Request: React.FC = () => {
   }
   return <>
     <Navbar hideBell title={route} />
-        <ScrollView style={styles.container}>
-            <View style={styles.panelContainer}>
+        <ScrollView
+          style={styles.container}
+          refreshControl={<RefreshControl
+            refreshing={loading}
+            onRefresh={fetchData}
+          />}>
+            {!loading && <View style={styles.panelContainer}>
                 <View style={styles.panel}>
                     <Image
                       source={{ uri: imageUrl }}
@@ -146,9 +166,9 @@ const Request: React.FC = () => {
                         </View>
                     </View>
                 </View>
-            </View>
+            </View>}
         </ScrollView>
-        {showButtons && <View style={styles.buttons}>
+        {showButtons && !loading && <View style={styles.buttons}>
             <Button
               onPress={onAccept}
               label='Accept'

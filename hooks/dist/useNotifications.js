@@ -41,6 +41,7 @@ var useNotifications = function () {
             }));
             HelperService_1["default"].vibrate();
         }
+        console.log(notification);
     }, [notification]);
     react_1.useEffect(function () {
         var unread = list.filter(function (l) { return !l.read; }).length > 0;

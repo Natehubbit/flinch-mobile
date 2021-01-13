@@ -19,19 +19,6 @@ export type User = {
     token: string;
 } | null;
 
-export interface NotificationMessage {
-    id?:string;
-    to?: string|string[];
-    data?: object;
-    title?: string;
-    subtitle?: string;
-    body?: string;
-    sent:boolean;
-    read:boolean;
-    recipientId:string;
-    createdAt:number;
-}
-
 export type UserRole = 'celebrity'|'user';
 
 export type UserResponse =
@@ -41,13 +28,21 @@ export type CelebResponse =
     Partial<Celeb>
 
 export interface AppLoader {
-    authLoader:boolean;
-    celebsLoader:boolean;
-    bookingLoader:boolean;
-    paymentLoader:boolean;
-    requestsLoader:boolean;
-    responseLoader:boolean;
-    videosResponseLoader:boolean;
+    authLoader:Loader;
+    celebsLoader:Loader;
+    bookingLoader:Loader;
+    paymentLoader:Loader;
+    requestsLoader:Loader;
+    responseLoader:Loader;
+    videosResponseLoader:Loader;
+}
+
+export interface Loader {
+    isLoading:boolean;
+    body?:any;
+    label?:string;
+    type?:'progress'|'loader';
+    showBtns?:boolean;
 }
 
 export type UploadProgressRef = firebase.storage.UploadTask|null;
@@ -85,6 +80,19 @@ export interface Request {
     status: RequestStatus;
     price: Price;
     timestamp: number;
+}
+
+export interface NotificationMessage {
+    id?:string;
+    to?: string|string[];
+    data?: Request;
+    title?: string;
+    subtitle?: string;
+    body?: string;
+    sent:boolean;
+    read:boolean;
+    recipientId:string;
+    createdAt:number;
 }
 
 export interface RequestPayment {
