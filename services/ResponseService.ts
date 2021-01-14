@@ -4,14 +4,23 @@ import { ResponsePayload } from '../types'
 const RequestRef = db.collection('requests')
 
 export default class ResponseService {
-  static async getApproved (id:string): Promise<ResponsePayload[]|null> {
+  static async getApproved(
+    id: string
+  ): Promise<ResponsePayload[] | null> {
     try {
-      const snapshot = await RequestRef
-        .where('requestor.id', '==', id)
-        .where('response.status', '==', 'approved')
+      const snapshot = await RequestRef.where(
+        'requestor.id',
+        '==',
+        id
+      )
+        .where(
+          'response.status',
+          '==',
+          'approved'
+        )
         .orderBy('response.timestamp', 'desc')
         .get()
-      return snapshot.docs.map(d => ({
+      return snapshot.docs.map((d) => ({
         id: d.id,
         celebrity: d.data().celebrity.name,
         recipient: d.data().recipient,

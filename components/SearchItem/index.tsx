@@ -1,10 +1,17 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
-import { Paragraph, TouchableRipple } from 'react-native-paper'
+import {
+  Image,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  Paragraph,
+  TouchableRipple
+} from 'react-native-paper'
 interface SearchItemProps {
-  uri:string;
-  label:string;
-  onPress:()=>void;
+  uri: string
+  label: string
+  onPress: () => void
 }
 
 const SearchItem: React.FC<SearchItemProps> = ({
@@ -16,19 +23,14 @@ const SearchItem: React.FC<SearchItemProps> = ({
     <View>
       <TouchableRipple
         onPress={onPress}
-        style={[styles.container]}
-      >
+        style={[styles.container]}>
         <>
           <Image
             source={{ uri }}
             style={[styles.img]}
           />
-          <View
-            style={[styles.label]}
-          >
-            <Paragraph>
-              {label}
-            </Paragraph>
+          <View style={[styles.label]}>
+            <Paragraph>{label}</Paragraph>
           </View>
         </>
       </TouchableRipple>

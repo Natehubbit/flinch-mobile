@@ -2,34 +2,37 @@ import React, { useState } from 'react'
 import { StyleSheet, View } from 'react-native'
 import Input from '../../components/Input'
 import Img from '../../assets/images/card.svg'
-import { maxHeight, maxWidth } from '../../common/styledComponents'
+import {
+  maxHeight,
+  maxWidth
+} from '../../common/styledComponents'
 import { FAB } from 'react-native-paper'
 
 const PaymentCard: React.FC = () => {
   const [see, setSee] = useState(true)
   const onToggle = () => setSee(!see)
-  return <View
-        style={styles.contentContainer}
-    >
-        <Img style={styles.image} />
-        <Input
-            left='credit-card'
-            label='Card No.'
-        />
-        <Input
-            label='CCV'
-            secureTextEntry={see}
-            left='lock'
-            right='eye'
-            onIconClicked={onToggle}
-        />
-        <FAB
-            style={styles.fab}
-            icon='chevron-right'
-            label='Proceed'
-            onPress={() => console.log('go')}
-        />
+  return (
+    <View style={styles.contentContainer}>
+      <Img style={styles.image} />
+      <Input
+        left="credit-card"
+        label="Card No."
+      />
+      <Input
+        label="CCV"
+        secureTextEntry={see}
+        left="lock"
+        right="eye"
+        onIconClicked={onToggle}
+      />
+      <FAB
+        style={styles.fab}
+        icon="chevron-right"
+        label="Proceed"
+        onPress={() => console.log('go')}
+      />
     </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -51,7 +54,6 @@ const styles = StyleSheet.create({
   fabContainer: {
     overflow: 'hidden'
   }
-
 })
 
 export default PaymentCard

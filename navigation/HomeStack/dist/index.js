@@ -19,8 +19,6 @@ var Home_1 = require("../../screens/Home");
 var Celeb_1 = require("../../screens/Celeb");
 var Book_1 = require("../../screens/Book");
 var PaymentMode_1 = require("../../screens/PaymentMode");
-var PaymentCard_1 = require("../../screens/PaymentCard");
-var PaymentMobile_1 = require("../../screens/PaymentMobile");
 var constants_1 = require("../../common/constants");
 var Stack = stack_1.createStackNavigator();
 var HomeStack = function () {
@@ -32,20 +30,18 @@ var HomeStack = function () {
             isHome = false;
             heading = 'Celebrity';
         }
-        if (name === 'PaymentCard' || name === 'PaymentMobile') {
+        if (name === 'PaymentMode') {
             heading = 'Payment';
         }
         var showNav = !(name === 'Search');
         if (!showNav)
             return null;
-        return react_1["default"].createElement(Navbar_1["default"], { isHome: isHome, hideBell: !isHome, title: heading });
+        return (react_1["default"].createElement(Navbar_1["default"], { isHome: isHome, hideBell: !isHome, title: heading }));
     };
     return (react_1["default"].createElement(Stack.Navigator, { screenOptions: __assign({ header: function (props) { return renderHeader(props); } }, constants_1.SLIDE_ANIMATION) },
-        react_1["default"].createElement(Stack.Screen, { name: 'Home', component: Home_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'Celeb', component: Celeb_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'Book', component: Book_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'Payment', component: PaymentMode_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'PaymentCard', component: PaymentCard_1["default"] }),
-        react_1["default"].createElement(Stack.Screen, { name: 'PaymentMobile', component: PaymentMobile_1["default"] })));
+        react_1["default"].createElement(Stack.Screen, { name: "Home", component: Home_1["default"] }),
+        react_1["default"].createElement(Stack.Screen, { name: "Celeb", component: Celeb_1["default"] }),
+        react_1["default"].createElement(Stack.Screen, { name: "Book", component: Book_1["default"] }),
+        react_1["default"].createElement(Stack.Screen, { name: "PaymentMode", component: PaymentMode_1["default"] })));
 };
 exports["default"] = HomeStack;

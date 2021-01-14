@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import { COLORS } from '../../config/theme'
 
 interface VideoPlayerProps {
-  uri: string;
+  uri: string
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({

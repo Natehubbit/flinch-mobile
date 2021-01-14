@@ -1,7 +1,7 @@
 import { Theme } from 'react-native-paper/lib/typescript/src/types'
 import { DefaultTheme } from 'react-native-paper'
 
-export const theme:Theme = {
+export const theme: Theme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
@@ -31,6 +31,4 @@ export const COLORS = {
   lighter: 'rgba(226,226,226,0.5)'
 }
 
-export const settings = {
-
-}
+export const settings = {}

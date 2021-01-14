@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { DrawerContentComponentProps, DrawerContentOptions, DrawerItem } from '@react-navigation/drawer'
+import {
+  DrawerContentComponentProps,
+  DrawerContentOptions,
+  DrawerItem
+} from '@react-navigation/drawer'
 
 import { useDispatch } from 'react-redux'
 import { useUser } from '../../hooks/useUser'
@@ -7,19 +11,38 @@ import { Routes } from '../../navigation'
 import { userActions } from '../../store/user'
 import { MaterialCommunityIcons as MaterialIcon } from '@expo/vector-icons'
 import { COLORS, theme } from '../../config/theme'
-import { Image, StyleSheet, View } from 'react-native'
-import { MiniLabel, Paragraph, SubHeading } from '../../common/styledComponents'
-import { Switch, TouchableRipple } from 'react-native-paper'
+import {
+  Image,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  MiniLabel,
+  Paragraph,
+  SubHeading
+} from '../../common/styledComponents'
+import {
+  Switch,
+  TouchableRipple
+} from 'react-native-paper'
 
-const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (props) => {
+const Drawer: React.FC<
+  DrawerContentComponentProps<DrawerContentOptions>
+> = (props) => {
   const dispatch = useDispatch()
   const user = useUser()
-  const { state: { routeNames }, navigation } = props
+  const {
+    state: { routeNames },
+    navigation
+  } = props
   const { navigate, reset } = navigation
-  const onNavigate = (route:Routes) => navigate<Routes>(route)
-  const [toggle, setToggle] = useState(user.role === 'celebrity')
+  const onNavigate = (route: Routes) =>
+    navigate<Routes>(route)
+  const [toggle, setToggle] = useState(
+    user.role === 'celebrity'
+  )
   const { isCeleb } = user.celebrity
-  const onToggleSwitch = (val:boolean) => {
+  const onToggleSwitch = (val: boolean) => {
     setToggle(val)
     dispatch(userActions.switchUserRole())
     reset({
@@ -31,78 +54,92 @@ const Drawer:React.FC<DrawerContentComponentProps<DrawerContentOptions>> = (prop
     dispatch(userActions.signout())
   }
   const renderRoutes = () => {
-    return routeNames.map((route:Routes, i:number) => {
-      const isHome = route === 'Home'
-      const label = route === 'Videos'
-        ? 'My Videos'
-        : route
-      const icon = isHome
-        ? 'home-outline'
-        : route === 'Requests'
+    return routeNames.map(
+      (route: Routes, i: number) => {
+        const isHome = route === 'Home'
+        const label =
+          route === 'Videos' ? 'My Videos' : route
+        const icon = isHome
+          ? 'home-outline'
+          : route === 'Requests'
           ? 'book-outline'
           : route === 'Notifications'
-            ? 'bell-outline'
-            : route === 'Videos'
-              ? 'video-outline'
-              : route === 'Profile'
-                ? 'account-outline'
-                : 'camera'
+          ? 'bell-outline'
+          : route === 'Videos'
+          ? 'video-outline'
+          : route === 'Profile'
+          ? 'account-outline'
+          : 'camera'
 
-      return <DrawerItem
-                key={i}
-                icon={props => <MaterialIcon
-                  {...props}
-                  name={icon}
-                  style={styles.drawerIcon}
-                />}
-                label={label}
-                onPress={() => onNavigate(route)}
-                activeBackgroundColor='#fff'
-                labelStyle={styles.drawerLabel}
-                style={styles.drawerItem}
-            />
-    })
+        return (
+          <DrawerItem
+            key={i}
+            icon={(props) => (
+              <MaterialIcon
+                {...props}
+                name={icon}
+                style={styles.drawerIcon}
+              />
+            )}
+            label={label}
+            onPress={() => onNavigate(route)}
+            activeBackgroundColor="#fff"
+            labelStyle={styles.drawerLabel}
+            style={styles.drawerItem}
+          />
+        )
+      }
+    )
   }
   const { imageUrl, role, displayName } = user
-  return <View style={styles.drawer}>
-        <View style={styles.head}>
-            <View style={styles.user}>
-                <Image
-                    source={{ uri: imageUrl }}
-                    style={styles.avatar}
-                />
-                <View style={styles.userLabel}>
-                    <SubHeading style={styles.name}>{displayName}</SubHeading>
-                    <MiniLabel style={styles.role}>{role || 'user'}</MiniLabel>
-                </View>
-            </View>
-            <View>
-                {isCeleb && <Switch
-                    theme={{ colors: { accent: 'white' } }}
-                    value={toggle}
-                    onValueChange={val => onToggleSwitch(val)}
-                />}
-            </View>
+  return (
+    <View style={styles.drawer}>
+      <View style={styles.head}>
+        <View style={styles.user}>
+          <Image
+            source={{ uri: imageUrl }}
+            style={styles.avatar}
+          />
+          <View style={styles.userLabel}>
+            <SubHeading style={styles.name}>
+              {displayName}
+            </SubHeading>
+            <MiniLabel style={styles.role}>
+              {role || 'user'}
+            </MiniLabel>
+          </View>
         </View>
-        {renderRoutes()}
-        <View style={[styles.bottom]}>
-          <TouchableRipple
-            onPress={onLogout}
-            style={[styles.logout]}
-          >
-            <>
-              <Paragraph>
-                Logout
-              </Paragraph>
-              <MaterialIcon
-                name='logout'
-                size={20}
-                color={COLORS.white}
-              />
-            </>
-          </TouchableRipple>
+        <View>
+          {isCeleb && (
+            <Switch
+              theme={{
+                colors: { accent: 'white' }
+              }}
+              value={toggle}
+              onValueChange={(val) =>
+                onToggleSwitch(val)
+              }
+            />
+          )}
         </View>
+      </View>
+      {renderRoutes()}
+      <View style={[styles.bottom]}>
+        <TouchableRipple
+          onPress={onLogout}
+          style={[styles.logout]}>
+          <>
+            <Paragraph>Logout</Paragraph>
+            <MaterialIcon
+              name="logout"
+              size={20}
+              color={COLORS.white}
+            />
+          </>
+        </TouchableRipple>
+      </View>
     </View>
+  )
 }
 
 const styles = StyleSheet.create({

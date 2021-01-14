@@ -1,27 +1,36 @@
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  Dispatch,
+  PayloadAction
+} from '@reduxjs/toolkit'
 import CelebService from '../services/CelebService'
 import { Celebs } from '../types'
 import { loaderActions } from './loader'
 
 const initState: Celebs = []
 
-export const { actions, ...celebsSlice } = createSlice({
+export const {
+  actions,
+  ...celebsSlice
+} = createSlice({
   name: 'celebs',
   initialState: initState,
   reducers: {
-    getCelebs (
+    getCelebs(
       state,
       { payload }: PayloadAction<Celebs>
     ) {
       return payload
     },
-    clearCelebs ():Celebs {
+    clearCelebs(): Celebs {
       return []
     }
   }
 })
 
-const getCelebs = () => async (dispatch:Dispatch) => {
+const getCelebs = () => async (
+  dispatch: Dispatch
+) => {
   dispatch(loaderActions.loading('celebsLoader'))
   const celebs = await CelebService.getCelebs()
   dispatch(actions.getCelebs(celebs))

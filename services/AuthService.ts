@@ -7,26 +7,30 @@ type UserResponse = Partial<User>
 
 export default class AuthService {
   /**
-     * Listens for user login state and returns result to
-     * callback function
-     * @param onAuthChange auth state changed callback
-     */
-  static authStateListener (
-    onAuthChange
-    : (user: firebase.User) => void
+   * Listens for user login state and returns result to
+   * callback function
+   * @param onAuthChange auth state changed callback
+   */
+  static authStateListener(
+    onAuthChange: (user: firebase.User) => void
   ) {
-    const subscriber = auth
-      .onAuthStateChanged(onAuthChange)
+    const subscriber = auth.onAuthStateChanged(
+      onAuthChange
+    )
     return subscriber
   }
 
-  static async signUp (
+  static async signUp(
     email: string,
     password: string
   ): Promise<UserResponse> {
     try {
-      const { user } = await auth
-        .createUserWithEmailAndPassword(email, password)
+      const {
+        user
+      } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      )
       const {
         uid: id,
         displayName,
@@ -36,7 +40,10 @@ export default class AuthService {
     } catch (error) {
       const { code } = error
       if (code === 'auth/email-already-in-use') {
-        Alert.alert('Error', 'Account already exists')
+        Alert.alert(
+          'Error',
+          'Account already exists'
+        )
       }
       if (code === 'auth/invalid-email') {
         Alert.alert('Error', 'Invalid email')
@@ -46,13 +53,17 @@ export default class AuthService {
     }
   }
 
-  static async login (
+  static async login(
     email: string,
     password: string
   ): Promise<UserResponse> {
     try {
-      const { user } = await auth
-        .signInWithEmailAndPassword(email, password)
+      const {
+        user
+      } = await auth.signInWithEmailAndPassword(
+        email,
+        password
+      )
       const {
         uid: id,
         displayName,
@@ -69,10 +80,9 @@ export default class AuthService {
     }
   }
 
-  static async signout (): Promise<boolean> {
+  static async signout(): Promise<boolean> {
     try {
-      await auth
-        .signOut()
+      await auth.signOut()
       return true
     } catch (error) {
       alert(error.message)
@@ -80,7 +90,7 @@ export default class AuthService {
     }
   }
 
-  static async sendVerificationEmail (): Promise<boolean> {
+  static async sendVerificationEmail(): Promise<boolean> {
     try {
       const user = auth.currentUser
       await user.sendEmailVerification()
@@ -91,7 +101,7 @@ export default class AuthService {
     }
   }
 
-  static async updateAuthEmail (email:string) {
+  static async updateAuthEmail(email: string) {
     try {
       const user = auth.currentUser
       await user.updateEmail(email)

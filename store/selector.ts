@@ -1,4 +1,8 @@
-import { createSlice, PayloadAction, Dispatch } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  PayloadAction,
+  Dispatch
+} from '@reduxjs/toolkit'
 import { AppState } from '.'
 import { Selector } from '../types'
 
@@ -10,43 +14,53 @@ const initState: Selector = {
   onSelect: () => {}
 }
 
-export const { actions, ...selectorSlice } = createSlice({
+export const {
+  actions,
+  ...selectorSlice
+} = createSlice({
   name: 'selector',
   initialState: initState,
   reducers: {
-    setSelector (
+    setSelector(
       state,
-      { payload }: PayloadAction<Partial<Selector>>
+      {
+        payload
+      }: PayloadAction<Partial<Selector>>
     ) {
       return { ...state, ...payload }
     },
-    resetSelector () {
+    resetSelector() {
       return initState
     }
   }
 })
 
 const openSelector = (
-  options:string[],
-  selectorTitle?:string,
-  val?:string,
-  onSelect?:()=>void
-) =>
-  (
-    dispatch:Dispatch,
-    getState: () => AppState
-  ) => {
-    const { selector: { title, value } } = getState()
-    dispatch(actions.setSelector({
+  options: string[],
+  selectorTitle?: string,
+  val?: string,
+  onSelect?: () => void
+) => (
+  dispatch: Dispatch,
+  getState: () => AppState
+) => {
+  const {
+    selector: { title, value }
+  } = getState()
+  dispatch(
+    actions.setSelector({
       title: selectorTitle || title,
       value: val || value,
       show: true,
       options,
       onSelect: onSelect || null
-    }))
-  }
+    })
+  )
+}
 
-const closeSelector = () => (dispatch:Dispatch) => {
+const closeSelector = () => (
+  dispatch: Dispatch
+) => {
   dispatch(actions.resetSelector())
 }
 

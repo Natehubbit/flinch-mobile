@@ -1,17 +1,19 @@
 import { TransitionPresets } from '@react-navigation/stack'
 import { PaymentMode, Request } from '../types'
 
-export const API = 'http://localhost:5001/shoutouts-3c57c/us-central1/'
+export const API =
+  'http://localhost:5001/shoutouts-3c57c/us-central1/'
 
 export const RECORD_DURATION = 60 // seconds
 
-export const PAYMENT_CALLBACK = 'https://us-central1-shoutouts-3c57c.cloudfunctions.net/paymentCallback'
+export const PAYMENT_CALLBACK =
+  'https://us-central1-shoutouts-3c57c.cloudfunctions.net/paymentCallback'
 
 export const SLIDE_ANIMATION = {
   ...TransitionPresets.SlideFromRightIOS
 }
 
-export const PAYMENT_OPTIONS:PaymentMode[] = [
+export const PAYMENT_OPTIONS: PaymentMode[] = [
   {
     label: 'Mobile Money',
     icon: 'cellphone'

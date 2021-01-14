@@ -1,14 +1,25 @@
 import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
-import { Button, RadioButton, TouchableRipple } from 'react-native-paper'
+import {
+  ScrollView,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  Button,
+  RadioButton,
+  TouchableRipple
+} from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { MiniLabel, SubHeading } from '../../common/styledComponents'
+import {
+  MiniLabel,
+  SubHeading
+} from '../../common/styledComponents'
 import { COLORS, theme } from '../../config/theme'
 import { useSelect } from '../../hooks/selector'
 import { selectorActions } from '../../store/selector'
 
 export interface SelectorProps {
-  onHide?: ()=>void;
+  onHide?: () => void
 }
 
 const Selector: React.FC<SelectorProps> = ({
@@ -22,14 +33,20 @@ const Selector: React.FC<SelectorProps> = ({
     options,
     title
   } = useSelect()
-  const onPress = (val:string) => {
-    dispatch(selectorActions.setSelector({ value: val }))
+  const onPress = (val: string) => {
+    dispatch(
+      selectorActions.setSelector({ value: val })
+    )
   }
   const close = () => {
-    dispatch(selectorActions.setSelector({ show: false }))
+    dispatch(
+      selectorActions.setSelector({ show: false })
+    )
   }
-  const checked = (option:string) => {
-    return value === option ? 'checked' : 'unchecked'
+  const checked = (option: string) => {
+    return value === option
+      ? 'checked'
+      : 'unchecked'
   }
   const onOkay = () => {
     close()
@@ -37,13 +54,14 @@ const Selector: React.FC<SelectorProps> = ({
   const onCancel = () => {
     dispatch(selectorActions.resetSelector())
   }
-  return show && (
+  return (
+    show && (
       <View style={[styles.container]}>
         <SubHeading>{title}</SubHeading>
-          <ScrollView
-            keyboardShouldPersistTaps='handled'
-            contentContainerStyle={[styles.scroll]}>
-            {options.map((option, i) =>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[styles.scroll]}>
+          {options.map((option, i) => (
             <TouchableRipple
               onPress={() => onPress(option)}
               key={i}
@@ -59,23 +77,24 @@ const Selector: React.FC<SelectorProps> = ({
                 <MiniLabel>{option}</MiniLabel>
               </>
             </TouchableRipple>
-            )}
-          </ScrollView>
-          <View style={[styles.btns]}>
-            <Button
-              color={theme.colors.primary}
-              uppercase={false}
-              onPress={onOkay} >
-              Okay
-            </Button>
-            <Button
-              color={COLORS.red}
-              uppercase={false}
-              onPress={onCancel} >
-              Cancel
-            </Button>
-          </View>
+          ))}
+        </ScrollView>
+        <View style={[styles.btns]}>
+          <Button
+            color={theme.colors.primary}
+            uppercase={false}
+            onPress={onOkay}>
+            Okay
+          </Button>
+          <Button
+            color={COLORS.red}
+            uppercase={false}
+            onPress={onCancel}>
+            Cancel
+          </Button>
+        </View>
       </View>
+    )
   )
 }
 

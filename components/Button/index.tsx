@@ -4,14 +4,14 @@ import { Button as Btn } from 'react-native-paper'
 import { theme } from '../../config/theme'
 
 interface ButtonComponentProps {
-    label:string;
-    type?:'outline';
-    loading?:boolean;
-    disabled?:boolean;
-    onPress?:()=>void;
+  label: string
+  type?: 'outline'
+  loading?: boolean
+  disabled?: boolean
+  onPress?: () => void
 }
 
-const Button:React.FC<ButtonComponentProps> = ({
+const Button: React.FC<ButtonComponentProps> = ({
   label,
   type,
   onPress,
@@ -19,23 +19,30 @@ const Button:React.FC<ButtonComponentProps> = ({
   disabled
 }) => {
   const { primary } = theme.colors
-  const { text, back, border } = type === 'outline'
-    ? { text: primary, back: '#fff', border: 2 }
-    : { text: '#fff', back: primary, border: 0 }
+  const { text, back, border } =
+    type === 'outline'
+      ? { text: primary, back: '#fff', border: 2 }
+      : {
+          text: '#fff',
+          back: primary,
+          border: 0
+        }
   return (
-        <Btn
-            onPress={onPress}
-            style={[styles.container, { borderWidth: border }]}
-            color={back}
-            labelStyle={{ color: text }}
-            mode='contained'
-            theme={{ roundness: 100 }}
-            loading={loading}
-            disabled={disabled}
-            uppercase={false}
-        >
-          {label}
-        </Btn>
+    <Btn
+      onPress={onPress}
+      style={[
+        styles.container,
+        { borderWidth: border }
+      ]}
+      color={back}
+      labelStyle={{ color: text }}
+      mode="contained"
+      theme={{ roundness: 100 }}
+      loading={loading}
+      disabled={disabled}
+      uppercase={false}>
+      {label}
+    </Btn>
   )
 }
 

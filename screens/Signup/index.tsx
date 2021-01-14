@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, SafeAreaView, ImageBackground } from 'react-native'
-import { FormContainer, FlexContainer, MainTitle, Paragraph, maxWidth, maxHeight, AuthContainer } from '../../common/styledComponents'
+import {
+  StyleSheet,
+  SafeAreaView,
+  ImageBackground
+} from 'react-native'
+import {
+  FormContainer,
+  FlexContainer,
+  MainTitle,
+  Paragraph,
+  maxWidth,
+  maxHeight,
+  AuthContainer
+} from '../../common/styledComponents'
 import AuthInput from '../../components/Input'
 import { Button } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
@@ -33,62 +45,71 @@ const Signup: React.FC = () => {
         source={require('../../assets/images/loginBack.jpg')}
         style={styles.background}
       />
-      <AuthContainer keyboardShouldPersistTaps='handled'>
+      <AuthContainer keyboardShouldPersistTaps="handled">
         <FormContainer>
-        <FlexContainer flex={1.25} justify='flex-end'>
-          <MainTitle>
-            Create {'\n'} your Account
-          </MainTitle>
-        </FlexContainer>
-        <FlexContainer flex={1} justify='center'>
-          <Paragraph>
-            Create an account and get{'\n'}connected with your favorite celebrity.
-            </Paragraph>
-        </FlexContainer>
-        <FlexContainer flex={3}>
-          <AuthInput
-            keyboardType='email-address'
-            left='account'
-            label='Email'
-            value={email}
-            onChangeText={setEmail}
-          />
-          <AuthInput
-            left='lock'
-            right='eye'
-            label='Password'
-            value={pass}
-            onChangeText={setPass}
-            secureTextEntry={!showPass}
-            onIconClicked={onShowPass}
-          />
-        </FlexContainer>
-        <FlexContainer justify='space-between' flex={2}>
-          <FlexContainer>
-            <Button
-              theme={{ roundness: 100 }}
-              mode='contained'
-              onPress={onSignup}
-            >
-              SignUp
-            </Button>
+          <FlexContainer
+            flex={1.25}
+            justify="flex-end">
+            <MainTitle>
+              Create {'\n'} your Account
+            </MainTitle>
           </FlexContainer>
-          <FlexContainer direction='row' justify='center' align='center'>
+          <FlexContainer
+            flex={1}
+            justify="center">
             <Paragraph>
-              Don't have an account?
+              Create an account and get{'\n'}
+              connected with your favorite
+              celebrity.
             </Paragraph>
-            <Button
-              labelStyle={styles.btnLabel}
-              onPress={onLogin}
-              uppercase={false}
-            >
-              Login
-            </Button>
           </FlexContainer>
-        </FlexContainer>
+          <FlexContainer flex={3}>
+            <AuthInput
+              keyboardType="email-address"
+              left="account"
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+            />
+            <AuthInput
+              left="lock"
+              right="eye"
+              label="Password"
+              value={pass}
+              onChangeText={setPass}
+              secureTextEntry={!showPass}
+              onIconClicked={onShowPass}
+            />
+          </FlexContainer>
+          <FlexContainer
+            justify="space-between"
+            flex={2}>
+            <FlexContainer>
+              <Button
+                theme={{ roundness: 100 }}
+                mode="contained"
+                onPress={onSignup}>
+                SignUp
+              </Button>
+            </FlexContainer>
+            <FlexContainer
+              direction="row"
+              justify="center"
+              align="center">
+              <Paragraph>
+                Don't have an account?
+              </Paragraph>
+              <Button
+                labelStyle={styles.btnLabel}
+                onPress={onLogin}
+                uppercase={false}>
+                Login
+              </Button>
+            </FlexContainer>
+          </FlexContainer>
         </FormContainer>
       </AuthContainer>
-      <ModalLoader show={authLoader}/>
+      <ModalLoader show={authLoader} />
     </SafeAreaView>
   )
 }

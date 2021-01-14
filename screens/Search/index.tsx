@@ -11,25 +11,24 @@ import SearchService from '../../services/SearchService'
 const Search: React.FC = () => {
   const { goBack, navigate } = useNavigation()
   const onClose = () => goBack()
-  const onPress = (data:any) => {
+  const onPress = (data: any) => {
     navigate<Routes>('Celeb', { data })
   }
-  return <View style={styles.container}>
-    <InstantSearch
-      searchClient={SearchService.searchClient}
-      indexName="celebs"
-    >
-      <SearchBox/>
-      <SearchHits
-        onPress={onPress}
+  return (
+    <View style={styles.container}>
+      <InstantSearch
+        searchClient={SearchService.searchClient}
+        indexName="celebs">
+        <SearchBox />
+        <SearchHits onPress={onPress} />
+      </InstantSearch>
+      <FAB
+        icon="close"
+        style={styles.fab}
+        onPress={onClose}
       />
-    </InstantSearch>
-    <FAB
-      icon='close'
-      style={styles.fab}
-      onPress={onClose}
-    />
-  </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -44,9 +43,7 @@ const styles = StyleSheet.create({
   content: {
     // paddingHorizontal: 17
   },
-  search: {
-
-  }
+  search: {}
 })
 
 export default Search

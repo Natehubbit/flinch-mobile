@@ -12,9 +12,7 @@ import {
   StatusBar,
   Image
 } from 'react-native'
-import {
-  Provider
-} from 'react-redux'
+import { Provider } from 'react-redux'
 import * as ScreenOrientation from 'expo-screen-orientation'
 
 import { Provider as PaperProvider } from 'react-native-paper'
@@ -29,65 +27,91 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { AppLoading } from 'expo'
 import AppOverlay from './components/Overlay'
 
-function cacheImages (images:Array<string|number>) {
-  return images.map(image => {
+function cacheImages(
+  images: Array<string | number>
+) {
+  return images.map((image) => {
     if (typeof image === 'string') {
       return Image.prefetch(image)
     } else {
-      return Asset.fromModule(image).downloadAsync()
+      return Asset.fromModule(
+        image
+      ).downloadAsync()
     }
   })
 }
 
-function cacheFonts (
-  fonts:Array<string | { [fontFamily: string]: Font.FontSource; }>
+function cacheFonts(
+  fonts: Array<
+    | string
+    | { [fontFamily: string]: Font.FontSource }
+  >
 ) {
-  return fonts.map(font => Font.loadAsync(font))
+  return fonts.map((font) => Font.loadAsync(font))
 }
 
 const App: () => React.ReactNode = () => {
   const [appReady, setAppReady] = useState(false)
   useEffect(() => {
-    LogBox.ignoreLogs(['Setting'])
+    LogBox.ignoreLogs([
+      'Setting',
+      'Require cycle:'
+    ])
     lockScreen()
   }, [])
   const lockScreen = async () => {
-    await ScreenOrientation
-      .lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    await ScreenOrientation.lockAsync(
+      ScreenOrientation.OrientationLock.PORTRAIT
+    )
   }
 
   const loadAssetsAsync = async () => {
     const imageAssets = cacheImages([
       require('./assets/images/profileBck.png')
-      // 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png'
-      // require('./assets/images/play.svg'),
     ])
 
     const fontAssets = cacheFonts([
       MaterialCommunityIcons.font,
-      { 'Karla-Regular': require('./assets/fonts/Karla-Regular.ttf') },
-      { 'Rubik-SemiBold': require('./assets/fonts/Rubik-SemiBold.ttf') },
-      { 'SuezOne-Regular': require('./assets/fonts/SuezOne-Regular.ttf') },
-      { 'MontserratAlternates-Bold': require('./assets/fonts/MontserratAlternates-Bold.ttf') },
-      { 'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf') }
+      {
+        'Karla-Regular': require('./assets/fonts/Karla-Regular.ttf')
+      },
+      {
+        'Rubik-SemiBold': require('./assets/fonts/Rubik-SemiBold.ttf')
+      },
+      {
+        'SuezOne-Regular': require('./assets/fonts/SuezOne-Regular.ttf')
+      },
+      {
+        'MontserratAlternates-Bold': require('./assets/fonts/MontserratAlternates-Bold.ttf')
+      },
+      {
+        'Rubik-Regular': require('./assets/fonts/Rubik-Regular.ttf')
+      }
     ])
 
-    await Promise.all([...(imageAssets as any), ...fontAssets])
+    await Promise.all([
+      ...(imageAssets as any),
+      ...fontAssets
+    ])
   }
-  return (
-    !appReady
-      ? <AppLoading
+  return !appReady ? (
+    <AppLoading
       startAsync={loadAssetsAsync}
       onFinish={() => setAppReady(true)}
       onError={console.warn}
     />
-      : <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AppOverlay >
+  ) : (
+    <Provider store={store}>
+      <PersistGate
+        loading={null}
+        persistor={persistor}>
+        <AppOverlay>
           <PaperProvider theme={theme}>
             <StatusBar
               barStyle="light-content"
-              backgroundColor={theme.colors.primary}
+              backgroundColor={
+                theme.colors.primary
+              }
             />
             <Navigation />
           </PaperProvider>

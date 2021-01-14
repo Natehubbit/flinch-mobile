@@ -11,7 +11,5 @@ export default class SearchService {
     '388026844dc825c3cfeb902b6ab4ff4a'
   )
 
-  static getCeleb () {
-
-  }
+  static getCeleb() {}
 }

@@ -7,26 +7,31 @@ import { Paragraph } from '../../common/styledComponents'
 import { theme } from '../../config/theme'
 
 interface ButtonActionProps {
-    label:string;
-    icon:string;
-    onPress?:()=>void;
+  label: string
+  icon: string
+  onPress?: () => void
 }
 
-const ButtonAction:React.FC<ButtonActionProps> = (props) => {
+const ButtonAction: React.FC<ButtonActionProps> = (
+  props
+) => {
   const { label, icon, onPress } = props
   const { primary } = theme.colors
   return (
-        <View style={styles.container}>
-            <TouchableRipple
-                style={styles.touch}
-                onPress={onPress}
-            >
-                <>
-                    <Icon name={icon} color={primary} size={35} />
-                    <Paragraph black>{label}</Paragraph>
-                </>
-            </TouchableRipple>
-        </View>
+    <View style={styles.container}>
+      <TouchableRipple
+        style={styles.touch}
+        onPress={onPress}>
+        <>
+          <Icon
+            name={icon}
+            color={primary}
+            size={35}
+          />
+          <Paragraph black>{label}</Paragraph>
+        </>
+      </TouchableRipple>
+    </View>
   )
 }
 
@@ -47,9 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  icon: {
-
-  }
+  icon: {}
 })
 
 // make this component available to the app

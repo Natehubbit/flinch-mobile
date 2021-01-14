@@ -5,22 +5,27 @@ import { COLORS } from '../../config/theme'
 import { RequestStatus } from '../../types'
 
 interface TagProps {
-  label:RequestStatus;
+  label: RequestStatus
 }
 
 const Tag: React.FC<TagProps> = (props) => {
   const { label } = props
-  const color = (label === 'failed' || label === 'urgent')
-    ? 'red'
-    : label === 'pending'
+  const color =
+    label === 'failed' || label === 'urgent'
+      ? 'red'
+      : label === 'pending'
       ? COLORS.warn
       : COLORS.success
-  return <Badge
-        visible
-        style={[styles.badge, { backgroundColor: color }]}
-    >
-        {label}
+  return (
+    <Badge
+      visible
+      style={[
+        styles.badge,
+        { backgroundColor: color }
+      ]}>
+      {label}
     </Badge>
+  )
 }
 
 const styles = StyleSheet.create({

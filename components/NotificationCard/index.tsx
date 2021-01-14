@@ -1,6 +1,10 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  View
+} from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import { Paragraph } from '../../common/styledComponents'
@@ -11,12 +15,12 @@ import { notificationsActions } from '../../store/notifications'
 import { Request } from '../../types'
 
 interface NotificationCardProps {
-  id: string;
-  msg: string;
-  time: string;
-  data?: Request;
-  read?:boolean;
-  type?:'success'|'failed'|'default'
+  id: string
+  msg: string
+  time: string
+  data?: Request
+  read?: boolean
+  type?: 'success' | 'failed' | 'default'
 }
 
 const NotificationCard: React.FC<NotificationCardProps> = ({
@@ -32,20 +36,19 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   const { navigate } = useNavigation()
   const opacity = read ? 0.4 : 1
   const onPress = () => {
-    id && dispatch(
-      notificationsActions
-        .update(id, { read: true })
-    )
+    id &&
+      dispatch(
+        notificationsActions.update(id, {
+          read: true
+        })
+      )
     navigate<Routes>('Request', { id: data.id })
   }
   return (
     <TouchableRipple
       onPress={onPress}
-      style={[styles.container, { opacity }]}
-      >
-      <View
-        style={[styles.info]}
-      >
+      style={[styles.container, { opacity }]}>
+      <View style={[styles.info]}>
         <View>
           <Image
             source={{ uri: imageUrl }}
@@ -53,7 +56,10 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
           />
         </View>
         <View style={[styles.content]}>
-          <Paragraph black numberOfLines={2} style={[styles.msg]}>
+          <Paragraph
+            black
+            numberOfLines={2}
+            style={[styles.msg]}>
             {/* <Paragraph black style={[styles.name]}>
               Shatta Wale{'\t'}
             </Paragraph> */}

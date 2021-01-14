@@ -1,12 +1,20 @@
 /* eslint-disable no-unused-vars */
-import { configureStore, combineReducers, getDefaultMiddleware } from '@reduxjs/toolkit'
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware
+} from '@reduxjs/toolkit'
 import {
   useSelector as nativeUseSelector,
   TypedUseSelectorHook
 } from 'react-redux'
 import { celebsSlice } from './celebs'
 import { loaderSlice } from './loader'
-import { persistStore, persistReducer, PersistConfig } from 'redux-persist'
+import {
+  persistStore,
+  persistReducer,
+  PersistConfig
+} from 'redux-persist'
 import AsyncStorage from '@react-native-community/async-storage'
 import { userSlice } from './user'
 import { requestSlice } from './request'
@@ -27,10 +35,16 @@ const rootReducer = combineReducers({
   [responseSlice.name]: responseSlice.reducer,
   [downloadsSlice.name]: downloadsSlice.reducer,
   [selectorSlice.name]: selectorSlice.reducer,
-  [notificationsSlice.name]: notificationsSlice.reducer
+  [notificationsSlice.name]:
+    notificationsSlice.reducer
 })
 
-const persistConfig:PersistConfig<unknown, any, any, any> = {
+const persistConfig: PersistConfig<
+  unknown,
+  any,
+  any,
+  any
+> = {
   key: 'root',
   blacklist: [
     'loader',
@@ -47,7 +61,10 @@ const persistConfig:PersistConfig<unknown, any, any, any> = {
   timeout: 10000
 }
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(
+  persistConfig,
+  rootReducer
+)
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -59,6 +76,8 @@ export const store = configureStore({
 
 export const persistor = persistStore(store)
 
-export type AppState = ReturnType<typeof rootReducer>;
+export type AppState = ReturnType<
+  typeof rootReducer
+>
 
 export const useSelector: TypedUseSelectorHook<AppState> = nativeUseSelector

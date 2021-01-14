@@ -1,15 +1,35 @@
 import React, { useEffect, useState } from 'react'
-import { Image, ImageBackground, RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple } from 'react-native-paper'
+import {
+  Image,
+  ImageBackground,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  Divider,
+  TouchableRipple
+} from 'react-native-paper'
 import { useDispatch } from 'react-redux'
-import { MiniLabel, SubHeading, Paragraph } from '../../common/styledComponents'
+import {
+  MiniLabel,
+  SubHeading,
+  Paragraph
+} from '../../common/styledComponents'
 import { useUser } from '../../hooks/useUser'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import Play from '../../assets/images/play.svg'
 import Tag from '../../components/Tag'
 import Button from '../../components/Button'
-import { Routes, RequestScreenRouteProps } from '../../navigation'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  Routes,
+  RequestScreenRouteProps
+} from '../../navigation'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 // import { useRequests } from '../../hooks/useRequests'
 // import { initStateRequest } from '../../common/constants'
 import HelperService from '../../services/HelperService'
@@ -20,12 +40,18 @@ import { initStateRequest } from '../../common/constants'
 
 const Request: React.FC = () => {
   const dispatch = useDispatch()
-  const [rejecting, setRejecting] = useState(false)
+  const [rejecting, setRejecting] = useState(
+    false
+  )
   const { role } = useUser()
   const [loading, setLoading] = useState(false)
   const { navigate, goBack } = useNavigation()
   const [request, setRequest] = useState(null)
-  const { params, name: route } = useRoute<RequestScreenRouteProps>()
+  const [seeMore, setSeeMore] = useState(false)
+  const {
+    params,
+    name: route
+  } = useRoute<RequestScreenRouteProps>()
   const { id, data } = params
   const {
     occasion,
@@ -33,27 +59,22 @@ const Request: React.FC = () => {
     instructions,
     recipient,
     price,
-    celebrity: {
-      name,
-      imageUrl
-    },
+    celebrity: { name, imageUrl },
     response: {
       duration,
       timestamp,
       videoUri: uri,
       thumbnailUri
     }
-  } = request ||
-  data ||
-  initStateRequest
+  } = request || data || initStateRequest
 
   const summarize = instructions.length > 99
-  const info = summarize
+  const info = summarize && !seeMore
     ? instructions.substring(0, 99)
     : instructions
-  const summarizeText = summarize
-    ? 'see more'
-    : 'see less'
+  const summarizeText = summarize && !seeMore
+    ? '\tsee more'
+    : '\tsee less'
   const isUser = role === 'user'
   const isSuccess = status === 'success'
   const isPending = status === 'pending'
@@ -66,123 +87,193 @@ const Request: React.FC = () => {
   }, [])
   const fetchData = async () => {
     setLoading(true)
-    const request = await RequestService
-      .getRequest(id)
+    const request = id &&
+      await RequestService.getRequest(
+        id
+      )
     setRequest(request)
     setLoading(false)
   }
-  const onAccept = () => navigate<Routes>('VideoUpload', { id: id || data?.id })
-  const onOpenVideo = () => navigate<Routes>('Video', {
-    id: id || data?.id,
-    duration,
-    recipient,
-    date: HelperService.parseToDate(timestamp),
-    name,
-    uri
-  })
+  const onSeeMore = () => {
+    setSeeMore(v => !v)
+  }
+  const onAccept = () =>
+    navigate<Routes>('VideoUpload', {
+      id: id || data?.id
+    })
+  const onOpenVideo = () =>
+    navigate<Routes>('Video', {
+      id: id || data?.id,
+      duration,
+      recipient,
+      date: HelperService.parseToDate(timestamp),
+      name,
+      uri
+    })
   const onReject = async () => {
     setRejecting(true)
-    dispatch(requestsActions.rejectRequest(id || data?.id, rejectCallback))
+    dispatch(
+      requestsActions.rejectRequest(
+        id || data?.id,
+        rejectCallback
+      )
+    )
   }
   const rejectCallback = () => {
     goBack()
     setRejecting(false)
   }
-  return <>
-    <Navbar hideBell title={route} />
-        <ScrollView
-          style={styles.container}
-          refreshControl={<RefreshControl
+  return (
+    <>
+      <Navbar hideBell title={route} />
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
             refreshing={loading}
             onRefresh={fetchData}
-          />}>
-            {!loading && <View style={styles.panelContainer}>
-                <View style={styles.panel}>
-                    <Image
-                      source={{ uri: imageUrl }}
-                      style={styles.img}
-                    />
-                    <View style={styles.panelContent}>
-                        <View style={styles.userInfo}>
-                            <MiniLabel numberOfLines={1} style={styles.name}>
-                                {name}
-                            </MiniLabel>
-                            <View>
-                                <Tag label={status}/>
-                            </View>
-                        </View>
-                        <Divider/>
-                        <View style={styles.details}>
-                            <SubHeading style={styles.miniHead}>Instructions</SubHeading>
-                            <Paragraph black>
-                                {info}
-                                {summarize && <Paragraph link >
-                                    {summarizeText}
-                                </Paragraph>}
-                            </Paragraph>
-                        </View>
-                        {isSuccess && <>
-                            <Divider style={[styles.div]}/>
-                            <TouchableRipple
-                                onPress={onOpenVideo}
-                                style={{ flex: 1 }}
-                            >
-                            <View style={styles.videoContainer}>
-                                <View style={styles.video}>
-                                  <ImageBackground
-                                    source={{ uri: thumbnailUri }}
-                                    style={[styles.thumbnail]}
-                                  />
-                                  <Play/>
-                                </View>
-                                <View style={styles.videoLabel}>
-                                  <Paragraph black>
-                                    {occasion}
-                                  </Paragraph>
-                                  <View style={[styles.length]}>
-                                    <Icon name='clock-outline' color='rgba(0,0,0,0.5)' />
-                                    <MiniLabel numberOfLines={1} style={styles.duration} >
-                                      {Math.ceil(duration)}s
-                                    </MiniLabel>
-                                  </View>
-                                </View>
-                            </View>
-                            </TouchableRipple>
-                        </>}
-                        <Divider style={[styles.div]}/>
-                        <View style={styles.bottom}>
-                            <View style={styles.bottomLabel}>
-                                <Icon name='account' color='rgba(0,0,0,0.5)' />
-                                <MiniLabel numberOfLines={1} style={styles.bottomText}>
-                                    {recipient}
-                                </MiniLabel>
-                            </View>
-                            <View style={styles.bottomLabel}>
-                                <Icon name='wallet' color='rgba(0,0,0,0.5)' />
-                                <MiniLabel numberOfLines={1} style={styles.bottomText}>
-                                    {HelperService.parseToMoney(price)}
-                                </MiniLabel>
-                            </View>
-                        </View>
-                    </View>
+          />
+        }>
+        {!loading && (
+          <View style={styles.panelContainer}>
+            <View style={styles.panel}>
+              <Image
+                source={{ uri: imageUrl }}
+                style={styles.img}
+              />
+              <View style={styles.panelContent}>
+                <View style={styles.userInfo}>
+                  <MiniLabel
+                    numberOfLines={1}
+                    style={styles.name}>
+                    {name}
+                  </MiniLabel>
+                  <View>
+                    <Tag label={status} />
+                  </View>
                 </View>
-            </View>}
-        </ScrollView>
-        {showButtons && !loading && <View style={styles.buttons}>
-            <Button
-              onPress={onAccept}
-              label='Accept'
-              disabled={rejecting}
-            />
-            <Button
-              onPress={onReject}
-              label='Reject'
-              type='outline'
-              loading={rejecting}
-              disabled={rejecting}
-            />
-        </View>}
+                <Divider />
+                <View style={styles.details}>
+                  <SubHeading
+                    style={styles.miniHead}>
+                    Instructions
+                  </SubHeading>
+                  <Paragraph black>
+                    {info}
+                    {summarize && (
+                      <Paragraph onPress={onSeeMore} link>
+                        {summarizeText}
+                      </Paragraph>
+                    )}
+                  </Paragraph>
+                </View>
+                {isSuccess && (
+                  <>
+                    <Divider
+                      style={[styles.div]}
+                    />
+                    <TouchableRipple
+                      onPress={onOpenVideo}
+                      style={{ flex: 1 }}>
+                      <View
+                        style={
+                          styles.videoContainer
+                        }>
+                        <View
+                          style={styles.video}>
+                          <ImageBackground
+                            source={{
+                              uri: thumbnailUri
+                            }}
+                            style={[
+                              styles.thumbnail
+                            ]}
+                          />
+                          <Play />
+                        </View>
+                        <View
+                          style={
+                            styles.videoLabel
+                          }>
+                          <Paragraph black>
+                            {occasion}
+                          </Paragraph>
+                          <View
+                            style={[
+                              styles.length
+                            ]}>
+                            <Icon
+                              name="clock-outline"
+                              color="rgba(0,0,0,0.5)"
+                            />
+                            <MiniLabel
+                              numberOfLines={1}
+                              style={
+                                styles.duration
+                              }>
+                              {Math.ceil(
+                                duration
+                              )}
+                              s
+                            </MiniLabel>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableRipple>
+                  </>
+                )}
+                <Divider style={[styles.div]} />
+                <View style={styles.bottom}>
+                  <View
+                    style={styles.bottomLabel}>
+                    <Icon
+                      name="account"
+                      color="rgba(0,0,0,0.5)"
+                    />
+                    <MiniLabel
+                      numberOfLines={1}
+                      style={styles.bottomText}>
+                      {recipient}
+                    </MiniLabel>
+                  </View>
+                  <View
+                    style={styles.bottomLabel}>
+                    <Icon
+                      name="wallet"
+                      color="rgba(0,0,0,0.5)"
+                    />
+                    <MiniLabel
+                      numberOfLines={1}
+                      style={styles.bottomText}>
+                      {HelperService.parseToMoney(
+                        price
+                      )}
+                    </MiniLabel>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        )}
+      </ScrollView>
+      {showButtons && !loading && (
+        <View style={styles.buttons}>
+          <Button
+            onPress={onAccept}
+            label="Accept"
+            disabled={rejecting}
+          />
+          <Button
+            onPress={onReject}
+            label="Reject"
+            type="outline"
+            loading={rejecting}
+            disabled={rejecting}
+          />
+        </View>
+      )}
     </>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -233,7 +324,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9
   },
   miniHead: {
-    fontSize: 12,
+    // fontSize: 12,
     marginBottom: 10
   },
   see: {

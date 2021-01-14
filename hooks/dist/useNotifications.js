@@ -19,15 +19,11 @@ var useNotifications = function () {
     var _b = react_1.useState(false), showBadge = _b[0], setShowBadge = _b[1];
     var list = react_redux_1.useSelector(function (state) { return state.notifications; });
     react_1.useEffect(function () {
-        var unsub = NotificationService_1["default"]
-            .listener(id, updateList);
-        NotificationService_1["default"]
-            .receivedListener(receivedCallback);
-        NotificationService_1["default"]
-            .responseListener(responseCallback);
+        var unsub = NotificationService_1["default"].listener(id, updateList);
+        NotificationService_1["default"].receivedListener(receivedCallback);
+        NotificationService_1["default"].responseListener(responseCallback);
         return function () {
-            NotificationService_1["default"]
-                .removeListeners();
+            NotificationService_1["default"].removeListeners();
             unsub && unsub();
         };
     }, []);
@@ -59,7 +55,9 @@ var useNotifications = function () {
         if (actionIdentifier ===
             Notifications.DEFAULT_ACTION_IDENTIFIER) {
             var data = notification.request.content.data;
-            NavigationService_1["default"].navigate('Request', { data: data });
+            NavigationService_1["default"].navigate('Request', {
+                data: data
+            });
         }
     };
     return {

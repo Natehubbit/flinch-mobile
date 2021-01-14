@@ -1,4 +1,7 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import { Audio } from 'expo-av'
 import { Camera } from 'expo-camera'
 import React, { useEffect, useState } from 'react'
@@ -7,7 +10,10 @@ import { useDispatch } from 'react-redux'
 import VideoBack from '../../assets/images/videoBack.svg'
 import ButtonAction from '../../components/ButtonAction'
 // import { useToast } from '../../hooks/useToast'
-import { Routes, UploadVideoScreenRouteProps } from '../../navigation'
+import {
+  Routes,
+  UploadVideoScreenRouteProps
+} from '../../navigation'
 import HelperService from '../../services/HelperService'
 import { requestsActions } from '../../store/requests'
 // import { toastActions } from '../../store/toast'
@@ -15,17 +21,18 @@ import * as MediaLibrary from 'expo-media-library'
 import Navbar from '../../components/Navbar'
 import { StackHeaderProps } from '@react-navigation/stack'
 
-interface VideoUploadProps extends StackHeaderProps {
+interface VideoUploadProps
+  extends StackHeaderProps {}
 
-}
-
-const VideoUpload:React.FC<VideoUploadProps> = ({
+const VideoUpload: React.FC<VideoUploadProps> = ({
   navigation
 }) => {
   const dispatch = useDispatch()
   // const toast = useToast()
   const [videoUri, setVideoUri] = useState('')
-  const { params: { id } } = useRoute<UploadVideoScreenRouteProps>()
+  const {
+    params: { id }
+  } = useRoute<UploadVideoScreenRouteProps>()
   const { navigate } = useNavigation()
   useEffect(() => {
     !!videoUri && onSend()
@@ -38,7 +45,8 @@ const VideoUpload:React.FC<VideoUploadProps> = ({
   }
   const onRecordVideo = async () => {
     const allowed = await requestPermission()
-    allowed && navigate<Routes>('RecordVideo', { id })
+    allowed &&
+      navigate<Routes>('RecordVideo', { id })
   }
   const onSend = async () => {
     // dispatch(toastActions.setToast({
@@ -50,18 +58,23 @@ const VideoUpload:React.FC<VideoUploadProps> = ({
   }
   const send = () => {
     dispatch(
-      requestsActions
-        .approveRequest(
-          id,
-          videoUri,
-          onReset
-        )
+      requestsActions.approveRequest(
+        id,
+        videoUri,
+        onReset
+      )
     )
   }
   const requestPermission = async () => {
-    const { status: mediaPerm } = await MediaLibrary.requestPermissionsAsync()
-    const { status: videoPerm } = await Camera.requestPermissionsAsync()
-    const { status: audioPerm } = await Audio.requestPermissionsAsync()
+    const {
+      status: mediaPerm
+    } = await MediaLibrary.requestPermissionsAsync()
+    const {
+      status: videoPerm
+    } = await Camera.requestPermissionsAsync()
+    const {
+      status: audioPerm
+    } = await Audio.requestPermissionsAsync()
     return (
       videoPerm === 'granted' &&
       audioPerm === 'granted' &&
@@ -70,23 +83,23 @@ const VideoUpload:React.FC<VideoUploadProps> = ({
   }
   return (
     <>
-      <Navbar title='Upload Video' hideBell/>
-        <View style={styles.container}>
-            <VideoBack/>
-            <View style={styles.content}>
-                <ButtonAction
-                    icon='video-plus'
-                    label='Record Video'
-                    onPress={onRecordVideo}
-                />
-                <ButtonAction
-                    onPress={onUploadVideo}
-                    icon='cloud-upload'
-                    label='Upload Video'
-                />
-            </View>
+      <Navbar title="Upload Video" hideBell />
+      <View style={styles.container}>
+        <VideoBack />
+        <View style={styles.content}>
+          <ButtonAction
+            icon="video-plus"
+            label="Record Video"
+            onPress={onRecordVideo}
+          />
+          <ButtonAction
+            onPress={onUploadVideo}
+            icon="cloud-upload"
+            label="Upload Video"
+          />
         </View>
-      </>
+      </View>
+    </>
   )
 }
 

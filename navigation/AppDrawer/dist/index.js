@@ -24,10 +24,8 @@ var CelebHome_1 = require("../../screens/CelebHome");
 var Drawer = drawer_1.createDrawerNavigator();
 var AppDrawer = function () {
     var role = useUser_1.useUser().role;
-    var Home = role === 'celebrity'
-        ? CelebHome_1["default"]
-        : HomeStack_1["default"];
-    return (react_1["default"].createElement(Drawer.Navigator, { drawerContent: function (props) { return react_1["default"].createElement(Drawer_1["default"], __assign({}, props)); }, initialRouteName: "Home", screenOptions: {
+    var Home = role === 'celebrity' ? CelebHome_1["default"] : HomeStack_1["default"];
+    return (react_1["default"].createElement(Drawer.Navigator, { drawerContent: function (props) { return (react_1["default"].createElement(Drawer_1["default"], __assign({}, props))); }, initialRouteName: "Home", screenOptions: {
             header: function () { return null; }
         } },
         react_1["default"].createElement(Drawer.Screen, { name: "Home", component: Home }),

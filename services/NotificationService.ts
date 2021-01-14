@@ -1,12 +1,18 @@
-import { getExpoPushTokenAsync, NotificationResponse, Notification } from 'expo-notifications'
+import {
+  getExpoPushTokenAsync,
+  NotificationResponse,
+  Notification
+} from 'expo-notifications'
 import { Alert } from 'react-native'
 import { db } from '../config/firebase'
 import { NotificationMessage } from '../types'
 import * as Notifications from 'expo-notifications'
 
-const NotificationsRef = db.collection('notifications')
+const NotificationsRef = db.collection(
+  'notifications'
+)
 export default class NotificationService {
-  constructor () {
+  constructor() {
     Notifications.setNotificationHandler({
       handleNotification: async () => ({
         shouldPlaySound: true,
@@ -16,7 +22,7 @@ export default class NotificationService {
     })
   }
 
-  static async getToken () {
+  static async getToken() {
     try {
       return (await getExpoPushTokenAsync()).data
     } catch (e) {
@@ -25,16 +31,14 @@ export default class NotificationService {
     }
   }
 
-  static async updateNotification (
-    id:string,
-    data:Partial<NotificationMessage>
+  static async updateNotification(
+    id: string,
+    data: Partial<NotificationMessage>
   ) {
     try {
-      await NotificationsRef
-        .doc(id)
-        .update({
-          ...data
-        })
+      await NotificationsRef.doc(id).update({
+        ...data
+      })
       return true
     } catch (e) {
       console.log(e.message)
@@ -42,39 +46,48 @@ export default class NotificationService {
     }
   }
 
-  static async getNotifications (
-    id:string
-  ):Promise<NotificationMessage[]|null> {
+  static async getNotifications(
+    id: string
+  ): Promise<NotificationMessage[] | null> {
     try {
-      const res = await NotificationsRef
-        .where('recipientId', '==', id)
+      const res = await NotificationsRef.where(
+        'recipientId',
+        '==',
+        id
+      )
         .orderBy('createdAt', 'desc')
         .get()
-      return res
-        .docs
-        .map(d => ({
-          id: d.id,
-          ...d.data()
-        })) as NotificationMessage[]
+      return res.docs.map((d) => ({
+        id: d.id,
+        ...d.data()
+      })) as NotificationMessage[]
     } catch (e) {
       console.log(e.message)
       return null
     }
   }
 
-  static listener (
-    id:string,
-    callback?:(val:NotificationMessage[])=>void
+  static listener(
+    id: string,
+    callback?: (
+      val: NotificationMessage[]
+    ) => void
   ) {
     try {
-      return NotificationsRef
-        .where('recipientId', '==', id)
+      return NotificationsRef.where(
+        'recipientId',
+        '==',
+        id
+      )
         .orderBy('createdAt', 'desc')
-        .onSnapshot(snapshot => {
-          const data = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          } as NotificationMessage))
+        .onSnapshot((snapshot) => {
+          const data = snapshot.docs.map(
+            (doc) =>
+              ({
+                id: doc.id,
+                ...doc.data()
+              } as NotificationMessage)
+          )
           callback && callback(data)
         })
     } catch (e) {
@@ -83,10 +96,11 @@ export default class NotificationService {
     }
   }
 
-  static async getPermission () {
+  static async getPermission() {
     try {
-      const { granted } = await Notifications
-        .requestPermissionsAsync()
+      const {
+        granted
+      } = await Notifications.requestPermissionsAsync()
       return granted
     } catch (e) {
       console.log(e.message)
@@ -94,29 +108,31 @@ export default class NotificationService {
     }
   }
 
-  static responseListener (
-    callback?:
-    (val:NotificationResponse) => void
+  static responseListener(
+    callback?: (val: NotificationResponse) => void
   ) {
     const granted = this.getPermission()
     granted &&
-      Notifications
-        .addNotificationResponseReceivedListener(response => {
+      Notifications.addNotificationResponseReceivedListener(
+        (response) => {
           callback && callback(response)
-        })
+        }
+      )
   }
 
-  static receivedListener (
-    callback?:(val:Notification)=>void
+  static receivedListener(
+    callback?: (val: Notification) => void
   ) {
     const granted = this.getPermission()
     granted &&
-      Notifications.addNotificationReceivedListener(e => {
-        callback && callback(e)
-      })
+      Notifications.addNotificationReceivedListener(
+        (e) => {
+          callback && callback(e)
+        }
+      )
   }
 
-  static removeListeners () {
+  static removeListeners() {
     Notifications.removeAllNotificationListeners()
   }
 }

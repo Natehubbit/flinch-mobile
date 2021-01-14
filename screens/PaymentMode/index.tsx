@@ -1,8 +1,15 @@
 import React from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
+import {
+  Alert,
+  StyleSheet,
+  View
+} from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { List } from 'react-native-paper'
-import { PAYMENT_CALLBACK, PAYMENT_OPTIONS } from '../../common/constants'
+import {
+  PAYMENT_CALLBACK,
+  PAYMENT_OPTIONS
+} from '../../common/constants'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import PaymentService from '../../services/PaymentService'
 import { useUser } from '../../hooks/useUser'
@@ -10,7 +17,10 @@ import { loaderActions } from '../../store/loader'
 import { useDispatch } from 'react-redux'
 import { PaymentType } from '../../types'
 import { useRequest } from '../../hooks/useRequest'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import { Routes } from '../../navigation'
 import { COLORS } from '../../config/theme'
 
@@ -27,25 +37,40 @@ const PaymentMode: React.FC = () => {
     email,
     token
   } = useUser()
-  console.log(token)
-  const onSelect = async (type:string) => {
-    dispatch(loaderActions.loading('paymentLoader'))
+  const onSelect = async (type: string) => {
+    dispatch(
+      loaderActions.loading('paymentLoader')
+    )
     const isCreditCard = type === 'Credit Card'
-    let uri = null
+    let uri = ''
     if (isCreditCard) {
       uri = await makePayment('card', cost)
     } else {
-      uri = await makePayment('mobile_money', cost)
+      uri = await makePayment(
+        'mobile_money',
+        cost
+      )
     }
+    console.log(uri)
     uri
-      ? navigate<Routes>('WebView', { uri, onStopLoading })
-      : Alert.alert('Error', 'Failed to launch Payment Widget')
-    onStopLoading()
+      ? navigate<Routes>('Payment', {
+          uri
+        })
+      : Alert.alert(
+          'Error',
+          'Failed to launch Payment Widget'
+        )
+    stopLoading()
   }
-  const onStopLoading = () => {
-    dispatch(loaderActions.loaded('paymentLoader'))
+  const stopLoading = () => {
+    dispatch(
+      loaderActions.loaded('paymentLoader')
+    )
   }
-  const makePayment = async (mode:PaymentType, amount:string) => {
+  const makePayment = async (
+    mode: PaymentType,
+    amount: string
+  ) => {
     const payload = {
       amount,
       callback_url: PAYMENT_CALLBACK,
@@ -59,15 +84,18 @@ const PaymentMode: React.FC = () => {
         id,
         data: request,
         token,
-        celebToken: (params as any)?.data?.token || ''
+        celebToken:
+          (params as any)?.data?.token || ''
       }
     }
-    const data = await PaymentService.init(payload)
+    const data = await PaymentService.init(
+      payload
+    )
     if (!data) return null
     const { authorization_url: url } = data
     return url
   }
-  const renderIcon = (icon:string) => {
+  const renderIcon = (icon: string) => {
     return (
       <View style={styles.logoContainer}>
         <Icon name={icon} size={25} />
@@ -75,22 +103,25 @@ const PaymentMode: React.FC = () => {
     )
   }
   const renderOptions = () => {
-    return PAYMENT_OPTIONS.map(({ label, icon }) => (
-      <List.Item
-        key={label}
-        onPress={() => onSelect(label)}
-        title={label}
-        left={() => renderIcon(icon)}
-        style={styles.listItem}
-      />
-    ))
+    return PAYMENT_OPTIONS.map(
+      ({ label, icon }) => (
+        <List.Item
+          key={label}
+          onPress={() => onSelect(label)}
+          title={label}
+          left={() => renderIcon(icon)}
+          style={styles.listItem}
+        />
+      )
+    )
   }
-  return <View style={styles.container}>
-      {/* <SectionHeader title='Payment Method' /> */}
+  return (
+    <View style={styles.container}>
       <ScrollView style={styles.scroll}>
         {renderOptions()}
       </ScrollView>
     </View>
+  )
 }
 
 const styles = StyleSheet.create({

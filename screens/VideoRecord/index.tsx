@@ -1,11 +1,32 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
-import React, { useEffect, useRef, useState } from 'react'
-import { View, StyleSheet, ScrollView } from 'react-native'
-import { Button, FAB, TouchableRipple } from 'react-native-paper'
-import { maxWidth, Paragraph } from '../../common/styledComponents'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
+import React, {
+  useEffect,
+  useRef,
+  useState
+} from 'react'
+import {
+  View,
+  StyleSheet,
+  ScrollView
+} from 'react-native'
+import {
+  Button,
+  FAB,
+  TouchableRipple
+} from 'react-native-paper'
+import {
+  maxWidth,
+  Paragraph
+} from '../../common/styledComponents'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { Video } from 'expo-av'
-import { Camera, CameraRecordingOptions } from 'expo-camera'
+import {
+  Camera,
+  CameraRecordingOptions
+} from 'expo-camera'
 import { RecordVideoScreenRouteProps } from '../../navigation'
 import { useDispatch } from 'react-redux'
 import { requestsActions } from '../../store/requests'
@@ -15,7 +36,7 @@ import { COLORS } from '../../config/theme'
 import { initStateRequest } from '../../common/constants'
 import { useRequests } from '../../hooks/useRequests'
 
-const RECORD_OPTIONS:CameraRecordingOptions = {
+const RECORD_OPTIONS: CameraRecordingOptions = {
   mute: false,
   maxDuration: 60,
   quality: Camera.Constants.VideoQuality['480p']
@@ -27,20 +48,33 @@ const VideoRecord = () => {
   const camera = useRef<Camera>(null)
   const dispatch = useDispatch()
   const toast = useToast()
-  const { params: { id } } = useRoute<RecordVideoScreenRouteProps>()
-  const [isRecording, setIsRecording] = useState(false)
-  const [showInstructions, setShowInstructions] = useState(true)
+  const {
+    params: { id }
+  } = useRoute<RecordVideoScreenRouteProps>()
+  const [isRecording, setIsRecording] = useState(
+    false
+  )
+  const [
+    showInstructions,
+    setShowInstructions
+  ] = useState(true)
   const [ratio, setRatio] = useState('16:9')
-  const [isPreviewing, setIsPreviewing] = useState(false)
+  const [
+    isPreviewing,
+    setIsPreviewing
+  ] = useState(false)
   const [videoUri, setVideoUri] = useState('')
   const [timer, setTimer] = useState(61)
-  const [cameraView, setCameraView] = useState(Camera.Constants.Type.front)
-  const [showControls, setShowControls] = useState(false)
+  const [cameraView, setCameraView] = useState(
+    Camera.Constants.Type.front
+  )
+  const [
+    showControls,
+    setShowControls
+  ] = useState(false)
   const { goBack } = useNavigation()
-  const {
-    instructions,
-    recipient
-  } = useRequests('id', id)[0] || initStateRequest
+  const { instructions, recipient } =
+    useRequests('id', id)[0] || initStateRequest
   useEffect(() => {
     const cleanUp = async () => {
       if (isRecording) {
@@ -65,7 +99,9 @@ const VideoRecord = () => {
     setShowInstructions(true)
   }
   const onRotateCamera = () => {
-    if (cameraView === Camera.Constants.Type.front) {
+    if (
+      cameraView === Camera.Constants.Type.front
+    ) {
       setCameraView(Camera.Constants.Type.back)
     } else {
       setCameraView(Camera.Constants.Type.front)
@@ -82,7 +118,9 @@ const VideoRecord = () => {
       try {
         resetTimer()
         setIsRecording(true)
-        const promise = camera.current.recordAsync(RECORD_OPTIONS)
+        const promise = camera.current.recordAsync(
+          RECORD_OPTIONS
+        )
         startTimer()
         const data = await promise
         if (data) {
@@ -100,7 +138,8 @@ const VideoRecord = () => {
     }
   }
   const onPreviewClose = () => {
-    if (showControls) return setShowControls(false)
+    if (showControls)
+      return setShowControls(false)
     setIsPreviewing(false)
   }
 
@@ -109,27 +148,25 @@ const VideoRecord = () => {
   }
 
   const onSend = async () => {
-    dispatch(toastActions.setToast({
-      ...toast,
-      show: false,
-      onPress: send
-    }))
+    dispatch(
+      toastActions.setToast({
+        ...toast,
+        show: false,
+        onPress: send
+      })
+    )
     send()
   }
 
   const send = () => {
     dispatch(
-      requestsActions
-        .approveRequest(
-          id,
-          videoUri
-        )
+      requestsActions.approveRequest(id, videoUri)
     )
   }
 
   const startTimer = () => {
     timerId = setInterval(() => {
-      setTimer(t => t - 1)
+      setTimer((t) => t - 1)
     }, 1000)
   }
   const resetTimer = () => {
@@ -137,130 +174,144 @@ const VideoRecord = () => {
     timerId && clearInterval(timerId)
   }
   return (
-        <View style={styles.container}>
-            <View style={styles.nav}>
-                {(isRecording || isPreviewing)
-                  ? null
-                  : <FAB
-                    icon="arrow-left"
-                    style={styles.icon}
-                    small
-                    onPress={onGoBack}
-                />}
-                {isRecording && <View style={styles.recording}>
-                    <View style={styles.recordingText}>
-                        <Paragraph>Recording</Paragraph>
-                        <View style={styles.recordIndicator}/>
-                    </View>
-                </View>}
-                {(!showInstructions && !isPreviewing && !isRecording) &&
-                  <FAB
-                    icon="eye-outline"
-                    style={[styles.showIcon]}
-                    small
-                    onPress={onShowInstructions}
-                />}
-            </View>
-            {!isPreviewing &&
-            <View
-              style={styles.camera}
-            >
-              {showInstructions && <View style={[styles.instructions]}>
-                <ScrollView style={[styles.scroll]}>
-                  <Paragraph>
-                    Receipient: {recipient}{'\n'}
-                  </Paragraph>
-                  <Paragraph>
-                    {instructions}
-                  </Paragraph>
-                </ScrollView>
-                <Button
-                  uppercase={false}
-                  icon='eye-off-outline'
-                  onPress={onHideInstructions}
-                >
-                  Hide
-                </Button>
-              </View>}
-              <Camera
-                style={[styles.cameraModule]}
-                type={cameraView}
-                ref={camera}
-                ratio={ratio}
+    <View style={styles.container}>
+      <View style={styles.nav}>
+        {isRecording || isPreviewing ? null : (
+          <FAB
+            icon="arrow-left"
+            style={styles.icon}
+            small
+            onPress={onGoBack}
+          />
+        )}
+        {isRecording && (
+          <View style={styles.recording}>
+            <View style={styles.recordingText}>
+              <Paragraph>Recording</Paragraph>
+              <View
+                style={styles.recordIndicator}
               />
             </View>
-            }
-            {(isPreviewing) &&
-            <View style={styles.videoContainer}>
-                <View>
-                    <FAB
-                        icon='close'
-                        style={styles.close}
-                        onPress={onPreviewClose}
-                        small
-                    />
-                </View>
-                <Video
-                    source={{ uri: videoUri }}
-                    style={styles.video}
-                    isLooping
-                    shouldPlay
-                    resizeMode='cover'
-                />
-                <FAB
-                    icon='send'
-                    style={styles.send}
-                    onPress={onSend}
-                />
-                {!showControls &&
-                <FAB
-                    icon='refresh'
-                    style={styles.save}
-                    label='Record again'
-                    small
-                    onPress={onRecordAgain}
-                />}
-            </View>}
-            <View style={styles.content}>
-                {!isRecording && !isPreviewing &&
-                <View style={[styles.recordContainer]}>
-                  <View style={styles.recordButton}>
-                      <TouchableRipple
-                          style={{ flex: 1 }}
-                          onPress={onRecordVideo}>
-                          <View/>
-                      </TouchableRipple>
-                  </View>
-                  <FAB
-                    icon='camera-retake-outline'
-                    style={[styles.rotateBtn]}
-                    onPress={onRotateCamera}
-                  />
-                </View>}
-                {isRecording && <View style={styles.recordBtns}>
-                  {!showInstructions && <FAB
-                    icon="eye-outline"
-                    style={[styles.showIconBottom]}
-                    small
-                    onPress={onShowInstructions}
-                  />}
-                    <View style={styles.stopBtn}>
-                        <TouchableRipple
-                            style={styles.stopBtn}
-                            onPress={onStopVideo}>
-                            <Icon size={50} name='stop' />
-                        </TouchableRipple>
-                    </View>
-                    <View style={styles.miniBtn}>
-                        <TouchableRipple
-                            style={styles.miniBtn}
-                            onPress={null}>
-                            <Paragraph>{timer}s</Paragraph>
-                        </TouchableRipple>
-                    </View>
-                </View>}
+          </View>
+        )}
+        {!showInstructions &&
+          !isPreviewing &&
+          !isRecording && (
+            <FAB
+              icon="eye-outline"
+              style={[styles.showIcon]}
+              small
+              onPress={onShowInstructions}
+            />
+          )}
+      </View>
+      {!isPreviewing && (
+        <View style={styles.camera}>
+          {showInstructions && (
+            <View style={[styles.instructions]}>
+              <ScrollView style={[styles.scroll]}>
+                <Paragraph>
+                  Receipient: {recipient}
+                  {'\n'}
+                </Paragraph>
+                <Paragraph>
+                  {instructions}
+                </Paragraph>
+              </ScrollView>
+              <Button
+                uppercase={false}
+                icon="eye-off-outline"
+                onPress={onHideInstructions}>
+                Hide
+              </Button>
             </View>
+          )}
+          <Camera
+            style={[styles.cameraModule]}
+            type={cameraView}
+            ref={camera}
+            ratio={ratio}
+          />
         </View>
+      )}
+      {isPreviewing && (
+        <View style={styles.videoContainer}>
+          <View>
+            <FAB
+              icon="close"
+              style={styles.close}
+              onPress={onPreviewClose}
+              small
+            />
+          </View>
+          <Video
+            source={{ uri: videoUri }}
+            style={styles.video}
+            isLooping
+            shouldPlay
+            resizeMode="cover"
+          />
+          <FAB
+            icon="send"
+            style={styles.send}
+            onPress={onSend}
+          />
+          {!showControls && (
+            <FAB
+              icon="refresh"
+              style={styles.save}
+              label="Record again"
+              small
+              onPress={onRecordAgain}
+            />
+          )}
+        </View>
+      )}
+      <View style={styles.content}>
+        {!isRecording && !isPreviewing && (
+          <View style={[styles.recordContainer]}>
+            <View style={styles.recordButton}>
+              <TouchableRipple
+                style={{ flex: 1 }}
+                onPress={onRecordVideo}>
+                <View />
+              </TouchableRipple>
+            </View>
+            <FAB
+              icon="camera-retake-outline"
+              style={[styles.rotateBtn]}
+              onPress={onRotateCamera}
+            />
+          </View>
+        )}
+        {isRecording && (
+          <View style={styles.recordBtns}>
+            {!showInstructions && (
+              <FAB
+                icon="eye-outline"
+                style={[styles.showIconBottom]}
+                small
+                onPress={onShowInstructions}
+              />
+            )}
+            <View style={styles.stopBtn}>
+              <TouchableRipple
+                style={styles.stopBtn}
+                onPress={onStopVideo}>
+                <Icon size={50} name="stop" />
+              </TouchableRipple>
+            </View>
+            <View style={styles.miniBtn}>
+              <TouchableRipple
+                style={styles.miniBtn}
+                onPress={null}>
+                <Paragraph>{timer}s</Paragraph>
+              </TouchableRipple>
+            </View>
+          </View>
+        )}
+      </View>
+    </View>
   )
 }
 

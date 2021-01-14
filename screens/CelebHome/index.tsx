@@ -1,10 +1,25 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { Image, RefreshControl, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple } from 'react-native-paper'
+import {
+  Image,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  Divider,
+  TouchableRipple
+} from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import moment from 'moment'
-import { AltMainLabel, MainLabel, maxHeight, Paragraph } from '../../common/styledComponents'
+import {
+  AltMainLabel,
+  MainLabel,
+  maxHeight,
+  Paragraph
+} from '../../common/styledComponents'
 import CelebRequestCard from '../../components/CelebRequestCard'
 import Navbar from '../../components/Navbar'
 import SectionHeader from '../../components/SectionHeader'
@@ -37,16 +52,18 @@ const STATS = [
 const CelebHome = () => {
   const dispatch = useDispatch()
   const [requests, setRequests] = useState([])
-  const [unsubscribe, setUnsubscribe] = useState(null)
-  const [responseCount, setResponseCount] = useState(0)
+  const [unsubscribe, setUnsubscribe] = useState(
+    null
+  )
+  const [
+    responseCount,
+    setResponseCount
+  ] = useState(0)
   const noData = requests.length < 1
   const {
     celebrity: {
       id,
-      data: {
-        imageUrl: uri,
-        alias
-      }
+      data: { imageUrl: uri, alias }
     }
   } = useUser() || {
     celebrity: {
@@ -57,24 +74,20 @@ const CelebHome = () => {
     }
   }
   const {
-    requestsLoader: {
-      isLoading: loading
-    }
+    requestsLoader: { isLoading: loading }
   } = useLoader()
   useEffect(() => {
-    dispatch(requestsActions
-      .listenForPending(
+    dispatch(
+      requestsActions.listenForPending(
         setRequests,
         setUnsubscribe
       )
     )
-    RequestService
-      .getCelebResponseCount(
-        id,
-        setResponseCount
-      )
-    return () => unsubscribe &&
-      unsubscribe()
+    RequestService.getCelebResponseCount(
+      id,
+      setResponseCount
+    )
+    return () => unsubscribe && unsubscribe()
   }, [])
   const { navigate } = useNavigation()
   const onSeeAll = () => {
@@ -85,19 +98,22 @@ const CelebHome = () => {
       const isCash = d.label === 'Earnings'
       const isPending = d.label === 'Pending'
       const isResponses = d.label === 'Responses'
-      return <View style={[styles.stat]} key={i}>
-        <AltMainLabel style={[styles.welcome]}>
-          {isCash && 'GHs'}{isPending
-            ? requests.length
-            : isResponses
+      return (
+        <View style={[styles.stat]} key={i}>
+          <AltMainLabel style={[styles.welcome]}>
+            {isCash && 'GHs'}
+            {isPending
+              ? requests.length
+              : isResponses
               ? responseCount
-              : d.value
-          }
-        </AltMainLabel>
-        <AltMainLabel style={[styles.welcome, styles.mini]}>
-          {d.label}
-        </AltMainLabel>
-      </View>
+              : d.value}
+          </AltMainLabel>
+          <AltMainLabel
+            style={[styles.welcome, styles.mini]}>
+            {d.label}
+          </AltMainLabel>
+        </View>
+      )
     })
   }
 
@@ -115,17 +131,17 @@ const CelebHome = () => {
     <SafeAreaView style={[styles.container]}>
       <Navbar invert />
       <ScrollView
-        refreshControl={<RefreshControl
-          refreshing={loading}
-          colors={[theme.colors.primary]}
-        />}
-      >
-        <View
-          style={[styles.top]}
-        >
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            colors={[theme.colors.primary]}
+          />
+        }>
+        <View style={[styles.top]}>
           <View style={[styles.content]}>
             <View>
-              <AltMainLabel style={[styles.welcome]}>
+              <AltMainLabel
+                style={[styles.welcome]}>
                 Welcome,
               </AltMainLabel>
               <MainLabel style={[styles.name]}>
@@ -145,10 +161,10 @@ const CelebHome = () => {
         </View>
         <View style={[styles.bottom]}>
           <View style={[styles.card]}>
-            <View style={[styles.head]} >
-              <SectionHeader title='Requests' />
+            <View style={[styles.head]}>
+              <SectionHeader title="Requests" />
               <TouchableRipple
-                rippleColor='rgba(0,163,255,0.2)'
+                rippleColor="rgba(0,163,255,0.2)"
                 style={[styles.touch]}
                 onPress={onSeeAll}>
                 <Paragraph link>
@@ -156,16 +172,22 @@ const CelebHome = () => {
                 </Paragraph>
               </TouchableRipple>
             </View>
-            <Divider/>
+            <Divider />
             <View style={[styles.cards]}>
-              {requests.map(req => (<CelebRequestCard
-                ocassion={req.occasion}
-                price={HelperService.parseToMoney(req.price)}
-                recipient={req.recipient}
-                key={req.id}
-                time={moment(req.timestamp).fromNow()}
-                data={req}
-              />))}
+              {requests.map((req) => (
+                <CelebRequestCard
+                  ocassion={req.occasion}
+                  price={HelperService.parseToMoney(
+                    req.price
+                  )}
+                  recipient={req.recipient}
+                  key={req.id}
+                  time={moment(
+                    req.timestamp
+                  ).fromNow()}
+                  data={req}
+                />
+              ))}
             </View>
           </View>
           {noData && renderNoData()}
@@ -178,8 +200,7 @@ const CelebHome = () => {
 export default CelebHome
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   top: {
     height: maxHeight * 0.25,
     backgroundColor: theme.colors.primary

@@ -87,9 +87,7 @@ var getAllRequests = function () { return function (dispatch, getState) { return
                 dispatch(loader_1.loaderActions.loading('requestsLoader'));
                 _a = getState().user, role = _a.role, user = __rest(_a, ["role"]);
                 isUser = role === 'user';
-                id = isUser
-                    ? user.id
-                    : user.celebrity.id;
+                id = isUser ? user.id : user.celebrity.id;
                 if (!isUser) return [3 /*break*/, 2];
                 return [4 /*yield*/, RequestService_1["default"].getAllRequests(id)];
             case 1:
@@ -114,9 +112,7 @@ var reloadRequests = function (callback) { return function (dispatch, getState) 
             case 0:
                 _a = getState().user, role = _a.role, user = __rest(_a, ["role"]);
                 isUser = role === 'user';
-                id = isUser
-                    ? user.id
-                    : user.celebrity.id;
+                id = isUser ? user.id : user.celebrity.id;
                 if (!isUser) return [3 /*break*/, 2];
                 return [4 /*yield*/, RequestService_1["default"].getAllRequests(id)];
             case 1:
@@ -145,8 +141,9 @@ var rejectRequest = function (id, callback) { return function (dispatch, getStat
                 return [4 /*yield*/, RequestService_1["default"].rejectRequest(id)];
             case 1:
                 rejected = _b.sent();
-                data = rejected && requests.filter(function (d) { return d.id !== id; });
-                data && dispatch(exports.actions.getRequests(data));
+                data = rejected &&
+                    requests.filter(function (d) { return d.id !== id; });
+                !!data && dispatch(exports.actions.getRequests(data));
                 callback && callback();
                 return [2 /*return*/];
         }
@@ -160,14 +157,11 @@ var approveRequest = function (id, uri, callback) { return function (dispatch, g
                 _a = getState(), requests = _a.requests, _b = _a.user, role = _b.role, userId = _b.celebrity.id;
                 if (role === 'user')
                     return [2 /*return*/];
-                dispatch(loader_1.loaderActions
-                    .loading('responseLoader'));
+                dispatch(loader_1.loaderActions.loading('responseLoader'));
                 updateLoader = function (data) {
-                    dispatch(loader_1.loaderActions
-                        .update(data));
+                    dispatch(loader_1.loaderActions.update(data));
                 };
-                return [4 /*yield*/, RequestService_1["default"]
-                        .approveRequest(id, uri, updateLoader)];
+                return [4 /*yield*/, RequestService_1["default"].approveRequest(id, uri, updateLoader)];
             case 1:
                 approved = _c.sent();
                 if (approved) {
@@ -182,9 +176,7 @@ var approveRequest = function (id, uri, callback) { return function (dispatch, g
                     callback && callback();
                 }
                 else {
-                    react_native_1.Alert.alert('Error', 'Failed to upload Video. Please try again.', [
-                        { text: 'Okay', style: 'cancel' }
-                    ]);
+                    react_native_1.Alert.alert('Error', 'Failed to upload Video. Please try again.', [{ text: 'Okay', style: 'cancel' }]);
                 }
                 return [2 /*return*/];
         }
@@ -193,19 +185,14 @@ var approveRequest = function (id, uri, callback) { return function (dispatch, g
 var listenForPending = function (dataCallback, callback) { return function (dispatch, getState) {
     var _a = getState().user, role = _a.role, userId = _a.id, celebId = _a.celebrity.id;
     var isUser = role === 'user';
-    var id = isUser
-        ? userId
-        : celebId;
+    var id = isUser ? userId : celebId;
     var loading = function () {
-        return dispatch(loader_1.loaderActions
-            .loading('requestsLoader'));
+        return dispatch(loader_1.loaderActions.loading('requestsLoader'));
     };
     var loaded = function () {
-        return dispatch(loader_1.loaderActions
-            .loaded('requestsLoader'));
+        return dispatch(loader_1.loaderActions.loaded('requestsLoader'));
     };
-    var unsub = RequestService_1["default"]
-        .pendingListener(id, isUser, dataCallback, loading, loaded);
+    var unsub = RequestService_1["default"].pendingListener(id, isUser, dataCallback, loading, loaded);
     callback && callback(unsub);
 }; };
 exports.requestsActions = __assign(__assign({}, exports.actions), { rejectRequest: rejectRequest,

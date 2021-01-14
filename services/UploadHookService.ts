@@ -2,14 +2,16 @@ import firebase from 'firebase'
 export default class UploadHookService {
   static uploadHookRef: firebase.storage.UploadTask = null
 
-  static setHook (hook:firebase.storage.UploadTask) {
+  static setHook(
+    hook: firebase.storage.UploadTask
+  ) {
     this.uploadHookRef = hook
   }
 
-  static listen (
-    setProgress:(val:number)=>void,
-    onError?:()=>void,
-    onComplete?:()=>void
+  static listen(
+    setProgress: (val: number) => void,
+    onError?: () => void,
+    onComplete?: () => void
   ) {
     const reset = () => {
       setProgress(0)
@@ -17,28 +19,38 @@ export default class UploadHookService {
     }
     return this.uploadHookRef.on(
       firebase.storage.TaskEvent.STATE_CHANGED,
-      snap => this.next(snap, setProgress),
-      e => this.error(e, onError, reset),
+      (snap) => this.next(snap, setProgress),
+      (e) => this.error(e, onError, reset),
       () => this.complete(onComplete)
     )
   }
 
-  static pause () {
+  static pause() {
     return this.uploadHookRef.pause()
   }
 
-  static cancel (callback?:()=>void) {
+  static cancel(callback?: () => void) {
     this.uploadHookRef.cancel()
     // callback && callback()
   }
 
-  static next (snapshot:firebase.storage.UploadTaskSnapshot, setProgress:(val:number)=>void) {
-    const progress = snapshot.bytesTransferred / snapshot.totalBytes
+  static next(
+    snapshot: firebase.storage.UploadTaskSnapshot,
+    setProgress: (val: number) => void
+  ) {
+    const progress =
+      snapshot.bytesTransferred /
+      snapshot.totalBytes
     setProgress(progress)
   }
 
-  static error (error:Error, reset:()=>void, onError?:()=>void) {
-    const cancelled = (error as any).code === 'storage/canceled'
+  static error(
+    error: Error,
+    reset: () => void,
+    onError?: () => void
+  ) {
+    const cancelled =
+      (error as any).code === 'storage/canceled'
     console.log(cancelled)
     if (!cancelled) {
       onError && onError()
@@ -47,7 +59,7 @@ export default class UploadHookService {
     reset()
   }
 
-  static complete (onComplete?:()=>void) {
+  static complete(onComplete?: () => void) {
     onComplete && onComplete()
   }
 }

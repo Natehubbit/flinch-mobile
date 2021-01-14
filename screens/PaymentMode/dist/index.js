@@ -57,7 +57,6 @@ var PaymentMode = function () {
     var cost = request.price.amount.toString();
     var currency = request.price.currency;
     var _a = useUser_1.useUser(), id = _a.id, displayName = _a.displayName, email = _a.email, token = _a.token;
-    console.log(token);
     var onSelect = function (type) { return __awaiter(void 0, void 0, void 0, function () {
         var isCreditCard, uri;
         return __generator(this, function (_a) {
@@ -65,7 +64,7 @@ var PaymentMode = function () {
                 case 0:
                     dispatch(loader_1.loaderActions.loading('paymentLoader'));
                     isCreditCard = type === 'Credit Card';
-                    uri = null;
+                    uri = '';
                     if (!isCreditCard) return [3 /*break*/, 2];
                     return [4 /*yield*/, makePayment('card', cost)];
                 case 1:
@@ -76,15 +75,18 @@ var PaymentMode = function () {
                     uri = _a.sent();
                     _a.label = 4;
                 case 4:
+                    console.log(uri);
                     uri
-                        ? navigate('WebView', { uri: uri, onStopLoading: onStopLoading })
+                        ? navigate('Payment', {
+                            uri: uri
+                        })
                         : react_native_1.Alert.alert('Error', 'Failed to launch Payment Widget');
-                    onStopLoading();
+                    stopLoading();
                     return [2 /*return*/];
             }
         });
     }); };
-    var onStopLoading = function () {
+    var stopLoading = function () {
         dispatch(loader_1.loaderActions.loaded('paymentLoader'));
     };
     var makePayment = function (mode, amount) { return __awaiter(void 0, void 0, void 0, function () {
@@ -129,8 +131,8 @@ var PaymentMode = function () {
             return (react_1["default"].createElement(react_native_paper_1.List.Item, { key: label, onPress: function () { return onSelect(label); }, title: label, left: function () { return renderIcon(icon); }, style: styles.listItem }));
         });
     };
-    return react_1["default"].createElement(react_native_1.View, { style: styles.container },
-        react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, { style: styles.scroll }, renderOptions()));
+    return (react_1["default"].createElement(react_native_1.View, { style: styles.container },
+        react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, { style: styles.scroll }, renderOptions())));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {

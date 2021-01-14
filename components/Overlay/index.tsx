@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react'
-import { View, StyleSheet, BackHandler, Alert } from 'react-native'
+import {
+  View,
+  StyleSheet,
+  BackHandler,
+  Alert
+} from 'react-native'
 import { ActivityIndicator } from 'react-native-paper'
 // import { useDispatch } from 'react-redux'
 import { Paragraph } from '../../common/styledComponents'
@@ -13,7 +18,7 @@ import Selector from '../Selector'
 import Toast from '../Toast'
 import UploadModal from '../UploadModal'
 interface AppOverlayProps {
-  children: any;
+  children: any
 }
 
 const AppOverlay: React.FC<AppOverlayProps> = ({
@@ -22,31 +27,31 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
 }) => {
   // const dispatch = useDispatch()
   const {
-    paymentLoader: {
-      isLoading: paymentLoader
-    },
-    responseLoader: {
-      isLoading: responseLoader
-    },
-    authLoader: {
-      isLoading: authLoader
-    }
+    paymentLoader: { isLoading: paymentLoader },
+    responseLoader: { isLoading: responseLoader },
+    authLoader: { isLoading: authLoader }
   } = useLoader()
-  const {
-    show: showSelector
-  } = useSelect()
-  const loading = paymentLoader ||
+  const { show: showSelector } = useSelect()
+  const loading =
+    paymentLoader ||
     responseLoader ||
-      authLoader ||
-        showSelector
+    authLoader ||
+    showSelector
   useEffect(() => {
     loading
-      ? BackHandler
-          .addEventListener('hardwareBackPress', onExit)
-      : BackHandler
-        .removeEventListener('hardwareBackPress', onExit)
-    return () => BackHandler
-      .removeEventListener('hardwareBackPress', onExit)
+      ? BackHandler.addEventListener(
+          'hardwareBackPress',
+          onExit
+        )
+      : BackHandler.removeEventListener(
+          'hardwareBackPress',
+          onExit
+        )
+    return () =>
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        onExit
+      )
   }, [loading])
 
   const onExit = () => {
@@ -70,33 +75,41 @@ const AppOverlay: React.FC<AppOverlayProps> = ({
   }
 
   const renderSubmitting = () => {
-    return <View style={[styles.submitting]}>
-      <View style={[styles.submittingContent]}>
-        <ActivityIndicator color={theme.colors.primary} style={[styles.submitLoader]}/>
-        <Paragraph black>Submitting </Paragraph>
+    return (
+      <View style={[styles.submitting]}>
+        <View style={[styles.submittingContent]}>
+          <ActivityIndicator
+            color={theme.colors.primary}
+            style={[styles.submitLoader]}
+          />
+          <Paragraph black>Submitting </Paragraph>
+        </View>
       </View>
-    </View>
+    )
   }
   const renderLoader = () => {
-    return <ActivityIndicator
-      animating
-      size="large"
-      color={theme.colors.primary}
-    />
+    return (
+      <ActivityIndicator
+        animating
+        size="large"
+        color={theme.colors.primary}
+      />
+    )
   }
   return (
     <>
       {children}
       {/* LOADERS */}
-      {loading && <View style={styles.container}>
-        {paymentLoader && renderLoader()}
-        {responseLoader &&
-          <UploadModal/>}
-        {authLoader && renderSubmitting()}
-        <Selector />
-      </View>}
+      {loading && (
+        <View style={styles.container}>
+          {paymentLoader && renderLoader()}
+          {responseLoader && <UploadModal />}
+          {authLoader && renderSubmitting()}
+          <Selector />
+        </View>
+      )}
       {/* TOASTS */}
-      <Toast/>
+      <Toast />
     </>
   )
 }

@@ -1,14 +1,34 @@
-import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import React from 'react'
-import { Image, ImageBackground, StyleSheet, View } from 'react-native'
+import {
+  Image,
+  ImageBackground,
+  StyleSheet,
+  View
+} from 'react-native'
 import { FAB } from 'react-native-paper'
-import { MainLabel, AltMainLabel, MiniLabel, maxHeight, maxWidth, Paragraph } from '../../common/styledComponents'
-import { CelebScreenRouteProp, Routes } from '../../navigation'
+import {
+  MainLabel,
+  AltMainLabel,
+  MiniLabel,
+  maxHeight,
+  maxWidth,
+  Paragraph
+} from '../../common/styledComponents'
+import {
+  CelebScreenRouteProp,
+  Routes
+} from '../../navigation'
 import HelperService from '../../services/HelperService'
 
 const CelebScreen: React.FC = () => {
   const { navigate } = useNavigation()
-  const { params } = useRoute<CelebScreenRouteProp>()
+  const {
+    params
+  } = useRoute<CelebScreenRouteProp>()
   const { data } = params
   const {
     id,
@@ -19,9 +39,8 @@ const CelebScreen: React.FC = () => {
     price,
     token
   } = data
-  const onBook = () => navigate<Routes>(
-    'Book',
-    {
+  const onBook = () =>
+    navigate<Routes>('Book', {
       data: {
         id,
         price,
@@ -29,47 +48,45 @@ const CelebScreen: React.FC = () => {
         imageUrl,
         token
       }
-    }
-  )
+    })
   console.log(price)
-  return <View
-      style={styles.container}
-    >
-        <ImageBackground
-          source={{ uri: imageUrl }}
-          style={styles.image}
-          blurRadius={100}
-        >
-          <Image
-            source={{
-              uri: imageUrl
-            }}
-            style={[styles.img]}
-            resizeMode='contain'
-          />
-        </ImageBackground>
-        <View style={styles.dets}>
-            <FAB
-                uppercase={false}
-                icon='wallet'
-                style={styles.fab}
-                label='Book'
-                onPress={onBook}
-            />
-            <View style={styles.label}>
-                <MainLabel>{alias}</MainLabel>
-                <MiniLabel>{craft}</MiniLabel>
-            </View>
-            <View style={styles.bio}>
-                <Paragraph black >{bio}</Paragraph>
-            </View>
-            <View style={styles.price}>
-                <AltMainLabel style={styles.price}>
-                  {HelperService.parseToMoney(price)}
-                </AltMainLabel>
-            </View>
+  return (
+    <View style={styles.container}>
+      <ImageBackground
+        source={{ uri: imageUrl }}
+        style={styles.image}
+        blurRadius={100}>
+        <Image
+          source={{
+            uri: imageUrl
+          }}
+          style={[styles.img]}
+          resizeMode="contain"
+        />
+      </ImageBackground>
+      <View style={styles.dets}>
+        <FAB
+          uppercase={false}
+          icon="wallet"
+          style={styles.fab}
+          label="Book"
+          onPress={onBook}
+        />
+        <View style={styles.label}>
+          <MainLabel>{alias}</MainLabel>
+          <MiniLabel>{craft}</MiniLabel>
         </View>
+        <View style={styles.bio}>
+          <Paragraph black>{bio}</Paragraph>
+        </View>
+        <View style={styles.price}>
+          <AltMainLabel style={styles.price}>
+            {HelperService.parseToMoney(price)}
+          </AltMainLabel>
+        </View>
+      </View>
     </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -98,9 +115,7 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     flex: 1
   },
-  price: {
-
-  },
+  price: {},
   img: {
     flex: 1,
     width: undefined,

@@ -9,13 +9,13 @@ import { selectorActions } from '../../store/selector'
 import { useSelect } from '../../hooks/selector'
 
 interface InputSelectProps {
-  right: string;
-  value: string;
-  placeholder: string;
-  field?: string;
-  options?: string[];
-  onPress?: ()=>void;
-  onChange?: any;
+  right: string
+  value: string
+  placeholder: string
+  field?: string
+  options?: string[]
+  onPress?: () => void
+  onChange?: any
 }
 
 const InputSelect: React.FC<InputSelectProps> = ({
@@ -28,8 +28,11 @@ const InputSelect: React.FC<InputSelectProps> = ({
 }) => {
   useEffect(() => {
     val &&
-    dispatch(selectorActions
-      .setSelector({ value: val }))
+      dispatch(
+        selectorActions.setSelector({
+          value: val
+        })
+      )
   }, [])
   const dispatch = useDispatch()
   const { value } = useSelect()
@@ -37,41 +40,45 @@ const InputSelect: React.FC<InputSelectProps> = ({
     onChange && onChange(field, value)
   }, [value])
   const onPress = () => {
-    dispatch(selectorActions
-      .openSelector(
+    dispatch(
+      selectorActions.openSelector(
         options,
         'Choose an Ocassion'
-      ))
+      )
+    )
   }
   const hasVal = !!value
   return (
     <TouchableRipple
       style={[styles.input]}
-      onPress={onPress}
-    >
+      onPress={onPress}>
       <>
-      <View style={[styles.icon]}>
-        <Icon
-          name='calendar-outline'
-          size={24}
-          color={COLORS.iconGrey}
-        />
-      </View>
-      <View style={[styles.label]}>
-        {!hasVal && <Paragraph style={[styles.txt]} black>
-          {placeholder}
-        </Paragraph>}
-        {hasVal && <Paragraph style={[styles.val]} black>
-          {value}
-        </Paragraph>}
-      </View>
-      <View style={[styles.icon]}>
-        <Icon
-          name={right}
-          size={24}
-          color={COLORS.iconGrey}
-        />
-      </View>
+        <View style={[styles.icon]}>
+          <Icon
+            name="calendar-outline"
+            size={24}
+            color={COLORS.iconGrey}
+          />
+        </View>
+        <View style={[styles.label]}>
+          {!hasVal && (
+            <Paragraph style={[styles.txt]} black>
+              {placeholder}
+            </Paragraph>
+          )}
+          {hasVal && (
+            <Paragraph style={[styles.val]} black>
+              {value}
+            </Paragraph>
+          )}
+        </View>
+        <View style={[styles.icon]}>
+          <Icon
+            name={right}
+            size={24}
+            color={COLORS.iconGrey}
+          />
+        </View>
       </>
     </TouchableRipple>
   )

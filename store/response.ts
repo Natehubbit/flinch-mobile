@@ -1,6 +1,13 @@
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  Dispatch,
+  PayloadAction
+} from '@reduxjs/toolkit'
 import ResponseService from '../services/ResponseService'
-import { ApprovedActionPayload, ResponseState } from '../types'
+import {
+  ApprovedActionPayload,
+  ResponseState
+} from '../types'
 import { loaderActions } from './loader'
 
 const initState: ResponseState = {
@@ -9,38 +16,67 @@ const initState: ResponseState = {
   all: []
 }
 
-export const { actions, ...responseSlice } = createSlice({
+export const {
+  actions,
+  ...responseSlice
+} = createSlice({
   name: 'response',
   initialState: initState,
   reducers: {
-    getResponse (
+    getResponse(
       state,
-      { payload }: PayloadAction<ApprovedActionPayload>
+      {
+        payload
+      }: PayloadAction<ApprovedActionPayload>
     ) {
       const { key, data } = payload
       return { ...state, [key]: data }
     },
-    resetResponse ():ResponseState {
+    resetResponse(): ResponseState {
       return initState
     }
   }
 })
 
-const getApproved = (id:string, callback?:()=>void) =>
-  async (dispatch:Dispatch) => {
-    dispatch(loaderActions.loading('videosResponseLoader'))
-    const data = await ResponseService.getApproved(id)
-    data && dispatch(actions.getResponse({ key: 'approved', data }))
-    dispatch(loaderActions.loaded('videosResponseLoader'))
-    callback && callback()
-  }
+const getApproved = (
+  id: string,
+  callback?: () => void
+) => async (dispatch: Dispatch) => {
+  dispatch(
+    loaderActions.loading('videosResponseLoader')
+  )
+  const data = await ResponseService.getApproved(
+    id
+  )
+  data &&
+    dispatch(
+      actions.getResponse({
+        key: 'approved',
+        data
+      })
+    )
+  dispatch(
+    loaderActions.loaded('videosResponseLoader')
+  )
+  callback && callback()
+}
 
-const reloadApproved = (id:string, callback?:()=>void) =>
-  async (dispatch:Dispatch) => {
-    const data = await ResponseService.getApproved(id)
-    data && dispatch(actions.getResponse({ key: 'approved', data }))
-    callback && callback()
-  }
+const reloadApproved = (
+  id: string,
+  callback?: () => void
+) => async (dispatch: Dispatch) => {
+  const data = await ResponseService.getApproved(
+    id
+  )
+  data &&
+    dispatch(
+      actions.getResponse({
+        key: 'approved',
+        data
+      })
+    )
+  callback && callback()
+}
 
 export const responseActions = {
   ...actions,

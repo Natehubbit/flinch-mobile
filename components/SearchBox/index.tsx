@@ -4,9 +4,8 @@ import { connectSearchBox } from 'react-instantsearch-native'
 import { StyleSheet } from 'react-native'
 import { Searchbar } from 'react-native-paper'
 
-interface SearchBoxProps extends SearchBoxProvided {
-
-}
+interface SearchBoxProps
+  extends SearchBoxProvided {}
 
 const SearchBox: React.FC<SearchBoxProps> = ({
   currentRefinement,
@@ -16,7 +15,7 @@ const SearchBox: React.FC<SearchBoxProps> = ({
     <Searchbar
       value={currentRefinement}
       onChangeText={refine}
-      placeholder='Search'
+      placeholder="Search"
       style={styles.search}
     />
   )
@@ -25,7 +24,5 @@ const SearchBox: React.FC<SearchBoxProps> = ({
 export default connectSearchBox(SearchBox)
 
 const styles = StyleSheet.create({
-  search: {
-
-  }
+  search: {}
 })

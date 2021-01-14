@@ -1,22 +1,26 @@
 import React from 'react'
-import { StyleSheet, TextProps, View } from 'react-native'
+import {
+  StyleSheet,
+  TextProps,
+  View
+} from 'react-native'
 import { SubHeading } from '../../common/styledComponents'
 import { theme } from '../../config/theme'
 
 interface SectionHeaderProps extends TextProps {
-    title:string;
+  title: string
 }
 
-const SectionHeader: React.FC<SectionHeaderProps> = (
-  {
-    title,
-    ...props
-  }
-) => {
-  return <View style={styles.container}>
-        <SubHeading {...props} >{title}</SubHeading>
-        <View style={styles.line} />
+const SectionHeader: React.FC<SectionHeaderProps> = ({
+  title,
+  ...props
+}) => {
+  return (
+    <View style={styles.container}>
+      <SubHeading {...props}>{title}</SubHeading>
+      <View style={styles.line} />
     </View>
+  )
 }
 
 const styles = StyleSheet.create({

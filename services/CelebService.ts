@@ -4,22 +4,24 @@ import { Celeb, Celebs } from '../types'
 const CelebsRef = db.collection('celebs')
 
 export default class CelebService {
-  static async getCelebs ():Promise<Celebs> {
+  static async getCelebs(): Promise<Celebs> {
     try {
       const res = await CelebsRef.get()
-      const celebs:Celebs = res.docs.map(doc => ({
-        id: doc.id,
-        craft: '',
-        bio: '',
-        imageUrl: '',
-        alias: '',
-        popularity: 0,
-        price: {
-          amount: 0,
-          currency: 'GHS'
-        },
-        ...doc.data()
-      }))
+      const celebs: Celebs = res.docs.map(
+        (doc) => ({
+          id: doc.id,
+          craft: '',
+          bio: '',
+          imageUrl: '',
+          alias: '',
+          popularity: 0,
+          price: {
+            amount: 0,
+            currency: 'GHS'
+          },
+          ...doc.data()
+        })
+      )
       return celebs
     } catch (error) {
       alert(error.message)
@@ -27,7 +29,9 @@ export default class CelebService {
     }
   }
 
-  static async getCeleb (id:string):Promise<Celeb> {
+  static async getCeleb(
+    id: string
+  ): Promise<Celeb> {
     try {
       const res = await CelebsRef.doc(id).get()
       return {
@@ -49,16 +53,15 @@ export default class CelebService {
     }
   }
 
-  static async updateCeleb (
-    data:Partial<Celeb>):Promise<boolean> {
+  static async updateCeleb(
+    data: Partial<Celeb>
+  ): Promise<boolean> {
     try {
       const { id, ...payload } = data
       if (!id) throw new Error('Missing Celeb id')
-      await CelebsRef
-        .doc(id)
-        .update({
-          ...payload
-        })
+      await CelebsRef.doc(id).update({
+        ...payload
+      })
       return true
     } catch (e) {
       alert(e.message)

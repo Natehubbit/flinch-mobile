@@ -6,21 +6,26 @@ import Requests from '../../screens/Requests'
 
 const Tab = createMaterialTopTabNavigator()
 
-function RequestsTabs () {
+function RequestsTabs() {
   return (
-        <Tab.Navigator
-            tabBarOptions={{
-              style: styles.tab,
-              labelStyle: styles.label,
-              indicatorStyle: {
-                backgroundColor: theme.colors.accent
-              }
-            }}
-            style={styles.tab}
-        >
-            <Tab.Screen name="Pending" component={Requests} />
-            <Tab.Screen name="Reviewed" component={Requests} />
-        </Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        style: styles.tab,
+        labelStyle: styles.label,
+        indicatorStyle: {
+          backgroundColor: theme.colors.accent
+        }
+      }}
+      style={styles.tab}>
+      <Tab.Screen
+        name="Pending"
+        component={Requests}
+      />
+      <Tab.Screen
+        name="Reviewed"
+        component={Requests}
+      />
+    </Tab.Navigator>
   )
 }
 

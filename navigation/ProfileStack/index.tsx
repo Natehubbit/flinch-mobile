@@ -15,12 +15,14 @@ const ProfileStack = () => {
 
   return (
     <Stack.Navigator
-      headerMode='none'
+      headerMode="none"
       screenOptions={{
         ...SLIDE_ANIMATION
-      }}
-    >
-      <Stack.Screen name='Profile' component={Profile} />
+      }}>
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+      />
     </Stack.Navigator>
   )
 }

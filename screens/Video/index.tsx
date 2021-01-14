@@ -3,7 +3,10 @@ import { StyleSheet, View } from 'react-native'
 import { FAB } from 'react-native-paper'
 import VideoPlayer from '../../components/VideoPlayer'
 import { COLORS } from '../../config/theme'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import {
+  useNavigation,
+  useRoute
+} from '@react-navigation/native'
 import { VideoScreenRouteProps } from '../../navigation'
 import { LinearGradient } from 'expo-linear-gradient'
 import HelperService from '../../services/HelperService'
@@ -17,10 +20,7 @@ const Video: React.FC = () => {
   const { displayName } = useUser()
   const { goBack } = useNavigation()
   const {
-    params: {
-      name,
-      uri: url
-    }
+    params: { name, uri: url }
   } = useRoute<VideoScreenRouteProps>()
   const onShare = () => {
     HelperService.shareMedia(
@@ -30,21 +30,29 @@ const Video: React.FC = () => {
   const onSaveVideo = async () => {
     setSaving(true)
     const label = Date.now() + '.mp4'
-    const uri = await DownloadHookService
-      .download(url, `${label}.mp4`, setProgress)
-    uri && await HelperService
-      .saveMedia(VIDEO_SAVES, uri)
+    const uri = await DownloadHookService.download(
+      url,
+      `${label}.mp4`,
+      setProgress
+    )
+    uri &&
+      (await HelperService.saveMedia(
+        VIDEO_SAVES,
+        uri
+      ))
     setSaving(false)
   }
   return (
     <View style={[styles.container]}>
       <View style={[styles.head]}>
         <LinearGradient
-          colors={['rgba(0,0,0,0.5)', 'transparent']}
-          style={[styles.headContent]}
-        >
+          colors={[
+            'rgba(0,0,0,0.5)',
+            'transparent'
+          ]}
+          style={[styles.headContent]}>
           <FAB
-            icon='close'
+            icon="close"
             style={[styles.icon]}
             small
             onPress={goBack}
@@ -52,24 +60,29 @@ const Video: React.FC = () => {
         </LinearGradient>
       </View>
       <View style={[styles.videoContainer]}>
-        <VideoPlayer
-          uri={url}
-        />
+        <VideoPlayer uri={url} />
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.5)']}
-          style={[styles.btnsContainer]}
-        >
+          colors={[
+            'transparent',
+            'rgba(0,0,0,0.5)'
+          ]}
+          style={[styles.btnsContainer]}>
           <View style={[styles.btns]}>
-            {!saving
-              ? <FAB
-                icon='cloud-download'
+            {!saving ? (
+              <FAB
+                icon="cloud-download"
                 onPress={onSaveVideo}
-                label='Download'
-                theme={{ colors: { accent: 'transparent' } }}
+                label="Download"
+                theme={{
+                  colors: {
+                    accent: 'transparent'
+                  }
+                }}
                 uppercase={false}
                 style={[styles.download]}
               />
-              : <FAB
+            ) : (
+              <FAB
                 icon={null}
                 loading={saving}
                 label={`${progress}% Downloading`}
@@ -77,7 +90,7 @@ const Video: React.FC = () => {
                 small
                 style={[styles.download]}
               />
-            }
+            )}
             {/* <IconBtn
               icon='cloud-download-outline'
             /> */}
@@ -89,7 +102,7 @@ const Video: React.FC = () => {
               style={[styles.btn]}
             /> */}
             <FAB
-              icon='send'
+              icon="send"
               onPress={onShare}
               small
               style={[styles.send]}

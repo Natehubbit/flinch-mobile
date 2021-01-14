@@ -51,6 +51,7 @@ var firebase_1 = require("../config/firebase");
 var constants_1 = require("../common/constants");
 var HelperService_1 = require("./HelperService");
 var VideoThumbnails = require("expo-video-thumbnails");
+var react_native_1 = require("react-native");
 var RequestRef = firebase_1.db.collection('requests');
 var RequestService = /** @class */ (function () {
     function RequestService() {
@@ -82,9 +83,7 @@ var RequestService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, RequestRef
-                                .doc(id)
-                                .get()];
+                        return [4 /*yield*/, RequestRef.doc(id).get()];
                     case 1:
                         res = _a.sent();
                         return [2 /*return*/, __assign({ id: res.id }, res.data())];
@@ -104,16 +103,13 @@ var RequestService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, RequestRef
-                                .where('celebrity.id', '==', id)
+                        return [4 /*yield*/, RequestRef.where('celebrity.id', '==', id)
                                 .where('payment.payed', '==', true)
                                 .orderBy('response.timestamp', 'desc')
                                 .get()];
                     case 1:
                         res = _a.sent();
-                        return [2 /*return*/, res
-                                .docs
-                                .map(function (d) { return (__assign({ id: d.id }, d.data())); })];
+                        return [2 /*return*/, res.docs.map(function (d) { return (__assign({ id: d.id }, d.data())); })];
                     case 2:
                         e_3 = _a.sent();
                         console.log(e_3.message);
@@ -123,114 +119,140 @@ var RequestService = /** @class */ (function () {
             });
         });
     };
-    RequestService.approveRequest = function (id, appUri, loading) {
+    RequestService.approveRequest = function (id, localUri, loading) {
         return __awaiter(this, void 0, Promise, function () {
-            var asset, duration, video, reload, uri, thumbUri, thumb, thumbUrl, _a, _b, e_4;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var asset, _a, duration, video, _b, reloadHook, uri, _c, thumbUri, _d, thumb, _e, thumbUrl, _f, _g, e_4;
+            return __generator(this, function (_h) {
+                switch (_h.label) {
                     case 0:
-                        _c.trys.push([0, 13, , 14]);
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Fetching Video Details',
-                                showBtns: false
-                            }
-                        });
-                        return [4 /*yield*/, HelperService_1["default"].getMediaInfo(appUri)];
-                    case 1:
-                        asset = _c.sent();
-                        duration = (asset ||
-                            { id: '', duration: 0 }).duration;
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Parsing video...'
-                            }
-                        });
-                        return [4 /*yield*/, HelperService_1["default"].parseToBlob(appUri)
-                            // upload video blob to firebase storage
-                        ];
-                    case 2:
-                        video = _c.sent();
-                        // upload video blob to firebase storage
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Uploading video to server...',
-                                showBtns: true,
-                                type: 'progress'
-                            }
-                        });
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: false
-                            }
-                        });
-                        reload = function () {
-                            loading && loading({
+                        _h.trys.push([0, 17, , 18]);
+                        loading &&
+                            loading({
                                 key: 'responseLoader',
                                 data: {
-                                    isLoading: true
+                                    isLoading: true,
+                                    label: 'Fetching Video Details',
+                                    showBtns: false
                                 }
                             });
-                        };
-                        return [4 /*yield*/, HelperService_1["default"]
-                                .generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, true, reload)];
-                    case 3:
-                        uri = _c.sent();
-                        console.log('URI:: ', uri);
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Generating thumbnail...',
-                                showBtns: false,
-                                type: 'loader'
-                            }
-                        });
-                        return [4 /*yield*/, VideoThumbnails
-                                .getThumbnailAsync(uri, {
-                                time: Math.abs(duration) / 2
-                            })
-                            // parse thumbnail to blob to upload to storage
+                        _a = localUri;
+                        if (!_a) return [3 /*break*/, 2];
+                        return [4 /*yield*/, HelperService_1["default"].getMediaInfo(localUri)];
+                    case 1:
+                        _a = (_h.sent());
+                        _h.label = 2;
+                    case 2:
+                        asset = _a;
+                        duration = (asset || {
+                            id: '',
+                            duration: 0
+                        }).duration;
+                        !!asset &&
+                            loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    label: 'Parsing video...'
+                                }
+                            });
+                        _b = !!localUri;
+                        if (!_b) return [3 /*break*/, 4];
+                        return [4 /*yield*/, HelperService_1["default"].parseToBlob(localUri)
+                            // upload video blob to firebase storage
                         ];
+                    case 3:
+                        _b = (_h.sent());
+                        _h.label = 4;
                     case 4:
-                        thumbUri = (_c.sent()).uri;
+                        video = _b;
+                        // upload video blob to firebase storage
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    label: 'Uploading video to server...',
+                                    showBtns: true,
+                                    type: 'progress'
+                                }
+                            });
+                        reloadHook = function () {
+                            loading &&
+                                loading({
+                                    key: 'responseLoader',
+                                    data: {
+                                        isLoading: true
+                                    }
+                                });
+                        };
+                        _c = !!video;
+                        if (!_c) return [3 /*break*/, 6];
+                        return [4 /*yield*/, HelperService_1["default"].generateBlobUrl("" + constants_1.REQUEST_VIDEO_PATH + id, video, true, reloadHook)];
+                    case 5:
+                        _c = (_h.sent());
+                        _h.label = 6;
+                    case 6:
+                        uri = _c;
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    label: 'Generating video thumbnail...',
+                                    showBtns: false,
+                                    type: 'loader'
+                                }
+                            });
+                        _d = !!uri;
+                        if (!_d) return [3 /*break*/, 8];
+                        return [4 /*yield*/, VideoThumbnails.getThumbnailAsync(uri, {
+                                time: Math.abs(duration) / 2
+                            })];
+                    case 7:
+                        _d = (_h.sent());
+                        _h.label = 8;
+                    case 8:
+                        thumbUri = ((_d) || { uri: '' }).uri;
                         // parse thumbnail to blob to upload to storage
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Uploading video thumbnail',
-                                showBtns: false,
-                                type: 'loader'
-                            }
-                        });
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: true,
+                                    label: 'Uploading video thumbnail...',
+                                    showBtns: false,
+                                    type: 'loader'
+                                }
+                            });
+                        _e = !!thumbUri;
+                        if (!_e) return [3 /*break*/, 10];
                         return [4 /*yield*/, HelperService_1["default"].parseToBlob(thumbUri)
                             // upload thumb to storage
                         ];
-                    case 5:
-                        thumb = _c.sent();
-                        return [4 /*yield*/, HelperService_1["default"]
-                                .generateBlobUrl("" + constants_1.THUMBS_PATH + id, thumb)];
-                    case 6:
-                        thumbUrl = _c.sent();
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Approving request...',
-                                showBtns: false
-                            }
-                        });
-                        if (!uri) return [3 /*break*/, 10];
-                        return [4 /*yield*/, RequestRef.doc(id)
-                                .update({
+                    case 9:
+                        _e = (_h.sent());
+                        _h.label = 10;
+                    case 10:
+                        thumb = _e;
+                        _f = !!thumb &&
+                            !!id;
+                        if (!_f) return [3 /*break*/, 12];
+                        return [4 /*yield*/, HelperService_1["default"].generateBlobUrl("" + constants_1.THUMBS_PATH + id, thumb)];
+                    case 11:
+                        _f = (_h.sent());
+                        _h.label = 12;
+                    case 12:
+                        thumbUrl = _f;
+                        thumbUrl &&
+                            loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: true,
+                                    label: 'Approving request...',
+                                    showBtns: false
+                                }
+                            });
+                        if (!(uri && thumbUrl)) return [3 /*break*/, 16];
+                        return [4 /*yield*/, RequestRef.doc(id).update({
                                 'response.videoUri': uri,
                                 'response.status': 'approved',
                                 'response.duration': duration,
@@ -238,30 +260,25 @@ var RequestService = /** @class */ (function () {
                                 'response.thumbnailUri': thumbUrl,
                                 'response.timestamp': Date.now()
                             })];
-                    case 7:
-                        _c.sent();
-                        _a = asset;
-                        if (!_a) return [3 /*break*/, 9];
-                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([asset])];
-                    case 8:
-                        _a = (_c.sent());
-                        _c.label = 9;
-                    case 9:
-                        _a;
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: true,
-                                label: 'Request approved.',
-                                showBtns: false
-                            }
-                        });
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: false
-                            }
-                        });
+                    case 13:
+                        _h.sent();
+                        _g = asset;
+                        if (!_g) return [3 /*break*/, 15];
+                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([
+                                asset
+                            ])];
+                    case 14:
+                        _g = (_h.sent());
+                        _h.label = 15;
+                    case 15:
+                        _g;
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: false
+                                }
+                            });
                         return [2 /*return*/, {
                                 status: 'success',
                                 response: {
@@ -272,27 +289,32 @@ var RequestService = /** @class */ (function () {
                                     timestamp: Date.now()
                                 }
                             }];
-                    case 10:
-                        _b = asset;
-                        if (!_b) return [3 /*break*/, 12];
-                        return [4 /*yield*/, HelperService_1["default"].deleteMediaInfo([asset])];
-                    case 11:
-                        _b = (_c.sent());
-                        _c.label = 12;
-                    case 12:
-                        _b;
+                    case 16:
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: false
+                                }
+                            });
+                        // const noError = !!video && !!uri && !!thumbUri && !!thumb
+                        asset &&
+                            (HelperService_1["default"].deleteMediaInfo([
+                                asset
+                            ]));
                         return [2 /*return*/, null];
-                    case 13:
-                        e_4 = _c.sent();
-                        loading && loading({
-                            key: 'responseLoader',
-                            data: {
-                                isLoading: false
-                            }
-                        });
-                        alert(e_4.message);
+                    case 17:
+                        e_4 = _h.sent();
+                        loading &&
+                            loading({
+                                key: 'responseLoader',
+                                data: {
+                                    isLoading: false
+                                }
+                            });
+                        react_native_1.Alert.alert('Error', e_4.message);
                         return [2 /*return*/, null];
-                    case 14: return [2 /*return*/];
+                    case 18: return [2 /*return*/];
                 }
             });
         });
@@ -304,9 +326,7 @@ var RequestService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, RequestRef
-                                .doc(id)
-                                .update({
+                        return [4 /*yield*/, RequestRef.doc(id).update({
                                 'response.status': 'rejected',
                                 status: 'failed'
                             })];
@@ -315,7 +335,7 @@ var RequestService = /** @class */ (function () {
                         return [2 /*return*/, true];
                     case 2:
                         e_5 = _a.sent();
-                        alert(e_5.message);
+                        react_native_1.Alert.alert('Error', e_5.message);
                         return [2 /*return*/, false];
                     case 3: return [2 /*return*/];
                 }
@@ -323,9 +343,9 @@ var RequestService = /** @class */ (function () {
         });
     };
     /**
-       * Get all user requests
-       * @param id requestor id
-       */
+     * Get all user requests
+     * @param id requestor id
+     */
     RequestService.getAllRequests = function (id) {
         return __awaiter(this, void 0, Promise, function () {
             var res, e_6;
@@ -333,8 +353,7 @@ var RequestService = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, RequestRef
-                                .where('requestor.id', '==', id)
+                        return [4 /*yield*/, RequestRef.where('requestor.id', '==', id)
                                 .where('payment.payed', '==', true)
                                 .orderBy('timestamp', 'desc')
                                 .get()];
@@ -359,15 +378,15 @@ var RequestService = /** @class */ (function () {
                     userRefId = isUser
                         ? 'requestor.id'
                         : 'celebrity.id';
-                    return [2 /*return*/, RequestRef
-                            .where(userRefId, '==', id)
+                    return [2 /*return*/, RequestRef.where(userRefId, '==', id)
                             .where('status', '==', 'pending')
                             .where('payment.payed', '==', true)
                             .orderBy('timestamp', 'desc')
                             .onSnapshot(function (snap) {
-                            callback && callback(snap
-                                .docs
-                                .map(function (s) { return (__assign({ id: s.id }, s.data())); }));
+                            callback &&
+                                callback(snap.docs.map(function (s) {
+                                    return (__assign({ id: s.id }, s.data()));
+                                }));
                             loaded && loaded();
                         })];
                 }
@@ -381,13 +400,11 @@ var RequestService = /** @class */ (function () {
     };
     RequestService.getCelebResponseCount = function (id, callback) {
         try {
-            return RequestRef
-                .where('status', '==', 'success')
+            return RequestRef.where('status', '==', 'success')
                 .where('celebrity.id', '==', id)
                 .where('response.status', '==', 'approved')
                 .onSnapshot(function (snap) {
-                callback &&
-                    callback(snap.size);
+                callback && callback(snap.size);
             });
         }
         catch (e) {

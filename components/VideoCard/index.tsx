@@ -1,23 +1,34 @@
 import React from 'react'
-import { View, StyleSheet, ImageBackground } from 'react-native'
-import { AltMiniLabel, maxHeight, Paragraph } from '../../common/styledComponents'
+import {
+  View,
+  StyleSheet,
+  ImageBackground
+} from 'react-native'
+import {
+  AltMiniLabel,
+  maxHeight,
+  Paragraph
+} from '../../common/styledComponents'
 import { COLORS } from '../../config/theme'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { Routes, VideoNavParam } from '../../navigation'
+import {
+  Routes,
+  VideoNavParam
+} from '../../navigation'
 import { LinearGradient } from 'expo-linear-gradient'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 interface VideoCardProps {
-  id: string;
-  celebrity: string;
-  recipient: string;
-  date: string;
-  thumbnailUri?: string;
-  duration: number;
-  uri: string;
+  id: string
+  celebrity: string
+  recipient: string
+  date: string
+  thumbnailUri?: string
+  duration: number
+  uri: string
 }
 
-const VideoCard:React.FC<VideoCardProps> = ({
+const VideoCard: React.FC<VideoCardProps> = ({
   id,
   celebrity,
   date,
@@ -42,29 +53,49 @@ const VideoCard:React.FC<VideoCardProps> = ({
     <View style={[styles.container]}>
       <TouchableOpacity
         style={[styles.touch]}
-        onPress={onOpen}
-      >
+        onPress={onOpen}>
         <LinearGradient
-          colors={['transparent', 'rgba(0,0,0,0.6)']}
-          style={[styles.content]}
-        >
+          colors={[
+            'transparent',
+            'rgba(0,0,0,0.6)'
+          ]}
+          style={[styles.content]}>
           <ImageBackground
             source={{ uri: thumbnailUri }}
             style={[styles.img]}
           />
           <View style={[styles.infoContainer]}>
             <View style={[styles.info]}>
-              <AltMiniLabel numberOfLines={3} style={[styles.celeb]}>
+              <AltMiniLabel
+                numberOfLines={3}
+                style={[styles.celeb]}>
                 {celebrity}
               </AltMiniLabel>
-              <View style={[styles.labelContainer]}>
+              <View
+                style={[styles.labelContainer]}>
                 <View style={[styles.label]}>
-                  <Icon size={10} name='account-outline' color={COLORS.white} />
-                  <Paragraph style={[styles.mini]} numberOfLines={1}>{recipient}</Paragraph>
+                  <Icon
+                    size={10}
+                    name="account-outline"
+                    color={COLORS.white}
+                  />
+                  <Paragraph
+                    style={[styles.mini]}
+                    numberOfLines={1}>
+                    {recipient}
+                  </Paragraph>
                 </View>
                 <View style={[styles.label]}>
-                  <Icon size={10} name='calendar-outline' color={COLORS.white} />
-                  <Paragraph style={[styles.mini]} numberOfLines={1}>{date}</Paragraph>
+                  <Icon
+                    size={10}
+                    name="calendar-outline"
+                    color={COLORS.white}
+                  />
+                  <Paragraph
+                    style={[styles.mini]}
+                    numberOfLines={1}>
+                    {date}
+                  </Paragraph>
                 </View>
               </View>
             </View>

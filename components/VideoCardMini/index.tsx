@@ -1,34 +1,47 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image } from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image
+} from 'react-native'
 import { TouchableRipple } from 'react-native-paper'
 import { useUser } from '../../hooks/useUser'
 import LabelTag from '../LabelTag'
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons'
 import { COLORS } from '../../config/theme'
 
-export default function VideoCardMini () {
+export default function VideoCardMini() {
   const { imageUrl: uri } = useUser()
   return (
     <View style={[styles.container]}>
-        <TouchableRipple
-          style={[styles.content]}
-        >
-          <>
+      <TouchableRipple style={[styles.content]}>
+        <>
           <Image
             source={{ uri }}
             style={[styles.img]}
           />
           <View style={[styles.info]}>
-            <Text style={[styles.name]}>James</Text>
+            <Text style={[styles.name]}>
+              James
+            </Text>
             <LabelTag />
-            <Text style={[styles.date]}>26 Dec 2020</Text>
+            <Text style={[styles.date]}>
+              26 Dec 2020
+            </Text>
             <View style={[styles.star]}>
-              <Icon name='star-outline' size={10} color={COLORS.grey} />
-              <Text style={[styles.celeb]} >Akuffo Addo</Text>
+              <Icon
+                name="star-outline"
+                size={10}
+                color={COLORS.grey}
+              />
+              <Text style={[styles.celeb]}>
+                Akuffo Addo
+              </Text>
             </View>
           </View>
-          </>
-        </TouchableRipple>
+        </>
+      </TouchableRipple>
     </View>
   )
 }

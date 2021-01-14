@@ -61,18 +61,17 @@ var Request = function () {
     var _b = react_1.useState(false), loading = _b[0], setLoading = _b[1];
     var _c = native_1.useNavigation(), navigate = _c.navigate, goBack = _c.goBack;
     var _d = react_1.useState(null), request = _d[0], setRequest = _d[1];
-    var _e = native_1.useRoute(), params = _e.params, route = _e.name;
+    var _e = react_1.useState(false), seeMore = _e[0], setSeeMore = _e[1];
+    var _f = native_1.useRoute(), params = _f.params, route = _f.name;
     var id = params.id, data = params.data;
-    var _f = request ||
-        data ||
-        constants_1.initStateRequest, occasion = _f.occasion, status = _f.status, instructions = _f.instructions, recipient = _f.recipient, price = _f.price, _g = _f.celebrity, name = _g.name, imageUrl = _g.imageUrl, _h = _f.response, duration = _h.duration, timestamp = _h.timestamp, uri = _h.videoUri, thumbnailUri = _h.thumbnailUri;
+    var _g = request || data || constants_1.initStateRequest, occasion = _g.occasion, status = _g.status, instructions = _g.instructions, recipient = _g.recipient, price = _g.price, _h = _g.celebrity, name = _h.name, imageUrl = _h.imageUrl, _j = _g.response, duration = _j.duration, timestamp = _j.timestamp, uri = _j.videoUri, thumbnailUri = _j.thumbnailUri;
     var summarize = instructions.length > 99;
-    var info = summarize
+    var info = summarize && !seeMore
         ? instructions.substring(0, 99)
         : instructions;
-    var summarizeText = summarize
-        ? 'see more'
-        : 'see less';
+    var summarizeText = summarize && !seeMore
+        ? '\tsee more'
+        : '\tsee less';
     var isUser = role === 'user';
     var isSuccess = status === 'success';
     var isPending = status === 'pending';
@@ -91,30 +90,43 @@ var Request = function () {
         init();
     }, []);
     var fetchData = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var request;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var request, _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     setLoading(true);
-                    return [4 /*yield*/, RequestService_1["default"]
-                            .getRequest(id)];
+                    _a = id;
+                    if (!_a) return [3 /*break*/, 2];
+                    return [4 /*yield*/, RequestService_1["default"].getRequest(id)];
                 case 1:
-                    request = _a.sent();
+                    _a = (_b.sent());
+                    _b.label = 2;
+                case 2:
+                    request = _a;
                     setRequest(request);
                     setLoading(false);
                     return [2 /*return*/];
             }
         });
     }); };
-    var onAccept = function () { return navigate('VideoUpload', { id: id || (data === null || data === void 0 ? void 0 : data.id) }); };
-    var onOpenVideo = function () { return navigate('Video', {
-        id: id || (data === null || data === void 0 ? void 0 : data.id),
-        duration: duration,
-        recipient: recipient,
-        date: HelperService_1["default"].parseToDate(timestamp),
-        name: name,
-        uri: uri
-    }); };
+    var onSeeMore = function () {
+        setSeeMore(function (v) { return !v; });
+    };
+    var onAccept = function () {
+        return navigate('VideoUpload', {
+            id: id || (data === null || data === void 0 ? void 0 : data.id)
+        });
+    };
+    var onOpenVideo = function () {
+        return navigate('Video', {
+            id: id || (data === null || data === void 0 ? void 0 : data.id),
+            duration: duration,
+            recipient: recipient,
+            date: HelperService_1["default"].parseToDate(timestamp),
+            name: name,
+            uri: uri
+        });
+    };
     var onReject = function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             setRejecting(true);
@@ -126,9 +138,9 @@ var Request = function () {
         goBack();
         setRejecting(false);
     };
-    return react_1["default"].createElement(react_1["default"].Fragment, null,
+    return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(Navbar_1["default"], { hideBell: true, title: route }),
-        react_1["default"].createElement(react_native_1.ScrollView, { style: styles.container, refreshControl: react_1["default"].createElement(react_native_1.RefreshControl, { refreshing: loading, onRefresh: fetchData }) }, !loading && react_1["default"].createElement(react_native_1.View, { style: styles.panelContainer },
+        react_1["default"].createElement(react_native_1.ScrollView, { style: styles.container, refreshControl: react_1["default"].createElement(react_native_1.RefreshControl, { refreshing: loading, onRefresh: fetchData }) }, !loading && (react_1["default"].createElement(react_native_1.View, { style: styles.panelContainer },
             react_1["default"].createElement(react_native_1.View, { style: styles.panel },
                 react_1["default"].createElement(react_native_1.Image, { source: { uri: imageUrl }, style: styles.img }),
                 react_1["default"].createElement(react_native_1.View, { style: styles.panelContent },
@@ -141,32 +153,38 @@ var Request = function () {
                         react_1["default"].createElement(styledComponents_1.SubHeading, { style: styles.miniHead }, "Instructions"),
                         react_1["default"].createElement(styledComponents_1.Paragraph, { black: true },
                             info,
-                            summarize && react_1["default"].createElement(styledComponents_1.Paragraph, { link: true }, summarizeText))),
-                    isSuccess && react_1["default"].createElement(react_1["default"].Fragment, null,
+                            summarize && (react_1["default"].createElement(styledComponents_1.Paragraph, { onPress: onSeeMore, link: true }, summarizeText)))),
+                    isSuccess && (react_1["default"].createElement(react_1["default"].Fragment, null,
                         react_1["default"].createElement(react_native_paper_1.Divider, { style: [styles.div] }),
                         react_1["default"].createElement(react_native_paper_1.TouchableRipple, { onPress: onOpenVideo, style: { flex: 1 } },
                             react_1["default"].createElement(react_native_1.View, { style: styles.videoContainer },
                                 react_1["default"].createElement(react_native_1.View, { style: styles.video },
-                                    react_1["default"].createElement(react_native_1.ImageBackground, { source: { uri: thumbnailUri }, style: [styles.thumbnail] }),
+                                    react_1["default"].createElement(react_native_1.ImageBackground, { source: {
+                                            uri: thumbnailUri
+                                        }, style: [
+                                            styles.thumbnail
+                                        ] }),
                                     react_1["default"].createElement(play_svg_1["default"], null)),
                                 react_1["default"].createElement(react_native_1.View, { style: styles.videoLabel },
                                     react_1["default"].createElement(styledComponents_1.Paragraph, { black: true }, occasion),
-                                    react_1["default"].createElement(react_native_1.View, { style: [styles.length] },
-                                        react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'clock-outline', color: 'rgba(0,0,0,0.5)' }),
+                                    react_1["default"].createElement(react_native_1.View, { style: [
+                                            styles.length
+                                        ] },
+                                        react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: "clock-outline", color: "rgba(0,0,0,0.5)" }),
                                         react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.duration },
                                             Math.ceil(duration),
-                                            "s")))))),
+                                            "s"))))))),
                     react_1["default"].createElement(react_native_paper_1.Divider, { style: [styles.div] }),
                     react_1["default"].createElement(react_native_1.View, { style: styles.bottom },
                         react_1["default"].createElement(react_native_1.View, { style: styles.bottomLabel },
-                            react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'account', color: 'rgba(0,0,0,0.5)' }),
+                            react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: "account", color: "rgba(0,0,0,0.5)" }),
                             react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.bottomText }, recipient)),
                         react_1["default"].createElement(react_native_1.View, { style: styles.bottomLabel },
-                            react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: 'wallet', color: 'rgba(0,0,0,0.5)' }),
-                            react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.bottomText }, HelperService_1["default"].parseToMoney(price)))))))),
-        showButtons && !loading && react_1["default"].createElement(react_native_1.View, { style: styles.buttons },
-            react_1["default"].createElement(Button_1["default"], { onPress: onAccept, label: 'Accept', disabled: rejecting }),
-            react_1["default"].createElement(Button_1["default"], { onPress: onReject, label: 'Reject', type: 'outline', loading: rejecting, disabled: rejecting })));
+                            react_1["default"].createElement(vector_icons_1.MaterialCommunityIcons, { name: "wallet", color: "rgba(0,0,0,0.5)" }),
+                            react_1["default"].createElement(styledComponents_1.MiniLabel, { numberOfLines: 1, style: styles.bottomText }, HelperService_1["default"].parseToMoney(price))))))))),
+        showButtons && !loading && (react_1["default"].createElement(react_native_1.View, { style: styles.buttons },
+            react_1["default"].createElement(Button_1["default"], { onPress: onAccept, label: "Accept", disabled: rejecting }),
+            react_1["default"].createElement(Button_1["default"], { onPress: onReject, label: "Reject", type: "outline", loading: rejecting, disabled: rejecting })))));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {
@@ -216,7 +234,7 @@ var styles = react_native_1.StyleSheet.create({
         paddingHorizontal: 9
     },
     miniHead: {
-        fontSize: 12,
+        // fontSize: 12,
         marginBottom: 10
     },
     see: {

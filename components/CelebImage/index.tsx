@@ -1,7 +1,14 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View
+} from 'react-native'
 import { Card } from 'react-native-paper'
-import { maxHeight, maxWidth } from '../../common/styledComponents'
+import {
+  maxHeight,
+  maxWidth
+} from '../../common/styledComponents'
 import { LinearGradient } from 'expo-linear-gradient'
 import { theme } from '../../config/theme'
 import { useNavigation } from '@react-navigation/native'
@@ -10,7 +17,7 @@ import { Celeb } from '../../types'
 import HelperService from '../../services/HelperService'
 
 interface CelebImageProps extends Celeb {
-    large?:boolean;
+  large?: boolean
 }
 const CelebImage: React.FC<CelebImageProps> = ({
   large,
@@ -25,11 +32,9 @@ const CelebImage: React.FC<CelebImageProps> = ({
     token
   } = props
   const size = large ? { width: '47%' } : null
-  const {
-    navigate
-  } = useNavigation()
-  const onPressed = () => navigate<Routes>(
-    'Celeb', {
+  const { navigate } = useNavigation()
+  const onPressed = () =>
+    navigate<Routes>('Celeb', {
       data: {
         id,
         alias,
@@ -38,48 +43,54 @@ const CelebImage: React.FC<CelebImageProps> = ({
         token: token || '',
         price
       }
-    }
-  )
-  return <Card
+    })
+  return (
+    <Card
+      theme={{ roundness: 10 }}
+      onPress={onPressed}
+      style={[styles.container, size]}>
+      <Card.Cover
+        style={[styles.cover]}
         theme={{ roundness: 10 }}
-        onPress={onPressed}
-        style={[styles.container, size]}
-    >
-        <Card.Cover
-            style={[styles.cover]}
-            theme={{ roundness: 10 }}
-            source={{
-              uri: imageUrl
-            }}
-        />
-        <LinearGradient
-            colors={['transparent', 'rgba(0,0,0,0.6)']}
-            style={styles.overlay}
-        >
-            <View style={styles.textContainer}>
-                <View style={styles.dets}>
-                    <Text numberOfLines={1} style={styles.celebName}>
-                      {alias}
-                    </Text>
-                    <Text style={styles.role}>{craft}</Text>
-                </View>
-                <Text style={styles.price}>
-                  {HelperService.parseToMoney(price)}
-                  </Text>
-            </View>
-        </LinearGradient>
+        source={{
+          uri: imageUrl
+        }}
+      />
+      <LinearGradient
+        colors={[
+          'transparent',
+          'rgba(0,0,0,0.6)'
+        ]}
+        style={styles.overlay}>
+        <View style={styles.textContainer}>
+          <View style={styles.dets}>
+            <Text
+              numberOfLines={1}
+              style={styles.celebName}>
+              {alias}
+            </Text>
+            <Text style={styles.role}>
+              {craft}
+            </Text>
+          </View>
+          <Text style={styles.price}>
+            {HelperService.parseToMoney(price)}
+          </Text>
+        </View>
+      </LinearGradient>
     </Card>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     width: maxWidth * 0.35,
     marginRight: 10,
-    height: maxHeight * 0.20,
+    height: maxHeight * 0.2,
     marginBottom: 20
   },
   cover: {
-    height: maxHeight * 0.20,
+    height: maxHeight * 0.2,
     borderRadius: 10
   },
   overlay: {

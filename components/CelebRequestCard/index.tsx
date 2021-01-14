@@ -1,18 +1,22 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Divider, Paragraph, TouchableRipple } from 'react-native-paper'
+import {
+  Divider,
+  Paragraph,
+  TouchableRipple
+} from 'react-native-paper'
 import Urgent from '../../assets/images/urgent.svg'
 import { AltMiniLabel } from '../../common/styledComponents'
 import { Routes } from '../../navigation'
 import { Request } from '../../types'
 
 interface CelebRequestCardProps {
-  ocassion:string;
-  recipient:string;
-  price:string;
-  data:Request;
-  time:string;
+  ocassion: string
+  recipient: string
+  price: string
+  data: Request
+  time: string
 }
 
 const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
@@ -28,33 +32,30 @@ const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
   }
   return (
     <>
-    <TouchableRipple
-      style={[styles.container]}
-      onPress={onPress}
-      >
-      <>
-        <View style={[styles.icon]}>
-          <Urgent height={40} width={40} />
-        </View>
-        <View style={[styles.info]}>
-          <AltMiniLabel style={[styles.event]}>
-            {ocassion}
-          </AltMiniLabel>
-          <Paragraph>
-            {recipient}
-          </Paragraph>
-        </View>
-        <View style={[styles.extra]}>
-          <Paragraph numberOfLines={1} style={[styles.time]}>
-            {time}
-          </Paragraph>
-          <AltMiniLabel>
-            {price}
-          </AltMiniLabel>
-        </View>
-      </>
-    </TouchableRipple>
-    <Divider/>
+      <TouchableRipple
+        style={[styles.container]}
+        onPress={onPress}>
+        <>
+          <View style={[styles.icon]}>
+            <Urgent height={40} width={40} />
+          </View>
+          <View style={[styles.info]}>
+            <AltMiniLabel style={[styles.event]}>
+              {ocassion}
+            </AltMiniLabel>
+            <Paragraph>{recipient}</Paragraph>
+          </View>
+          <View style={[styles.extra]}>
+            <Paragraph
+              numberOfLines={1}
+              style={[styles.time]}>
+              {time}
+            </Paragraph>
+            <AltMiniLabel>{price}</AltMiniLabel>
+          </View>
+        </>
+      </TouchableRipple>
+      <Divider />
     </>
   )
 }

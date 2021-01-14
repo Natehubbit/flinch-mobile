@@ -1,4 +1,8 @@
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  Dispatch,
+  PayloadAction
+} from '@reduxjs/toolkit'
 import RequestService from '../services/RequestService'
 import { Request } from '../types'
 import { loaderActions } from './loader'
@@ -21,6 +25,7 @@ export const initState: Request = {
     amount: 0,
     payed: false,
     currency: 'GHS',
+    trxRef: '',
     timestamp: Date.now()
   },
   requestor: {
@@ -38,31 +43,34 @@ export const initState: Request = {
   timestamp: 0
 }
 
-export const { actions, ...requestSlice } = createSlice({
+export const {
+  actions,
+  ...requestSlice
+} = createSlice({
   name: 'request',
   initialState: initState,
   reducers: {
-    getRequest (
+    getRequest(
       state,
       { payload }: PayloadAction<Request>
     ): Request {
       return { ...state, ...payload }
     },
-    clearRequest (): Request {
+    clearRequest(): Request {
       return initState
     }
   }
 })
 
-const createRequest = (data:Request) => async (dispatch:Dispatch) => {
-  dispatch(loaderActions
-    .loading('bookingLoader'))
-  const res = await RequestService
-    .createRequest(data)
-  res && dispatch(actions
-    .getRequest(res))
-  dispatch(loaderActions
-    .loaded('bookingLoader'))
+const createRequest = (data: Request) => async (
+  dispatch: Dispatch
+) => {
+  dispatch(loaderActions.loading('bookingLoader'))
+  const res = await RequestService.createRequest(
+    data
+  )
+  res && dispatch(actions.getRequest(res))
+  dispatch(loaderActions.loaded('bookingLoader'))
 }
 
 export const requestActions = {

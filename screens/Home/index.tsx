@@ -1,7 +1,14 @@
 import React, { useEffect } from 'react'
-import { RefreshControl, StyleSheet, View } from 'react-native'
+import {
+  RefreshControl,
+  StyleSheet,
+  View
+} from 'react-native'
 import { useDispatch } from 'react-redux'
-import { AppContainer, maxHeight } from '../../common/styledComponents'
+import {
+  AppContainer,
+  maxHeight
+} from '../../common/styledComponents'
 import CelebImage from '../../components/CelebImage'
 import SectionHeader from '../../components/SectionHeader'
 import { theme } from '../../config/theme'
@@ -13,13 +20,11 @@ const Home: React.FC = () => {
   const dispatch = useDispatch()
   const celebs = useCelebs()
   const {
-    celebsLoader: {
-      isLoading: celebsLoader
-    }
+    celebsLoader: { isLoading: celebsLoader }
   } = useLoader()
   useEffect(() => {
-    (celebs.length < 1) &&
-    dispatch(celebsActions.getCelebs())
+    celebs.length < 1 &&
+      dispatch(celebsActions.getCelebs())
   }, [])
 
   const onRefresh = () => {
@@ -27,19 +32,22 @@ const Home: React.FC = () => {
   }
 
   const renderAll = () => {
-    return celebs && celebs.map(celeb => (
-      <CelebImage
-        key={celeb.id}
-        {...celeb}
-        large
-      />
-    ))
+    return (
+      celebs &&
+      celebs.map((celeb) => (
+        <CelebImage
+          key={celeb.id}
+          {...celeb}
+          large
+        />
+      ))
+    )
   }
 
   const allView = () => {
     return (
       <>
-        <SectionHeader title='Celebrities' />
+        <SectionHeader title="Celebrities" />
         <View style={styles.allSection}>
           {renderAll()}
         </View>
@@ -47,28 +55,36 @@ const Home: React.FC = () => {
     )
   }
 
-  const renderViews = ({ item }:{item:any}) => {
+  const renderViews = ({
+    item
+  }: {
+    item: any
+  }) => {
     return item
   }
 
-  return <View>
-    <AppContainer
-      refreshControl={<RefreshControl
-        refreshing={celebsLoader}
-        onRefresh={onRefresh}
-        colors={[theme.colors.primary]}
-      />}
-      data={[allView()]}
-      renderItem={renderViews}
-      keyExtractor={(item, index) => index.toString()}
-    />
-  </View>
+  return (
+    <View>
+      <AppContainer
+        refreshControl={
+          <RefreshControl
+            refreshing={celebsLoader}
+            onRefresh={onRefresh}
+            colors={[theme.colors.primary]}
+          />
+        }
+        data={[allView()]}
+        renderItem={renderViews}
+        keyExtractor={(item, index) =>
+          index.toString()
+        }
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-  container: {
-
-  },
+  container: {},
   section: {
     paddingVertical: 15,
     flexDirection: 'row',

@@ -1,14 +1,20 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Dialog, Portal, ActivityIndicator } from 'react-native-paper'
+import {
+  Dialog,
+  Portal,
+  ActivityIndicator
+} from 'react-native-paper'
 import { Paragraph } from '../../common/styledComponents'
 
 interface ModalLoaderProps {
-  show?:boolean;
-  label?:string
+  show?: boolean
+  label?: string
 }
 
-const ModalLoader:React.FC<ModalLoaderProps> = (props) => {
+const ModalLoader: React.FC<ModalLoaderProps> = (
+  props
+) => {
   const { show, label } = props
   return (
     <Portal>
@@ -17,9 +23,7 @@ const ModalLoader:React.FC<ModalLoaderProps> = (props) => {
           <Paragraph black style={styles.text}>
             {`${label || ''}\n`}
           </Paragraph>
-          <ActivityIndicator
-            animating
-          />
+          <ActivityIndicator animating />
         </Dialog.Content>
       </Dialog>
     </Portal>

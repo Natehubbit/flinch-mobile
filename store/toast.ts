@@ -1,4 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {
+  createSlice,
+  PayloadAction
+} from '@reduxjs/toolkit'
 import { Toast } from '../types'
 
 const initState: Toast = {
@@ -11,17 +14,20 @@ const initState: Toast = {
   onPress: undefined
 }
 
-export const { actions, ...toastSlice } = createSlice({
+export const {
+  actions,
+  ...toastSlice
+} = createSlice({
   name: 'toast',
   initialState: initState,
   reducers: {
-    setToast (
+    setToast(
       state,
       { payload }: PayloadAction<Toast>
     ) {
       return { ...state, ...payload }
     },
-    resetToast ():Toast {
+    resetToast(): Toast {
       return initState
     }
   }

@@ -1,12 +1,15 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { TextInput, withTheme } from 'react-native-paper'
+import {
+  TextInput,
+  withTheme
+} from 'react-native-paper'
 import { theme } from '../../config/theme'
 import { TextInputProps } from 'react-native-paper/lib/typescript/src/components/TextInput/TextInput'
 
 interface InputProps extends TextInputProps {
-  onIconClicked?:()=>void;
-  left?:string|React.ReactNode;
+  onIconClicked?: () => void
+  left?: string | React.ReactNode
 }
 
 const AuthInput: React.FC<InputProps> = ({
@@ -15,16 +18,33 @@ const AuthInput: React.FC<InputProps> = ({
   onIconClicked,
   style,
   ...props
-}) => <TextInput
-  {...props}
-  mode='flat'
-  style={[styles.input, style]}
-  right={(right && <TextInput.Icon onPress={onIconClicked} color='#707577' name={right.toString()} />) || null}
-  left={
-    typeof left === 'string'
-      ? <TextInput.Icon color='#707577' name={left.toString()} />
-      : left
-} />
+}) => (
+  <TextInput
+    {...props}
+    mode="flat"
+    style={[styles.input, style]}
+    right={
+      (right && (
+        <TextInput.Icon
+          onPress={onIconClicked}
+          color="#707577"
+          name={right.toString()}
+        />
+      )) ||
+      null
+    }
+    left={
+      typeof left === 'string' ? (
+        <TextInput.Icon
+          color="#707577"
+          name={left.toString()}
+        />
+      ) : (
+        left
+      )
+    }
+  />
+)
 
 const styles = StyleSheet.create({
   input: {

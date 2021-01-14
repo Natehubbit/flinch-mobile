@@ -1,20 +1,30 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
-import { Divider, TouchableRipple } from 'react-native-paper'
-import { AltMiniLabel, Paragraph } from '../../common/styledComponents'
+import {
+  Image,
+  StyleSheet,
+  View
+} from 'react-native'
+import {
+  Divider,
+  TouchableRipple
+} from 'react-native-paper'
+import {
+  AltMiniLabel,
+  Paragraph
+} from '../../common/styledComponents'
 import Tag from '../Tag'
 import { RequestStatus } from '../../types'
 import { theme } from '../../config/theme'
 
 interface RequestCardProps {
-  celeb:string;
-  imageUrl:string;
-  tag:RequestStatus;
-  occasion:string;
-  price:string;
-  recipient:string;
-  date:string;
-  onPress:()=>void;
+  celeb: string
+  imageUrl: string
+  tag: RequestStatus
+  occasion: string
+  price: string
+  recipient: string
+  date: string
+  onPress: () => void
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({
@@ -27,49 +37,61 @@ const RequestCard: React.FC<RequestCardProps> = ({
   date,
   onPress
 }) => {
-  return <View style={styles.container}>
-        <TouchableRipple onPress={onPress}>
-            <>
-                <View style={styles.top}>
-                    <View style={styles.user}>
-                        <Image
-                          source={{ uri }}
-                          style={styles.image}
-                        />
-                        <View style={styles.label}>
-                            <AltMiniLabel>
-                              {celeb}
-                            </AltMiniLabel>
-                            <Paragraph black style={[styles.bottomLabel, styles.mini]}>
-                              for {recipient}
-                            </Paragraph>
-                        </View>
-                    </View>
-                    <View style={styles.tagContainer}>
-                        <Paragraph black style={[styles.bottomLabel, styles.date]}>
-                          {date}
-                        </Paragraph>
-                        <Tag
-                          label={tag}
-                        />
-                    </View>
-                </View>
-                <Divider/>
-                <View style={styles.bottom}>
-                    <View>
-                      <Paragraph style={styles.bottomText}>
-                        {occasion}
-                      </Paragraph>
-                    </View>
-                    <View>
-                        <Paragraph style={styles.bottomText}>
-                          {price}
-                        </Paragraph>
-                    </View>
-                </View>
-            </>
-        </TouchableRipple>
+  return (
+    <View style={styles.container}>
+      <TouchableRipple onPress={onPress}>
+        <>
+          <View style={styles.top}>
+            <View style={styles.user}>
+              <Image
+                source={{ uri }}
+                style={styles.image}
+              />
+              <View style={styles.label}>
+                <AltMiniLabel>
+                  {celeb}
+                </AltMiniLabel>
+                <Paragraph
+                  black
+                  style={[
+                    styles.bottomLabel,
+                    styles.mini
+                  ]}>
+                  for {recipient}
+                </Paragraph>
+              </View>
+            </View>
+            <View style={styles.tagContainer}>
+              <Paragraph
+                black
+                style={[
+                  styles.bottomLabel,
+                  styles.date
+                ]}>
+                {date}
+              </Paragraph>
+              <Tag label={tag} />
+            </View>
+          </View>
+          <Divider />
+          <View style={styles.bottom}>
+            <View>
+              <Paragraph
+                style={styles.bottomText}>
+                {occasion}
+              </Paragraph>
+            </View>
+            <View>
+              <Paragraph
+                style={styles.bottomText}>
+                {price}
+              </Paragraph>
+            </View>
+          </View>
+        </>
+      </TouchableRipple>
     </View>
+  )
 }
 
 const styles = StyleSheet.create({

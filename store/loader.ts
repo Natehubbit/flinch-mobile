@@ -1,5 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppLoader, Loader, LoaderString } from '../types'
+import {
+  createSlice,
+  PayloadAction
+} from '@reduxjs/toolkit'
+import {
+  AppLoader,
+  Loader,
+  LoaderString
+} from '../types'
 
 const initState: AppLoader = {
   authLoader: {
@@ -50,11 +57,14 @@ const initState: AppLoader = {
   }
 }
 
-export const { actions, ...loaderSlice } = createSlice({
+export const {
+  actions,
+  ...loaderSlice
+} = createSlice({
   name: 'loader',
   initialState: initState,
   reducers: {
-    loading (
+    loading(
       state,
       { payload }: PayloadAction<LoaderString>
     ): AppLoader {
@@ -66,7 +76,7 @@ export const { actions, ...loaderSlice } = createSlice({
         }
       }
     },
-    loaded (
+    loaded(
       state,
       { payload }: PayloadAction<LoaderString>
     ): AppLoader {
@@ -78,14 +88,16 @@ export const { actions, ...loaderSlice } = createSlice({
         }
       }
     },
-    update (
+    update(
       state,
-      { payload }: PayloadAction<{key:LoaderString, data:Loader}>
+      {
+        payload
+      }: PayloadAction<{
+        key: LoaderString
+        data: Loader
+      }>
     ): AppLoader {
-      const {
-        key,
-        data
-      } = payload
+      const { key, data } = payload
       return {
         ...state,
         [key]: {
@@ -94,7 +106,7 @@ export const { actions, ...loaderSlice } = createSlice({
         }
       }
     },
-    resetLoaders (): AppLoader {
+    resetLoaders(): AppLoader {
       return initState
     }
   }

@@ -46,7 +46,9 @@ var Book = function () {
         else {
             !booking &&
                 request.id &&
-                navigate('Payment', { data: { token: celebToken || '' } });
+                navigate('PaymentMode', {
+                    data: { token: celebToken || '' }
+                });
         }
     }, [booking]);
     var onSubmit = function (values) {
@@ -70,32 +72,35 @@ var Book = function () {
                 amount: price.amount,
                 currency: price.currency,
                 payed: false,
-                timestamp: 0
+                timestamp: 0,
+                trxRef: ''
             }, status: 'pending', price: price, timestamp: Date.now() }, values);
-        dispatch(request_1.requestActions
-            .createRequest(data));
+        dispatch(request_1.requestActions.createRequest(data));
     };
     var renderForm = function () {
         return (react_1["default"].createElement(formik_1.Formik, { initialValues: forms_1.BOOK_FORM, onSubmit: onSubmit, validationSchema: forms_1.BookSchema, enableReinitialize: true }, function (_a) {
             var errors = _a.errors, touched = _a.touched, values = _a.values, handleSubmit = _a.handleSubmit, handleChange = _a.handleChange, setFieldValue = _a.setFieldValue;
             var instructions = values.instructions, recipient = values.recipient;
-            return react_1["default"].createElement(react_1["default"].Fragment, null,
-                react_1["default"].createElement(Input_1["default"], { label: 'Recipient Name', left: 'account-outline', value: recipient, disabled: booking, onChangeText: handleChange('recipient') }),
-                errors.recipient && touched.recipient && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.recipient)),
-                react_1["default"].createElement(InputSelect_1["default"], { value: occasion, placeholder: 'Ocassion', right: 'chevron-down', field: 'occasion', onChange: setFieldValue, options: constants_1.OCCASIONS }),
-                errors.occasion && touched.occasion && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.occasion)),
-                react_1["default"].createElement(Input_1["default"], { disabled: booking, label: 'Instructions', left: 'information-outline', style: { height: 83 }, value: instructions, onChangeText: handleChange('instructions'), multiline: true }),
-                errors.instructions && touched.instructions && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: 'error' }, errors.instructions)),
-                react_1["default"].createElement(react_native_paper_1.Button, { uppercase: false, mode: 'contained', theme: { roundness: 100 }, style: styles.btn, onPress: handleSubmit, loading: booking, disabled: booking }, "Submit"));
+            return (react_1["default"].createElement(react_1["default"].Fragment, null,
+                react_1["default"].createElement(Input_1["default"], { label: "Recipient Name", left: "account-outline", value: recipient, disabled: booking, onChangeText: handleChange('recipient') }),
+                errors.recipient &&
+                    touched.recipient && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: "error" }, errors.recipient)),
+                react_1["default"].createElement(InputSelect_1["default"], { value: occasion, placeholder: "Ocassion", right: "chevron-down", field: "occasion", onChange: setFieldValue, options: constants_1.OCCASIONS }),
+                errors.occasion &&
+                    touched.occasion && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: "error" }, errors.occasion)),
+                react_1["default"].createElement(Input_1["default"], { disabled: booking, label: "Instructions", left: "information-outline", style: { height: 83 }, value: instructions, onChangeText: handleChange('instructions'), multiline: true }),
+                errors.instructions &&
+                    touched.instructions && (react_1["default"].createElement(react_native_paper_1.HelperText, { type: "error" }, errors.instructions)),
+                react_1["default"].createElement(react_native_paper_1.Button, { uppercase: false, mode: "contained", theme: { roundness: 100 }, style: styles.btn, onPress: handleSubmit, loading: booking, disabled: booking }, "Submit")));
         }));
     };
-    return react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, { style: styles.container, keyboardShouldPersistTaps: 'handled' },
+    return (react_1["default"].createElement(react_native_gesture_handler_1.ScrollView, { style: styles.container, keyboardShouldPersistTaps: "handled" },
         react_1["default"].createElement(book_svg_1["default"], { style: styles.image, width: styledComponents_1.maxWidth }),
         react_1["default"].createElement(react_native_1.View, { style: styles.card },
             react_1["default"].createElement(react_native_1.View, { style: styles.celeb },
                 react_1["default"].createElement(react_native_1.Image, { source: { uri: imageUrl }, style: styles.celebDp }),
                 react_1["default"].createElement(styledComponents_1.Paragraph, { black: true }, alias)),
-            renderForm()));
+            renderForm())));
 };
 var styles = react_native_1.StyleSheet.create({
     container: {

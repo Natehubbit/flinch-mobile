@@ -1,6 +1,13 @@
 import React from 'react'
-import { connectInfiniteHits, InfiniteHitsProvided } from 'react-instantsearch-core'
-import { FlatList, StyleSheet, View } from 'react-native'
+import {
+  connectInfiniteHits,
+  InfiniteHitsProvided
+} from 'react-instantsearch-core'
+import {
+  FlatList,
+  StyleSheet,
+  View
+} from 'react-native'
 import { Celebs } from '../../services/CelebService'
 import SearchItem from '../SearchItem'
 // import Algolia from '../../assets/images/algolia.svg'
@@ -8,9 +15,10 @@ import SearchAlgolia from '../../assets/images/searchAlgolia.svg'
 import { COLORS } from '../../config/theme'
 import { Paragraph } from '../../common/styledComponents'
 
-interface SearchHitsProps extends Partial<InfiniteHitsProvided> {
-  onPress:(data:any)=>void;
-  hits?: Celebs;
+interface SearchHitsProps
+  extends Partial<InfiniteHitsProvided> {
+  onPress: (data: any) => void
+  hits?: Celebs
 }
 
 const SearchHits: React.FC<SearchHitsProps> = ({
@@ -24,18 +32,21 @@ const SearchHits: React.FC<SearchHitsProps> = ({
 
     return (
       <>
-        {!hasHits && <View style={[styles.noData]}>
-          <Paragraph black>
-            No data found
-          </Paragraph>
-        </View>}
+        {!hasHits && (
+          <View style={[styles.noData]}>
+            <Paragraph black>
+              No data found
+            </Paragraph>
+          </View>
+        )}
         <View style={[styles.algolia]}>
           <SearchAlgolia />
         </View>
       </>
     )
   }
-  return <FlatList
+  return (
+    <FlatList
       data={hits}
       keyExtractor={(item) => item.objectID}
       onEndReached={hasMore && refineNext}
@@ -44,16 +55,21 @@ const SearchHits: React.FC<SearchHitsProps> = ({
         <SearchItem
           label={item.alias}
           uri={item.imageUrl}
-          onPress={() => onPress({
-            ...item,
-            id: item.objectID
-          })}
+          onPress={() =>
+            onPress({
+              ...item,
+              id: item.objectID
+            })
+          }
         />
       )}
     />
+  )
 }
 
-export default (connectInfiniteHits(SearchHits) as React.ComponentClass<SearchHitsProps, any>)
+export default connectInfiniteHits(
+  SearchHits
+) as React.ComponentClass<SearchHitsProps, any>
 
 const styles = StyleSheet.create({
   algolia: {

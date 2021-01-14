@@ -14,7 +14,7 @@
       "assets/lottie/*",
       "node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/MaterialCommunityIcons.tff"
     ],
-    "android":{
+    "android": {
       "package": "com.flinch",
       "googleServicesFile": "./google-services.json",
       "versionCode": 1,
