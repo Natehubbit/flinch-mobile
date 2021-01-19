@@ -13,6 +13,7 @@ import {
 } from '../types'
 import { loaderActions } from './loader'
 import { responseActions } from './response'
+import { toastActions } from './toast'
 
 const initState: Request[] = []
 
@@ -135,6 +136,11 @@ const approveRequest = (
     updateLoader
   )
   if (approved) {
+    dispatch(toastActions.setToast({
+      label: 'Okay',
+      msg: 'Request approved',
+      show: true
+    }))
     const data = requests.map((d) => {
       if (d.id === id) {
         return { ...d, ...approved }

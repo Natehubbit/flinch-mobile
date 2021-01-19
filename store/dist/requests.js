@@ -65,6 +65,7 @@ var react_native_1 = require("react-native");
 var RequestService_1 = require("../services/RequestService");
 var loader_1 = require("./loader");
 var response_1 = require("./response");
+var toast_1 = require("./toast");
 var initState = [];
 exports.actions = (_a = toolkit_1.createSlice({
     name: 'requests',
@@ -165,6 +166,11 @@ var approveRequest = function (id, uri, callback) { return function (dispatch, g
             case 1:
                 approved = _c.sent();
                 if (approved) {
+                    dispatch(toast_1.toastActions.setToast({
+                        label: 'Okay',
+                        msg: 'Request approved',
+                        show: true
+                    }));
                     data = requests.map(function (d) {
                         if (d.id === id) {
                             return __assign(__assign({}, d), approved);

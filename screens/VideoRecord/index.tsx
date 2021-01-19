@@ -33,8 +33,13 @@ import { requestsActions } from '../../store/requests'
 import { useToast } from '../../hooks/useToast'
 import { toastActions } from '../../store/toast'
 import { COLORS } from '../../config/theme'
-import { initStateRequest } from '../../common/constants'
-import { useRequests } from '../../hooks/useRequests'
+import RequestService from '../../services/RequestService'
+import { StackHeaderProps } from '@react-navigation/stack'
+
+interface VideoRecordScreenProps
+  extends StackHeaderProps {
+
+  }
 
 const RECORD_OPTIONS: CameraRecordingOptions = {
   mute: false,
@@ -44,10 +49,15 @@ const RECORD_OPTIONS: CameraRecordingOptions = {
 
 let timerId = null
 
-const VideoRecord = () => {
+const VideoRecord: React.FC<VideoRecordScreenProps> = ({
+  navigation
+}) => {
   const camera = useRef<Camera>(null)
   const dispatch = useDispatch()
   const toast = useToast()
+  const [info, setInfo] = useState<
+    {instructions:string, recipient:string} | null
+  >(null)
   const {
     params: { id }
   } = useRoute<RecordVideoScreenRouteProps>()
@@ -74,20 +84,16 @@ const VideoRecord = () => {
   ] = useState(false)
   const { goBack } = useNavigation()
   const { instructions, recipient } =
-    useRequests('id', id)[0] || initStateRequest
+    info || { instructions: '', recipient: '' }
   useEffect(() => {
     const cleanUp = async () => {
       if (isRecording) {
         resetTimer()
+        camera.current &&
         camera.current.stopRecording()
       }
     }
-    const setCameraRatio = async () => {
-      const ratioData = await camera.current.getSupportedRatiosAsync()
-      const res = ratioData.pop()
-      setRatio(res)
-    }
-    setCameraRatio()
+    getRequestData()
     return () => {
       cleanUp()
     }
@@ -138,8 +144,9 @@ const VideoRecord = () => {
     }
   }
   const onPreviewClose = () => {
-    if (showControls)
+    if (showControls) {
       return setShowControls(false)
+    }
     setIsPreviewing(false)
   }
 
@@ -151,17 +158,30 @@ const VideoRecord = () => {
     dispatch(
       toastActions.setToast({
         ...toast,
-        show: false,
-        onPress: send
+        show: false
       })
     )
     send()
   }
 
+  const onCameraReady = async () => {
+    await setCameraRatio()
+  }
+
   const send = () => {
+    const callback = () =>
+      navigation.popToTop()
     dispatch(
-      requestsActions.approveRequest(id, videoUri)
+      requestsActions.approveRequest(id, videoUri, callback)
     )
+  }
+
+  const getRequestData = async () => {
+    const data = await RequestService.getRequest(id)
+    data && setInfo({
+      instructions: data.instructions,
+      recipient: data.recipient
+    })
   }
 
   const startTimer = () => {
@@ -172,6 +192,16 @@ const VideoRecord = () => {
   const resetTimer = () => {
     setTimer(61)
     timerId && clearInterval(timerId)
+  }
+
+  const setCameraRatio = async () => {
+    if (camera.current) {
+      const ratioData = await camera
+        .current
+        .getSupportedRatiosAsync()
+      const res = ratioData.pop()
+      setRatio(res)
+    }
   }
   return (
     <View style={styles.container}>
@@ -227,6 +257,7 @@ const VideoRecord = () => {
             </View>
           )}
           <Camera
+            onCameraReady={onCameraReady}
             style={[styles.cameraModule]}
             type={cameraView}
             ref={camera}

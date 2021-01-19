@@ -28,6 +28,7 @@ var Payment = function (_a) {
     };
     var onCallbackUrl = function (e) {
         var url = e.url;
+        console.log(url);
         var isCallback = url.includes(constants_1.PAYMENT_CALLBACK);
         isCallback && onComplete();
     };

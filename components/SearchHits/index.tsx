@@ -8,12 +8,12 @@ import {
   StyleSheet,
   View
 } from 'react-native'
-import { Celebs } from '../../services/CelebService'
 import SearchItem from '../SearchItem'
 // import Algolia from '../../assets/images/algolia.svg'
 import SearchAlgolia from '../../assets/images/searchAlgolia.svg'
 import { COLORS } from '../../config/theme'
 import { Paragraph } from '../../common/styledComponents'
+import { Celebs } from '../../types'
 
 interface SearchHitsProps
   extends Partial<InfiniteHitsProvided> {
@@ -29,7 +29,6 @@ const SearchHits: React.FC<SearchHitsProps> = ({
 }) => {
   const renderLogo = () => {
     const hasHits = hits.length > 0
-
     return (
       <>
         {!hasHits && (

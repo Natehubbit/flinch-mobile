@@ -4,10 +4,13 @@ import { User, UserResponse } from '../types'
 const UsersRef = db.collection('users')
 
 export default class UserService {
-  static async addUser(user: UserResponse) {
+  static async addUser(user: UserResponse): Promise<User> {
     try {
-      await UsersRef.doc(user.id).set(user)
-      return user
+      const { id, ...data } = user
+      await UsersRef
+        .doc(id)
+        .set(data)
+      return user as User
     } catch (error) {
       alert(error.message)
       return null
@@ -16,7 +19,9 @@ export default class UserService {
 
   static async getUser(id: string) {
     try {
-      const doc = await UsersRef.doc(id).get()
+      const doc = await UsersRef
+        .doc(id)
+        .get()
       return {
         id: doc.id,
         ...doc.data()
@@ -32,9 +37,11 @@ export default class UserService {
   ): Promise<UserResponse> {
     try {
       const { id, ...details } = data
-      await UsersRef.doc(id).update({
-        ...details
-      })
+      await UsersRef
+        .doc(id)
+        .update({
+          ...details
+        })
       return data
     } catch (error) {
       alert(error.message)

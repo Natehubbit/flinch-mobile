@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   StyleSheet,
   SafeAreaView,
@@ -16,29 +16,29 @@ import {
 import AuthInput from '../../components/Input'
 import { Button } from 'react-native-paper'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
-import { userActions } from '../../store/user'
-import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
-import { useLoader } from '../../hooks/useLoader'
-import ModalLoader from '../../components/ModalLoader'
+import { useDispatch } from 'react-redux'
+import { toastActions } from '../../store/toast'
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch()
-  const { loggedIn } = useUser()
-  const { authLoader } = useLoader()
   const { navigate } = useNavigation()
   const [showPass, setShowPass] = useState(false)
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
-  const onLogin = () => navigate('Login')
+  const onLogin = () => navigate<Routes>('Login')
   const onShowPass = () => setShowPass(!showPass)
+  const hasDetails = !!email && !!pass
   const onSignup = async () => {
-    dispatch(userActions.signup(email, pass))
+    hasDetails
+    ? navigate<Routes>('Signup2', { email, pass })
+    : dispatch(toastActions.setToast({
+      label: 'Okay',
+      msg: 'Please enter your email and password',
+      show: true,
+      mode: 'danger'
+    }))
   }
-  useEffect(() => {
-    loggedIn && navigate<Routes>('Signup2')
-  }, [loggedIn])
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -88,6 +88,7 @@ const Signup: React.FC = () => {
               <Button
                 theme={{ roundness: 100 }}
                 mode="contained"
+                uppercase={false}
                 onPress={onSignup}>
                 SignUp
               </Button>
@@ -109,7 +110,6 @@ const Signup: React.FC = () => {
           </FlexContainer>
         </FormContainer>
       </AuthContainer>
-      <ModalLoader show={authLoader} />
     </SafeAreaView>
   )
 }

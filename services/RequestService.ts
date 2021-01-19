@@ -247,7 +247,8 @@ export default class RequestService {
     try {
       await RequestRef.doc(id).update({
         'response.status': 'rejected',
-        status: 'failed'
+        status: 'failed',
+        'response.timestamp': Date.now()
       })
       return true
     } catch (e) {

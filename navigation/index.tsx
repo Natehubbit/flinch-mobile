@@ -23,7 +23,7 @@ export type RouteParams = {
   Welcome: undefined;
   Login: undefined;
   Signup: undefined;
-  Signup2: undefined;
+  Signup2: {email:string, pass:string};
   Home: undefined;
   Search: undefined;
   Notifications: undefined;

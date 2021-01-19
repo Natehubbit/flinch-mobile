@@ -47,6 +47,7 @@ const Payment: React.FC<PaymentScreenProps> = ({
     e: WebViewNavigation
   ) => {
     const { url } = e
+    console.log(url)
     const isCallback = url.includes(
       PAYMENT_CALLBACK
     )

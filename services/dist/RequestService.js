@@ -328,7 +328,8 @@ var RequestService = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, RequestRef.doc(id).update({
                                 'response.status': 'rejected',
-                                status: 'failed'
+                                status: 'failed',
+                                'response.timestamp': Date.now()
                             })];
                     case 1:
                         _a.sent();

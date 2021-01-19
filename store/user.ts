@@ -104,33 +104,50 @@ const login = (
 }
 
 const signup = (
-  email: string,
-  password: string
+  password: string,
+  data: Partial<User>,
+  callback?: ()=>void
 ) => async (dispatch: Dispatch) => {
   dispatch(loaderActions.loading('authLoader'))
   const user = await AuthService.signUp(
-    email,
+    data.email,
     password
   )
   const token = await NotificationService.getToken()
-  const userData =
-    user && (await UserService.addUser(user))
-  userData &&
-    (await UserService.update({
-      id: userData.id,
-      token: token || ''
-    }))
-  userData &&
-    dispatch(
-      actions.getUser({
-        ...userData,
-        token: token || {
-          data: '',
-          type: 'expo'
-        },
-        loggedIn: true
-      })
-    )
+  const hasImage = !!data.imageUrl
+  if (hasImage) {
+    const blob = await HelperService
+      .parseToBlob(
+        data.imageUrl
+      )
+    const uri = blob && !!user.id && await HelperService
+      .generateBlobUrl(
+        `user/${user.id}`,
+        blob
+      )
+    const userData =
+      user && (await UserService
+        .addUser({
+          ...user,
+          ...data,
+          celebrity: {
+            id: '',
+            isCeleb: false
+          },
+          imageUrl: uri || '',
+          token
+        }))
+    userData &&
+      dispatch(
+        actions.getUser({
+          ...userData,
+          profileUpdated: true,
+          token: token || '',
+          loggedIn: true
+        })
+      )
+  }
+  callback && callback()
   dispatch(loaderActions.loaded('authLoader'))
 }
 

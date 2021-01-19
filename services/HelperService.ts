@@ -33,11 +33,12 @@ export default class HelperService {
     const {
       granted
     } = await ImagePicker.requestCameraRollPermissionsAsync()
-    if (!granted)
+    if (!granted) {
       return Alert.alert(
         'Permission Failed',
         'Allow permission to access images'
       )
+    }
     const res = await ImagePicker.launchImageLibraryAsync(
       IMG_OPTIONS
     )

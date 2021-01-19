@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MaterialIcons as Icon } from '@expo/vector-icons'
-import { theme } from '../../config/theme'
+import { COLORS, theme } from '../../config/theme'
 
 interface AvatarProps extends ViewProps {
   onPress: () => void
@@ -22,7 +22,7 @@ const Avatar: React.FC<AvatarProps> = ({
   const showImage = source.length > 0
   return (
     <TouchableOpacity
-      style={[styles.container, style && style]}
+      style={[style && style]}
       onPress={onPress}>
       <View style={[styles.container]}>
         {showImage ? (
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     height: 100,
     width: 100,
-    elevation: 1,
+    borderWidth: 1,
+    borderColor: COLORS.light2,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden'

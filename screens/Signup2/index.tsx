@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
   SafeAreaView,
-  StyleSheet
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
 } from 'react-native'
 import {
   FAB,
   HelperText
 } from 'react-native-paper'
 import {
-  AuthContainer2,
-  FlexContainer,
   maxHeight
 } from '../../common/styledComponents'
 import Avatar from '../../components/Avatar'
@@ -18,36 +19,33 @@ import { useDispatch } from 'react-redux'
 import { userActions } from '../../store/user'
 import { useLoader } from '../../hooks/useLoader'
 import HelperService from '../../services/HelperService'
-import {
-  ExpoPushToken,
-  getExpoPushTokenAsync
-} from 'expo-notifications'
+import { useRoute } from '@react-navigation/native'
 
 const Signup2: React.FC = () => {
   const dispatch = useDispatch()
-  // const user = useUser()
-  const { authLoader } = useLoader()
-  const [name, setName] = useState('')
-  const [submit, setSubmit] = useState(false)
-  const [imgUri, setImgUri] = useState('')
-  const [
-    token,
-    setToken
-  ] = useState<ExpoPushToken | null>()
-  useEffect(() => {
-    const getNotificationToken = async () => {
-      const tkn = await getExpoPushTokenAsync()
-      setToken(tkn)
+  const {
+    authLoader: {
+      isLoading: authLoader
     }
-    getNotificationToken()
-  }, [])
+  } = useLoader()
+  const [name, setName] = useState('')
+  const [imgUri, setImgUri] = useState('')
+  const enableSubmit = !!name && !!imgUri
+  const {
+    email,
+    pass
+  } = useRoute().params as {
+    email:string,
+    pass:string
+  }
   const onProceed = () => {
     dispatch(
-      userActions.update({
-        displayName: name,
-        imageUrl: imgUri,
-        token
-      })
+      userActions.signup(pass || '', {
+          displayName: name,
+          imageUrl: imgUri,
+          email: email || ''
+        }
+      )
     )
   }
   const onUploadImage = () =>
@@ -55,18 +53,20 @@ const Signup2: React.FC = () => {
 
   const onInput = (input: string) => {
     if (input) {
-      setSubmit(true)
       return setName(input)
     }
-    return setSubmit(false)
   }
   return (
     <SafeAreaView style={styles.container}>
-      <AuthContainer2>
-        <FlexContainer
-          style={styles.flexContainer}
-          align="center"
-          justify="center">
+      <ScrollView
+        contentContainerStyle={[styles.scroll]}>
+        <View style={[styles.header]}>
+          <Text style={[styles.title]}>
+            Create Profile
+          </Text>
+        </View>
+        <View
+          style={styles.avatarContainer}>
           <Avatar
             onPress={onUploadImage}
             source={imgUri}
@@ -74,22 +74,20 @@ const Signup2: React.FC = () => {
           <HelperText type="info">
             {'\n'}Add Image{'\n'}
           </HelperText>
-        </FlexContainer>
-        <FlexContainer flex={2}>
-          <Input
-            label="Username"
-            left="account"
-            onChangeText={onInput}
-          />
-          <FAB
-            style={styles.fab}
-            icon="arrow-right"
-            onPress={onProceed}
-            disabled={!submit}
-            loading={authLoader}
-          />
-        </FlexContainer>
-      </AuthContainer2>
+        </View>
+        <Input
+          label="Username"
+          left="account"
+          onChangeText={onInput}
+        />
+        <FAB
+          style={styles.fab}
+          icon="arrow-right"
+          onPress={onProceed}
+          disabled={!enableSubmit}
+          loading={authLoader}
+        />
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -98,6 +96,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
+  scroll: {
+    minHeight: maxHeight - 25,
+    paddingHorizontal: 40
+  },
   content: {
     height: maxHeight,
     backgroundColor: 'blue'
@@ -105,10 +107,21 @@ const styles = StyleSheet.create({
   fab: {
     position: 'absolute',
     bottom: 20,
-    right: 0
+    right: 20
   },
-  flexContainer: {
-    marginTop: 50
+  avatarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '15%'
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 18,
+    fontFamily: 'SuezOne-Regular'
+  },
+  header: {
+    height: 80,
+    justifyContent: 'center'
   }
 })
 
