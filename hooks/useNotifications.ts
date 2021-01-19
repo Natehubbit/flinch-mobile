@@ -7,7 +7,6 @@ import {
   useDispatch,
   useSelector
 } from 'react-redux'
-import HelperService from '../services/HelperService'
 import NotificationService from '../services/NotificationService'
 import { toastActions } from '../store/toast'
 import * as Notifications from 'expo-notifications'
@@ -60,9 +59,7 @@ const useNotifications = () => {
           mode: 'info'
         })
       )
-      HelperService.vibrate()
     }
-    console.log(notification)
   }, [notification])
   useEffect(() => {
     const unread =

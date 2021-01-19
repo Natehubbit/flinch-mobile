@@ -7,7 +7,6 @@ var react_native_webview_1 = require("react-native-webview");
 var theme_1 = require("../../config/theme");
 var Navbar_1 = require("../../components/Navbar");
 var react_native_paper_1 = require("react-native-paper");
-var constants_1 = require("../../common/constants");
 var Payment = function (_a) {
     var navigation = _a.navigation;
     var params = native_1.useRoute().params;
@@ -28,8 +27,8 @@ var Payment = function (_a) {
     };
     var onCallbackUrl = function (e) {
         var url = e.url;
-        console.log(url);
-        var isCallback = url.includes(constants_1.PAYMENT_CALLBACK);
+        var isCallback = !url
+            .includes(uri);
         isCallback && onComplete();
     };
     var onError = function () {

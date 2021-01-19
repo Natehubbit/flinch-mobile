@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import {
-  Image,
   StyleSheet,
   View
 } from 'react-native'
@@ -9,10 +8,11 @@ import { TouchableRipple } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import { Paragraph } from '../../common/styledComponents'
 import { COLORS } from '../../config/theme'
-import { useUser } from '../../hooks/useUser'
+// import { useUser } from '../../hooks/useUser'
 import { Routes } from '../../navigation'
 import { notificationsActions } from '../../store/notifications'
 import { Request } from '../../types'
+import NotificationIcon from '../../assets/images/notification.svg'
 
 interface NotificationCardProps {
   id: string
@@ -32,7 +32,7 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
   type
 }) => {
   const dispatch = useDispatch()
-  const { imageUrl } = useUser()
+  // const { imageUrl } = useUser()
   const { navigate } = useNavigation()
   const opacity = read ? 0.4 : 1
   const onPress = () => {
@@ -50,10 +50,11 @@ const NotificationCard: React.FC<NotificationCardProps> = ({
       style={[styles.container, { opacity }]}>
       <View style={[styles.info]}>
         <View>
-          <Image
+          <NotificationIcon height={40} width={40} />
+          {/* <Image
             source={{ uri: imageUrl }}
             style={[styles.img]}
-          />
+          /> */}
         </View>
         <View style={[styles.content]}>
           <Paragraph

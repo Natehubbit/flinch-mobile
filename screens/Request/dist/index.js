@@ -135,8 +135,8 @@ var Request = function () {
         });
     }); };
     var rejectCallback = function () {
-        goBack();
         setRejecting(false);
+        goBack();
     };
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
         react_1["default"].createElement(Navbar_1["default"], { hideBell: true, title: route }),

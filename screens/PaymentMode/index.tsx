@@ -51,7 +51,6 @@ const PaymentMode: React.FC = () => {
         cost
       )
     }
-    console.log(uri)
     uri
       ? navigate<Routes>('Payment', {
           uri

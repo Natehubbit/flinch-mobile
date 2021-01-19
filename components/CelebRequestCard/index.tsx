@@ -1,15 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
+import moment from 'moment'
 import {
   Divider,
   Paragraph,
   TouchableRipple
 } from 'react-native-paper'
 import Urgent from '../../assets/images/urgent.svg'
+import Wait from '../../assets/images/wait.svg'
 import { AltMiniLabel } from '../../common/styledComponents'
 import { Routes } from '../../navigation'
 import { Request } from '../../types'
+import { theme } from '../../config/theme'
 
 interface CelebRequestCardProps {
   ocassion: string
@@ -27,6 +30,11 @@ const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
   time
 }) => {
   const { navigate } = useNavigation()
+  const expire = moment(data.timestamp)
+    .add(7, 'days')
+  const expNo = Number(expire.fromNow(true))
+  const expireText = expire.fromNow()
+  const endsSoon = expNo < 2
   const onPress = () => {
     navigate<Routes>('Request', { id: '', data })
   }
@@ -37,7 +45,10 @@ const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
         onPress={onPress}>
         <>
           <View style={[styles.icon]}>
-            <Urgent height={40} width={40} />
+            {endsSoon
+            ? <Urgent height={40} width={40} />
+            : <Wait height={40} width={40} />
+            }
           </View>
           <View style={[styles.info]}>
             <AltMiniLabel style={[styles.event]}>
@@ -49,9 +60,11 @@ const CelebRequestCard: React.FC<CelebRequestCardProps> = ({
             <Paragraph
               numberOfLines={1}
               style={[styles.time]}>
-              {time}
+              exp. {expireText}
             </Paragraph>
-            <AltMiniLabel>{price}</AltMiniLabel>
+            <Paragraph style={[styles.price]}>
+              {price}
+            </Paragraph>
           </View>
         </>
       </TouchableRipple>
@@ -77,7 +90,7 @@ const styles = StyleSheet.create({
   },
   info: {
     paddingHorizontal: 10,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     flex: 6,
     height: '100%'
   },
@@ -88,7 +101,6 @@ const styles = StyleSheet.create({
   extra: {
     alignItems: 'flex-end',
     height: '100%',
-    // backgroundColor: 'red',
     flex: 4
   },
   event: {
@@ -97,5 +109,8 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 12
+  },
+  price: {
+    color: theme.colors.primary
   }
 })

@@ -2,7 +2,6 @@
 exports.__esModule = true;
 var react_1 = require("react");
 var react_redux_1 = require("react-redux");
-var HelperService_1 = require("../services/HelperService");
 var NotificationService_1 = require("../services/NotificationService");
 var toast_1 = require("../store/toast");
 var Notifications = require("expo-notifications");
@@ -35,9 +34,7 @@ var useNotifications = function () {
                 show: true,
                 mode: 'info'
             }));
-            HelperService_1["default"].vibrate();
         }
-        console.log(notification);
     }, [notification]);
     react_1.useEffect(function () {
         var unread = list.filter(function (l) { return !l.read; }).length > 0;

@@ -120,8 +120,8 @@ const Request: React.FC = () => {
     )
   }
   const rejectCallback = () => {
-    goBack()
     setRejecting(false)
+    goBack()
   }
   return (
     <>

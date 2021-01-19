@@ -75,7 +75,6 @@ var PaymentMode = function () {
                     uri = _a.sent();
                     _a.label = 4;
                 case 4:
-                    console.log(uri);
                     uri
                         ? navigate('Payment', {
                             uri: uri

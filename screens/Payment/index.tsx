@@ -13,7 +13,6 @@ import {
   WebViewNavigation,
   WebViewProgressEvent
 } from 'react-native-webview/lib/WebViewTypes'
-import { PAYMENT_CALLBACK } from '../../common/constants'
 import { StackHeaderProps } from '@react-navigation/stack'
 
 interface PaymentScreenProps
@@ -47,10 +46,10 @@ const Payment: React.FC<PaymentScreenProps> = ({
     e: WebViewNavigation
   ) => {
     const { url } = e
-    console.log(url)
-    const isCallback = url.includes(
-      PAYMENT_CALLBACK
-    )
+    const isCallback = !url
+      .includes(
+        uri
+      )
     isCallback && onComplete()
   }
 

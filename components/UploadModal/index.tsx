@@ -7,8 +7,8 @@ import {
 } from 'react-native-paper'
 import { useDispatch } from 'react-redux'
 import {
-  AltMiniLabel,
-  maxWidth
+  maxWidth,
+  Paragraph
 } from '../../common/styledComponents'
 import { COLORS, theme } from '../../config/theme'
 import { useLoader } from '../../hooks/useLoader'
@@ -52,7 +52,9 @@ const UploadModal = () => {
   const isProgress = type === 'progress'
   return (
     <View style={[styles.progressContainer]}>
-      <AltMiniLabel>{label}</AltMiniLabel>
+      <Paragraph>
+        {label}
+      </Paragraph>
       {isProgress ? (
         <ProgressBar
           progress={progress}

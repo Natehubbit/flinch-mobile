@@ -55,7 +55,8 @@ export type RouteParams = {
     data: {
       token: string
     }
-  }
+  };
+  ForgotPass: undefined
 }
 
 export type CelebScreenRouteProp = RouteProp<

@@ -90,6 +90,17 @@ export default class AuthService {
     }
   }
 
+  static async resetPass(email:string): Promise<boolean> {
+    try {
+      await auth
+        .sendPasswordResetEmail(email)
+      return true
+    } catch (e) {
+      Alert.alert('Error', 'Failed to send reset email.')
+      return false
+    }
+  }
+
   static async sendVerificationEmail(): Promise<boolean> {
     try {
       const user = auth.currentUser

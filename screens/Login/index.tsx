@@ -15,26 +15,25 @@ import {
 } from '../../common/styledComponents'
 import AuthInput from '../../components/Input'
 import {
-  Button,
-  IconButton
+  Button
+  // IconButton
 } from 'react-native-paper'
-import { theme } from '../../config/theme'
+// import { theme } from '../../config/theme'
 import { useNavigation } from '@react-navigation/native'
 import { userActions } from '../../store/user'
 import { useDispatch } from 'react-redux'
-// import ModalLoader from '../../components/ModalLoader'
-// import { useLoader } from '../../hooks/useLoader'
+import { Routes } from '../../navigation'
 
 const Login: React.FC = () => {
   const dispatch = useDispatch()
   const { navigate } = useNavigation()
-  // const { authLoader } = useLoader()
   const [showPass, setShowPass] = useState(false)
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
 
-  const onSignup = () => navigate('Signup')
+  const onSignup = () => navigate<Routes>('Signup')
   const onShowPass = () => setShowPass(!showPass)
+  const onForgot = () => navigate<Routes>('ForgotPass')
   const onLogin = async () => {
     dispatch(userActions.login(email, pass))
   }
@@ -49,7 +48,9 @@ const Login: React.FC = () => {
           <FlexContainer
             flex={1}
             justify="flex-end">
-            <MainTitle>Welcome</MainTitle>
+            <MainTitle>
+              Welcome
+            </MainTitle>
           </FlexContainer>
           <FlexContainer
             flex={1}
@@ -75,6 +76,12 @@ const Login: React.FC = () => {
               onIconClicked={onShowPass}
               onChangeText={setPass}
             />
+            <Paragraph
+              style={[styles.forgot]}
+              link
+              onPress={onForgot}>
+              Forgot password?
+            </Paragraph>
           </FlexContainer>
           <FlexContainer
             justify="space-between"
@@ -88,7 +95,7 @@ const Login: React.FC = () => {
                 Login
               </Button>
             </FlexContainer>
-            <FlexContainer
+            {/* <FlexContainer
               justify="center"
               align="center">
               <Paragraph>or</Paragraph>
@@ -109,7 +116,7 @@ const Login: React.FC = () => {
                 color="blue"
                 style={styles.iconBack}
               />
-            </FlexContainer>
+            </FlexContainer> */}
             <FlexContainer
               direction="row"
               justify="center"
@@ -127,7 +134,6 @@ const Login: React.FC = () => {
           </FlexContainer>
         </FormContainer>
       </AuthContainer>
-      {/* <ModalLoader show={authLoader}/> */}
     </SafeAreaView>
   )
 }
@@ -146,6 +152,10 @@ const styles = StyleSheet.create({
   },
   btnLabel: {
     marginHorizontal: 0
+  },
+  forgot: {
+    textAlign: 'right',
+    marginTop: 10
   }
 })
 

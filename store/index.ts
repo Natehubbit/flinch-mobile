@@ -52,7 +52,7 @@ const persistConfig: PersistConfig<
     'downloads',
     'selector',
     'celebs',
-    'notifications',
+    // 'notifications',
     'request',
     // 'requests',
     'response'
